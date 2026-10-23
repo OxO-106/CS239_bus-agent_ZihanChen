@@ -33,10 +33,13 @@ KEEP = {
     "calendar.txt": None,
     "calendar_dates.txt": None,
     "routes.txt": ["route_id", "route_short_name", "route_long_name", "route_type"],
-    "trips.txt": ["route_id", "service_id", "trip_id", "trip_headsign", "direction_id"],
+    "trips.txt": ["route_id", "service_id", "trip_id", "trip_headsign", "direction_id", "shape_id"],
     "stops.txt": ["stop_id", "stop_name", "stop_lat", "stop_lon"],
     "stop_times.txt": ["trip_id", "arrival_time", "departure_time", "stop_id", "stop_sequence"],
+    "shapes.txt": ["shape_id", "shape_pt_lat", "shape_pt_lon", "shape_pt_sequence"],
 }
+SHAPE_MARGIN = 0.01   # deg; keep shape points a little outside BBOX so lines reach the edge
+SHAPE_STEP_M = 15     # drop shape points closer than this to the previous kept point (map only)
 
 
 def _rows(zf, name):
@@ -80,6 +83,9 @@ def trim(key):
     _write(out / "trips.txt", trips, KEEP["trips.txt"])
     _write(out / "routes.txt", [r for r in _rows(zf, "routes.txt") if r["route_id"] in route_ids], KEEP["routes.txt"])
     _write(out / "stop_times.txt", [st for rows in times.values() for st in rows], KEEP["stop_times.txt"])
+    if "shapes.txt" in zf.namelist():
+        _write(out / "shapes.txt", _trim_shapes(zf, {t["shape_id"] for t in trips if t.get("shape_id")}),
+               KEEP["shapes.txt"])
     for name in ("agency.txt", "feed_info.txt", "calendar.txt", "calendar_dates.txt"):
         if name in zf.namelist():
             rows = list(_rows(zf, name))
@@ -88,6 +94,25 @@ def trim(key):
             if rows:
                 _write(out / name, rows, list(rows[0]))
     return {"stops": len(used_stops), "trips": len(trips), "routes": len(route_ids)}
+
+
+def _trim_shapes(zf, shape_ids):
+    """Shape points of used shapes inside BBOX (+ margin), thinned, for drawing routes on the map."""
+    lat0, lat1 = BBOX["lat"][0] - SHAPE_MARGIN, BBOX["lat"][1] + SHAPE_MARGIN
+    lon0, lon1 = BBOX["lon"][0] - SHAPE_MARGIN, BBOX["lon"][1] + SHAPE_MARGIN
+    points = defaultdict(list)
+    for r in _rows(zf, "shapes.txt"):
+        if r["shape_id"] in shape_ids:
+            lat, lon = float(r["shape_pt_lat"]), float(r["shape_pt_lon"])
+            if lat0 <= lat <= lat1 and lon0 <= lon <= lon1:
+                points[r["shape_id"]].append((int(r["shape_pt_sequence"]), lat, lon))
+    for sid, pts in points.items():
+        last = None
+        for seq, lat, lon in sorted(pts):
+            if last is None or meters(*last, lat, lon) >= SHAPE_STEP_M:
+                yield {"shape_id": sid, "shape_pt_lat": f"{lat:.5f}", "shape_pt_lon": f"{lon:.5f}",
+                       "shape_pt_sequence": seq}
+                last = (lat, lon)
 
 
 def parse_time(hms):
@@ -120,6 +145,7 @@ class Trip:
     direction: str
     headsign: str
     stops: list = field(default_factory=list)  # [(stop_id, arrive_sec, depart_sec)] in order
+    shape: str = ""                             # "feed:shape_id", for drawing only
 
 
 @dataclass
@@ -197,13 +223,24 @@ def load(keys=None, gtfs_dir=GTFS_DIR):
         for t in _read(d / "trips.txt"):
             tid = f"{key}:{t['trip_id']}"
             net.trips[tid] = Trip(tid, lines[t["route_id"]], f"{key}:{t['service_id']}",
-                                  t.get("direction_id", ""), t.get("trip_headsign", ""))
+                                  t.get("direction_id", ""), t.get("trip_headsign", ""),
+                                  shape=f"{key}:{t['shape_id']}" if t.get("shape_id") else "")
         rows = sorted(_read(d / "stop_times.txt"), key=lambda r: (r["trip_id"], int(r["stop_sequence"])))
         for r in rows:
             net.trips[f"{key}:{r['trip_id']}"].stops.append(
                 (f"{key}:{r['stop_id']}", parse_time(r["arrival_time"]), parse_time(r["departure_time"])))
     net.index()
     return net
+
+
+def load_shapes(keys=None, gtfs_dir=GTFS_DIR):
+    """{"feed:shape_id": [(lat, lon)]} from the trimmed feeds (used only to draw routes)."""
+    shapes = defaultdict(list)
+    for key in keys or FEEDS:
+        rows = sorted(_read(gtfs_dir / key / "shapes.txt"), key=lambda r: (r["shape_id"], int(r["shape_pt_sequence"])))
+        for r in rows:
+            shapes[f"{key}:{r['shape_id']}"].append((float(r["shape_pt_lat"]), float(r["shape_pt_lon"])))
+    return dict(shapes)
 
 
 if __name__ == "__main__":

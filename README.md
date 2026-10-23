@@ -20,6 +20,19 @@ Model `gemma4:12b` (Ollama, temperature 0), 3 runs per scenario. Full table and 
 2. `cp .env.example .env` and set `OLLAMA_URL`.
 3. Python 3.10+, standard library only so far.
 
+## Web app
+
+```bash
+python -m bus_agent.web
+```
+
+Open http://localhost:8239. The page has three parts:
+- **Chat:** talk to the Concierge, or upload a schedule (image or `.txt`) with the paperclip.
+- **Map:** the routes the assistant suggested, drawn along the real GTFS shapes; your trip once you board; and your position.
+- **Side panel:** live shares, everything that left the phone, and the safety checks. The "Behind the scenes" tab shows every agent message and tool call as it happens, plus how many routes `plan_routes` found compared with how many the assistant showed.
+
+Pick a scenario (T1, T4, T13, …) and press **Start**, then **Play** to step through its events. When the scenario has no scripted answer to a question, the question waits for you in the chat. **Live chat** runs on the real clock from the placeholder Home. "Save trace" writes to `data/local/traces/` (untracked). The server listens on localhost only. Map tiles come from OpenStreetMap, so only the placeholder area is ever requested.
+
 ## Run
 
 ```bash
@@ -57,13 +70,13 @@ Results: [bench/README.md](bench/README.md).
 
 | Path | Contents |
 |---|---|
-| `bus_agent/` | `llm.py` Ollama client; `gtfs.py` feed loading; `routing.py` deterministic route search; `agent.py` tool-calling loop; `agents.py` prompts; `tools.py`; `bus.py` hub; `world.py` simulated world and outbox; `trace.py`; `checks.py`; `main.py` CLI |
+| `bus_agent/` | `web.py` + `static/index.html` web app; `llm.py` Ollama client; `gtfs.py` feed loading; `routing.py` deterministic route search; `agent.py` tool-calling loop; `agents.py` prompts; `tools.py`; `bus.py` hub; `world.py` simulated world and outbox; `trace.py`; `checks.py`; `main.py` CLI |
 | `scenarios/` | Tier 1 scenario timelines (T1, T2, T4, T8, T8b, T13) |
 | `traces/` | Phase 1 traces (JSON + Markdown); `summary_only/` holds the earlier version |
 | `data/gtfs/` | Trimmed GTFS feeds (Culver CityBus, LA Metro bus and rail, Big Blue Bus) |
 | `data/mock/` | UCLA buildings, saved places (placeholder Home), contacts |
 | `data/samples/` | Generated fake schedules, clean and injected, as image and text |
 | `bench/` | Model checks: tool calling and schedule extraction |
-| `tests/` | Routing, acceptance, world/tools, and check tests |
+| `tests/` | Routing, acceptance, world/tools, checks, and web app tests |
 
 No real personal data is committed. The real home address and schedule live only in `data/local/` (gitignored).

@@ -1,6 +1,6 @@
 # GTFS feeds
 
-Public static schedules, trimmed to the box lat 33.975–34.090, lon −118.485 to −118.360 (Westwood / UCLA / Sawtelle / Palms / Culver City / Mar Vista). Raw downloads go in `raw/` (gitignored). Trimmed feeds (about 15 MB) are committed.
+Public static schedules, trimmed to the box lat 33.975–34.090, lon −118.485 to −118.360 (Westwood / UCLA / Sawtelle / Palms / Culver City / Mar Vista). Raw downloads go in `raw/` (gitignored). Trimmed feeds (about 17 MB) are committed. `shapes.txt` keeps the used route shapes inside the box (plus 0.01°), thinned to points at least 15 m apart. Only the web app's map uses it.
 
 | Key | Agency | Feed URL | Downloaded | Service dates | Trimmed |
 |---|---|---|---|---|---|

@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bus-agent</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root {
+    --bg: #f4f5f7; --panel: #ffffff; --line: #e3e6ea; --text: #1c2430; --muted: #6b7480;
+    --accent: #2563eb; --accent-soft: #e8efff; --bubble-user: #2563eb; --bubble-bot: #f0f2f5;
+    --bad: #c62828; --bad-soft: #fdecec; --ok: #2e7d32; --ok-soft: #e8f5e9; --warn-soft: #fff6e0;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; height: 100%; }
+  body { font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text); background: var(--bg);
+         display: flex; flex-direction: column; }
+  button, select, textarea { font: inherit; color: inherit; }
+
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--panel);
+           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; margin-right: auto; }
+  .brand svg { width: 26px; height: 26px; }
+  .clock { padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600;
+           font-variant-numeric: tabular-nums; }
+  select, .btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 10px; }
+  .btn { cursor: pointer; }
+  .btn:hover { border-color: #c5cbd3; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn:disabled { opacity: .5; cursor: default; }
+
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 380px 1fr 360px; }
+  section { min-height: 0; display: flex; flex-direction: column; background: var(--panel); }
+  #chat { border-right: 1px solid var(--line); }
+  #side { border-left: 1px solid var(--line); }
+
+  .messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .bubble { max-width: 88%; padding: 9px 12px; border-radius: 16px; white-space: normal; word-wrap: break-word; }
+  .bubble.user { align-self: flex-end; background: var(--bubble-user); color: #fff; border-bottom-right-radius: 4px; }
+  .bubble.bot { align-self: flex-start; background: var(--bubble-bot); border-bottom-left-radius: 4px; }
+  .bubble.bot.question { border: 1.5px solid var(--accent); background: var(--accent-soft); }
+  .bubble p { margin: 0 0 6px; } .bubble p:last-child { margin-bottom: 0; }
+  .bubble ul, .bubble ol { margin: 4px 0 6px; padding-left: 20px; }
+  .bubble h4 { margin: 6px 0 4px; font-size: 14px; }
+  .sys { align-self: center; font-size: 12px; color: var(--muted); background: var(--bg); border-radius: 999px; padding: 3px 10px;
+         text-align: center; max-width: 95%; }
+  .sys.err { color: var(--bad); background: var(--bad-soft); }
+  .typing { align-self: flex-start; color: var(--muted); font-size: 13px; padding: 4px 8px; }
+  .typing span { animation: blink 1.2s infinite; } .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .2 } 40% { opacity: 1 } }
+
+  .next { margin: 0 12px 8px; padding: 10px 12px; border: 1px dashed #c5cbd3; border-radius: 10px; display: flex; gap: 10px; align-items: center; }
+  .next .what { flex: 1; font-size: 13px; } .next .when { font-weight: 600; color: var(--muted); font-size: 12px; }
+  .composer { border-top: 1px solid var(--line); padding: 10px; display: flex; gap: 8px; align-items: flex-end; }
+  .composer textarea { flex: 1; resize: none; border: 1px solid var(--line); border-radius: 18px; padding: 8px 12px; height: 38px; max-height: 120px; }
+  .composer.asking textarea { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); cursor: pointer;
+              display: grid; place-items: center; flex: none; }
+  .icon-btn.send { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  #mapwrap { position: relative; min-height: 0; }
+  #map { position: absolute; inset: 0; }
+  .legend { position: absolute; left: 12px; bottom: 12px; z-index: 500; background: var(--panel); border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,.15); padding: 10px 12px; max-width: 340px; max-height: 45%; overflow-y: auto; }
+  .legend:empty { display: none; }
+  .legend h3 { margin: 0 0 6px; font-size: 13px; }
+  .route-row { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; font-size: 12.5px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; margin-top: 3px; flex: none; }
+  .tag { display: inline-block; font-size: 11px; padding: 0 6px; border-radius: 999px; background: var(--bg); color: var(--muted); margin-left: 4px; }
+  .rider { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 0 12px var(--accent); }
+  .home-pin { background: #fff; border: 2px solid #111; border-radius: 6px; padding: 1px 5px; font-weight: 700; font-size: 11px; white-space: nowrap; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--line); }
+  .tabs button { flex: 1; border: 0; background: none; padding: 10px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; }
+  .tabs button.on { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
+  .pane { flex: 1; overflow-y: auto; padding: 14px; display: none; }
+  .pane.on { display: block; }
+  .pane h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 8px; }
+  .pane h3:first-child { margin-top: 0; }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; margin-bottom: 8px; font-size: 13px; }
+  .card.bad { border-color: #f1b5b5; background: var(--bad-soft); }
+  .card .top { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+  .card .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); } .badge.bad { background: var(--bad); color: #fff; }
+  .badge.muted { background: var(--bg); color: var(--muted); }
+  .empty { color: var(--muted); font-size: 13px; }
+  .check { display: flex; gap: 8px; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+  .check .ev { color: var(--muted); font-size: 12px; word-break: break-word; }
+  .check .badge { flex: none; align-self: flex-start; margin-top: 1px; }
+
+  .log { font-size: 12.5px; }
+  .ev-row { padding: 7px 0; border-bottom: 1px solid var(--line); }
+  .ev-row .who { font-weight: 600; } .ev-row .t { color: var(--muted); font-size: 11px; margin-right: 6px; font-variant-numeric: tabular-nums; }
+  .ev-row pre, .ev-row code { font: 11.5px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .ev-row pre { white-space: pre-wrap; word-break: break-word; background: var(--bg); padding: 6px 8px; border-radius: 6px; margin: 4px 0 0; max-height: 260px; overflow: auto; }
+  .ev-row.outbox { background: var(--warn-soft); padding: 7px 8px; border-radius: 8px; border: 0; margin: 4px 0; }
+  .ev-row.outbox.bad { background: var(--bad-soft); }
+  .ev-row .text { white-space: pre-wrap; margin-top: 2px; }
+  .ev-row details summary { cursor: pointer; color: var(--muted); }
+  .stat { font-size: 12.5px; background: var(--bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; }
+
+  @media (max-width: 1100px) {
+    main { grid-template-columns: 1fr; grid-auto-rows: minmax(420px, auto); overflow-y: auto; }
+    #mapwrap { min-height: 420px; } #chat, #side { border: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/><circle cx="8" cy="14.5" r=".8" fill="#2563eb"/><circle cx="16" cy="14.5" r=".8" fill="#2563eb"/>
+    </svg>
+    bus-agent
+  </div>
+  <span class="clock" id="clock">--:--</span>
+  <select id="mode" aria-label="Session"><option value="">Live chat</option></select>
+  <button class="btn primary" id="start">Start</button>
+  <button class="btn" id="save" title="Save this session's trace to data/local/traces">Save trace</button>
+</header>
+
+<main>
+  <section id="chat">
+    <div class="messages" id="messages"></div>
+    <div class="next" id="next" hidden>
+      <div class="what"><div class="when" id="next-when"></div><div id="next-text"></div></div>
+      <button class="btn primary" id="play">Play</button>
+    </div>
+    <div class="composer" id="composer">
+      <input type="file" id="file" accept=".png,.jpg,.jpeg,.txt" hidden>
+      <button class="icon-btn" id="attach" title="Upload a schedule (image or .txt)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.5l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.8 1.8 0 0 1-2.6-2.6l8.4-8.4"/></svg>
+      </button>
+      <textarea id="input" placeholder="Message bus-agent…" rows="1"></textarea>
+      <button class="icon-btn send" id="send" title="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <div id="mapwrap">
+    <div id="map"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <section id="side">
+    <div class="tabs">
+      <button class="on" data-pane="trip">Trip &amp; sharing</button>
+      <button data-pane="behind">Behind the scenes</button>
+    </div>
+    <div class="pane on" id="pane-trip">
+      <div id="scenario-info"></div>
+      <h3>Live shares</h3><div id="shares"></div>
+      <h3>Sent from your phone</h3><div id="outbox"></div>
+      <h3>Safety checks</h3><div id="checks"></div>
+    </div>
+    <div class="pane" id="pane-behind">
+      <div class="stat" id="routes-stat">No routes planned yet.</div>
+      <div class="log" id="log"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const COLORS = ["#2563eb", "#db2777", "#059669", "#d97706", "#7c3aed", "#0891b2", "#dc2626", "#65a30d", "#9333ea"];
+const AGENTS = {concierge: "Concierge", schedule: "Schedule", transit: "Transit", route: "Route+ETA", share: "Share",
+                user: "You", system: "System", world: "World"};
+let state = null, contacts = {};
+
+// ---------- helpers ----------
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+
+function md(text) {
+  // small Markdown subset: headings, bold, italics, bullet and numbered lists, paragraphs
+  const lines = esc(text).split("\n");
+  let html = "", list = null, para = [];
+  const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|\W)\*(?!\s)(.+?)\*(?=\W|$)/g, "$1<i>$2</i>")
+                       .replace(/`(.+?)`/g, "<code>$1</code>");
+  const flushPara = () => { if (para.length) { html += `<p>${para.map(inline).join("<br>")}</p>`; para = []; } };
+  const flushList = () => { if (list) { html += `</${list}>`; list = null; } };
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    let m;
+    if ((m = line.match(/^\s*#{1,6}\s+(.*)/))) { flushPara(); flushList(); html += `<h4>${inline(m[1])}</h4>`; }
+    else if ((m = line.match(/^\s*[*-]\s+(.*)/)) || (m = line.match(/^\s*\d+\.\s+(.*)/))) {
+      flushPara();
+      const kind = /^\s*\d+\./.test(line) ? "ol" : "ul";
+      if (list !== kind) { flushList(); html += `<${kind}>`; list = kind; }
+      html += `<li>${inline(m[1])}</li>`;
+    }
+    else if (!line.trim()) { flushPara(); flushList(); }
+    else { flushList(); para.push(line); }
+  }
+  flushPara(); flushList();
+  return html;
+}
+
+function splitRaw(text) {
+  const i = text.indexOf("\n\nRaw tool results:");
+  return i < 0 ? [text, null] : [text.slice(0, i), text.slice(i + 20)];
+}
+
+const name = key => contacts[key]?.name || key;
+const trusted = key => !!contacts[key]?.trusted;
+
+async function post(path, body, headers = {"Content-Type": "application/json"}) {
+  const r = await fetch(path, {method: "POST", headers, body: body instanceof Blob ? body : JSON.stringify(body || {})});
+  const out = await r.json();
+  if (out.error) sys(out.error, true);
+  return out;
+}
+
+// ---------- chat ----------
+const messages = $("messages");
+function addToChat(el) {
+  const typing = messages.querySelector(".typing");
+  messages.insertBefore(el, typing);
+  messages.scrollTop = messages.scrollHeight;
+}
+function bubble(who, html, extra = "") {
+  const el = document.createElement("div");
+  el.className = `bubble ${who} ${extra}`;
+  el.innerHTML = html;
+  addToChat(el);
+}
+function sys(text, err = false) {
+  const el = document.createElement("div");
+  el.className = "sys" + (err ? " err" : "");
+  el.textContent = text;
+  addToChat(el);
+}
+
+function worldLine(e) {
+  const d = e.data;
+  switch (d.type) {
+    case "delay": return `🚌 ${d.line} is running ${d.minutes} min late`;
+    case "alert": return `⚠️ Service alert: ${d.text}`;
+    case "board": return `🚏 You boarded ${d.route_id.split(":")[0]} (${d.depart})`;
+    case "reply": return `💬 ${name(d.from)} replied: “${d.text}”`;
+    case "arrive": return `📍 You arrived at ${d.place}`;
+    default: return null;
+  }
+}
+
+// ---------- behind the scenes ----------
+function logRow(e) {
+  const d = e.data, row = document.createElement("div");
+  row.className = "ev-row";
+  const t = `<span class="t">${esc(e.t)}</span>`;
+  const who = AGENTS[e.agent] || e.agent;
+  if (e.kind === "message") {
+    const [text, raw] = splitRaw(d.text);
+    row.innerHTML = `${t}<span class="who">${esc(who)} → ${esc(AGENTS[d.to] || d.to)}</span><div class="text">${esc(text)}</div>` +
+      (raw ? `<details><summary>raw tool results</summary><pre>${esc(raw.slice(0, 6000))}</pre></details>` : "");
+  } else if (e.kind === "tool_call") {
+    row.innerHTML = `${t}<span class="who">${esc(who)}</span> calls <code>${esc(d.name)}</code><pre>${esc(JSON.stringify(d.arguments, null, 1))}</pre>`;
+  } else if (e.kind === "tool_result") {
+    const body = typeof d.result === "string" ? d.result : JSON.stringify(d.result, null, 1);
+    row.innerHTML = `${t}<details><summary><code>${esc(d.name)}</code> result</summary><pre>${esc(body.slice(0, 6000))}</pre></details>`;
+  } else if (e.kind === "outbox") {
+    row.className += " outbox" + (trusted(d.to) ? "" : " bad");
+    row.innerHTML = `${t}<span class="who">Sent ${esc(d.kind.replace("_", " "))} to ${esc(name(d.to))}</span>${trusted(d.to) ? "" : ' <span class="badge bad">not trusted</span>'}<pre>${esc(JSON.stringify(d, null, 1))}</pre>`;
+  } else if (e.kind === "thought") {
+    row.innerHTML = `${t}<span class="who">${esc(who)}</span> <i>${esc(typeof d === "string" ? d : JSON.stringify(d))}</i>`;
+  } else {
+    row.innerHTML = `${t}<span class="who">${esc(who)} · ${esc(e.kind)}</span><pre>${esc(JSON.stringify(d))}</pre>`;
+  }
+  const log = $("log");
+  const stick = log.parentElement.scrollTop + log.parentElement.clientHeight >= log.parentElement.scrollHeight - 30;
+  log.appendChild(row);
+  if (stick) log.parentElement.scrollTop = log.parentElement.scrollHeight;
+}
+
+function onTrace(e) {
+  logRow(e);
+  const d = e.data;
+  if (e.kind === "message" && e.agent === "user" && d.to === "concierge") bubble("user", esc(d.text).replace(/\n/g, "<br>"));
+  else if (e.kind === "message" && e.agent === "concierge" && d.to === "user") bubble("bot", md(d.text));
+  else if (e.kind === "event") { const line = worldLine(e); if (line) sys(line); }
+}
+
+// ---------- map ----------
+const map = L.map("map", {zoomControl: true}).setView([34.052, -118.44], 13);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+const routeLayer = L.layerGroup().addTo(map), activeLayer = L.layerGroup().addTo(map);
+let rider = null;
+
+function drawPlaces(places, buildings) {
+  for (const [n, p] of Object.entries(buildings))
+    L.circleMarker([p.lat, p.lon], {radius: 4, color: "#475569", weight: 1, fillColor: "#94a3b8", fillOpacity: .9})
+      .bindTooltip(n).addTo(map);
+  for (const [n, p] of Object.entries(places))
+    L.marker([p.lat, p.lon], {icon: L.divIcon({className: "", html: `<div class="home-pin">${n === "Home" ? "🏠 " : ""}${esc(n)}</div>`,
+      iconAnchor: [n === "Home" ? 30 : 40, 10]})}).bindTooltip(n === "Home" ? "Home (public placeholder)" : n).addTo(map);
+}
+
+function drawRoute(layer, route, color, weight) {
+  const all = [];
+  for (const p of route.parts) {
+    all.push(...p.coords);
+    if (p.kind === "walk") {
+      L.polyline(p.coords, {color: "#64748b", weight: 3, dashArray: "2 6", lineCap: "round"}).addTo(layer);
+    } else {
+      L.polyline(p.coords, {color: "#fff", weight: weight + 4, opacity: .9}).addTo(layer);
+      L.polyline(p.coords, {color, weight, opacity: .95}).bindTooltip(`${p.line}: ${p.board} → ${p.alight}`, {sticky: true}).addTo(layer);
+      for (const [pt, label] of [[p.coords[0], `Board ${p.line} at ${p.board}`], [p.coords[p.coords.length - 1], `Get off at ${p.alight}`]])
+        L.circleMarker(pt, {radius: 5, color, weight: 2, fillColor: "#fff", fillOpacity: 1}).bindTooltip(label).addTo(layer);
+    }
+  }
+  return all;
+}
+
+function onMap(m) {
+  routeLayer.clearLayers(); activeLayer.clearLayers();
+  const pts = [];
+  m.shown.forEach((r, i) => pts.push(...drawRoute(routeLayer, r, COLORS[i % COLORS.length], 5)));
+  if (m.active) pts.push(...drawRoute(activeLayer, m.active, "#111827", 7));
+  if (m.dest) L.marker(m.dest, {icon: L.divIcon({className: "", html: '<div class="home-pin">🎓 Destination</div>', iconAnchor: [45, 10]})}).addTo(routeLayer);
+  if (pts.length) map.fitBounds(L.latLngBounds(pts), {padding: [40, 40]});
+
+  const legend = $("legend");
+  if (!m.shown.length && !m.active) { legend.innerHTML = ""; }
+  else {
+    let html = "";
+    if (m.active) html += `<h3>Your trip</h3><div class="route-row"><span class="swatch" style="background:#111827"></span><div><b>${esc(m.active.lines.join(" → "))}</b></div></div>`;
+    if (m.shown.length) {
+      html += `<h3>Routes the assistant suggested</h3>`;
+      m.shown.forEach((r, i) => {
+        const dep = r.next_departures.map(d => `${d.depart}→${d.arrive}`).join(", ");
+        html += `<div class="route-row"><span class="swatch" style="background:${COLORS[i % COLORS.length]}"></span><div><b>${esc(r.lines.join(" → "))}</b>` +
+                r.labels.map(l => `<span class="tag">${esc(l)}</span>`).join("") + `<div style="color:var(--muted)">${esc(dep)}</div></div></div>`;
+      });
+    }
+    legend.innerHTML = html;
+  }
+  $("routes-stat").innerHTML = m.found
+    ? `<b>plan_routes</b> found <b>${m.found}</b> suitable routes. The assistant's reply mentions <b>${m.shown.length}</b> of them${m.shown.length < m.found ? " (the rest were never shown to you)" : ""}.`
+    : "No routes planned yet.";
+}
+
+function moveRider(gps) {
+  if (!gps) return;
+  const ll = [gps.lat, gps.lon];
+  if (!rider) rider = L.marker(ll, {icon: L.divIcon({className: "", html: '<div class="rider"></div>', iconSize: [16, 16], iconAnchor: [8, 8]}), zIndexOffset: 1000})
+    .bindTooltip("You").addTo(map);
+  else rider.setLatLng(ll);
+}
+
+// ---------- side panel and state ----------
+function fields(f) { return Object.entries(f).filter(([, v]) => v).map(([k]) => k.replace("_", " ")).join(", ") || "nothing"; }
+
+function onState(s) {
+  state = s; contacts = s.contacts;
+  $("clock").textContent = `${s.day} · ${s.time}`;
+  $("mode").value = s.scenario ? s.scenario.file : "";
+  moveRider(s.gps);
+
+  // typing indicator and question mode
+  let typing = messages.querySelector(".typing");
+  const waiting = s.busy && !s.question;
+  if (waiting && !typing) { typing = document.createElement("div"); typing.className = "typing"; typing.innerHTML = "bus-agent is working <span>●</span><span>●</span><span>●</span>"; messages.appendChild(typing); messages.scrollTop = messages.scrollHeight; }
+  if (!waiting && typing) typing.remove();
+  $("composer").classList.toggle("asking", !!s.question);
+  $("input").placeholder = s.question ? "Answer the assistant…" : "Message bus-agent…";
+  const last = [...messages.querySelectorAll(".bubble.bot")].pop();
+  messages.querySelectorAll(".bubble.question").forEach(b => b.classList.remove("question"));
+  if (s.question && last) last.classList.add("question");
+  const canSend = !s.busy || !!s.question;
+  $("send").disabled = !canSend; $("attach").disabled = s.busy;
+
+  // next scenario event
+  $("next").hidden = !s.next;
+  if (s.next) {
+    $("next-when").textContent = `Next event ${s.next.n}/${s.next.of} · ${s.next.at}`;
+    $("next-text").textContent = s.next.text;
+    $("play").disabled = s.busy;
+  }
+
+  $("scenario-info").innerHTML = s.scenario
+    ? `<div class="card"><div class="top">${esc(s.scenario.id)} · ${esc(s.scenario.title)}</div><div class="sub">Expected: ${esc(s.scenario.expected)}</div></div>`
+    : `<div class="card"><div class="top">Live chat</div><div class="sub">Starts from the placeholder Home. Upload a schedule with the paperclip.</div></div>`;
+
+  $("shares").innerHTML = s.shares.length ? s.shares.map(sh => {
+    const bad = !trusted(sh.recipient);
+    const status = sh.status === "active" ? '<span class="badge ok">live</span>' : `<span class="badge muted">${esc(sh.status)}</span>`;
+    return `<div class="card ${bad ? "bad" : ""}"><div class="top"><span>${esc(name(sh.recipient))}${bad ? ' <span class="badge bad">not a trusted contact</span>' : ""}</span>${status}</div>
+      <div class="sub">Shares: ${esc(fields(sh.fields))}${sh.fields.live_location ? ` · precision ${esc(sh.precision)}` : ""} · ${sh.stop_on_arrival ? "stops on arrival" : "no auto-stop"}</div></div>`;
+  }).join("") : '<div class="empty">Not sharing with anyone.</div>';
+
+  $("outbox").innerHTML = s.outbox.length ? s.outbox.slice().reverse().map(o => {
+    const bad = !trusted(o.to);
+    const parts = [];
+    if (o.location) parts.push(`📍 ${o.location.lat}, ${o.location.lon}`);
+    if (o.route) parts.push(`🚌 ${o.route.split(":")[0]}`);
+    if (o.eta) parts.push(`⏱ ETA ${o.eta}`);
+    if (o.text) parts.push(`“${o.text}”`);
+    if (o.message) parts.push(`“${o.message}”`);
+    return `<div class="card ${bad ? "bad" : ""}"><div class="top"><span>${esc(o.at)} · ${esc(o.kind.replace("_", " "))} → ${esc(name(o.to))}</span>${bad ? '<span class="badge bad">not trusted</span>' : ""}</div>
+      <div class="sub">${esc(parts.join(" · ")) || "—"}</div></div>`;
+  }).join("") : '<div class="empty">Nothing has left your phone.</div>';
+
+  const checks = Object.entries(s.checks);
+  $("checks").innerHTML = checks.length ? checks.map(([n, c]) =>
+    `<div class="check"><span class="badge ${c.violated ? "bad" : "ok"}">${c.violated ? "violated" : "ok"}</span><div>${esc(n)}${c.evidence ? `<div class="ev">${esc(c.evidence)}</div>` : ""}</div></div>`).join("")
+    : '<div class="empty">Nothing to check yet.</div>';
+}
+
+function reset() {
+  messages.innerHTML = ""; $("log").innerHTML = ""; $("legend").innerHTML = "";
+  routeLayer.clearLayers(); activeLayer.clearLayers();
+  $("routes-stat").textContent = "No routes planned yet.";
+}
+
+// ---------- wiring ----------
+function connect() {
+  const es = new EventSource("/api/events");
+  es.onmessage = ev => {
+    const item = JSON.parse(ev.data);
+    if (item.type === "reset") reset();
+    else if (item.type === "state") onState(item);
+    else if (item.type === "trace") onTrace(item.event);
+    else if (item.type === "map") onMap(item);
+    else if (item.type === "error") sys(item.text, true);
+  };
+}
+
+async function send() {
+  const text = $("input").value.trim();
+  if (!text) return;
+  $("input").value = "";
+  const out = await post("/api/message", {text});
+  if (out.ok === false) { $("input").value = text; sys("Still working on the last request."); }
+}
+
+$("send").onclick = send;
+$("input").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+$("play").onclick = () => post("/api/step");
+$("attach").onclick = () => $("file").click();
+$("file").onchange = async () => {
+  const f = $("file").files[0];
+  if (!f) return;
+  await post("/api/upload", f, {"X-Filename": f.name});
+  $("file").value = "";
+};
+$("start").onclick = () => post("/api/session", {scenario: $("mode").value || null});
+$("save").onclick = async () => { const out = await post("/api/save"); if (out.path) sys(`Trace saved to ${out.path}`); };
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + b.dataset.pane));
+});
+
+fetch("/api/init").then(r => r.json()).then(init => {
+  for (const s of init.scenarios) {
+    const o = document.createElement("option");
+    o.value = s.file; o.textContent = `${s.id} · ${s.title}`;
+    $("mode").appendChild(o);
+  }
+  drawPlaces(init.places, init.buildings);
+  connect();
+});
+</script>
+</body>
+</html>

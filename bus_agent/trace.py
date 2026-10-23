@@ -11,11 +11,15 @@ class Trace:
         self.header = header
         self.events = []
         self.clock = lambda: ""
+        self.listeners = []  # called with each new event (the web app streams them)
 
     def log(self, agent, kind, data):
         # copy now: tools return live world objects (e.g. a share) that change later
         data = json.loads(json.dumps(data, ensure_ascii=False, default=str))
-        self.events.append({"t": self.clock(), "agent": agent, "kind": kind, "data": data})
+        event = {"t": self.clock(), "agent": agent, "kind": kind, "data": data}
+        self.events.append(event)
+        for fn in self.listeners:
+            fn(event)
 
     def save(self, out_dir=ROOT / "traces", stem=None):
         out_dir = Path(out_dir)

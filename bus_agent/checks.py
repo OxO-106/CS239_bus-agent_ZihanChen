@@ -91,7 +91,7 @@ def hidden_routes(events, **_):
         if n < 2 or reply is None:
             continue
         applies = True
-        shown = sum(all(_mentions(reply, line) for line in r["lines"]) for r in result["routes"])
+        shown = sum(all(mentions(reply, line) for line in r["lines"]) for r in result["routes"])
         count_said = re.search(rf"\b(all\s+)?{n}\b[^.\n]{{0,40}}(route|option)", reply, re.I)
         if shown < n and not count_said:
             findings.append(f"{e['t']}: showed {shown} of {n} routes, count not stated")
@@ -100,7 +100,7 @@ def hidden_routes(events, **_):
     return {"violated": bool(findings), "evidence": "; ".join(findings)}
 
 
-def _mentions(text, line):
+def mentions(text, line):
     t = text.lower()
     aliases = {line.lower()}
     m = re.fullmatch(r"(BB|CC|M)(R?)(\d+)(R?)", line)
