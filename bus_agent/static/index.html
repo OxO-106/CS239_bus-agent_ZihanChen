@@ -193,7 +193,7 @@
   <section class="card panel routes-card" aria-labelledby="routes-h" id="routes" hidden>
     <div>
       <div class="panel-head"><h2 id="routes-h">Routes</h2><span class="sub" id="routes-to"></span></div>
-      <div class="sub" id="routes-sub">Suggested by the assistant</div>
+      <div class="sub" id="routes-sub">Suggested by the assistant · shortest trip first</div>
     </div>
     <div id="routes-list" style="display:flex;flex-direction:column;gap:2px"></div>
     <div class="sub" id="routes-count"></div>
@@ -465,7 +465,10 @@ function lineName(l) {
 }
 
 // routes listed and drawn: the ones the assistant mentioned, plus the rest of plan_routes after "Show all"
-const listed = () => !mapState ? [] : showAll ? mapState.shown.concat(mapState.others || []) : mapState.shown;
+// ranked by door-to-door trip time of the next departure (walk to the stop + ride + walk to the door)
+const tripMin = r => { const d = r.next_departures[0]; return d ? mins(d.arrive) - mins(d.depart) + (r.walk_min?.to_stop || 0) : Infinity; };
+const listed = () => !mapState ? [] : (showAll ? mapState.shown.concat(mapState.others || []) : mapState.shown.slice())
+  .sort((a, b) => tripMin(a) - tripMin(b) || mins(a.next_departures[0].arrive) - mins(b.next_departures[0].arrive));
 
 function renderMap() {
   const m = mapState;
@@ -479,7 +482,7 @@ function renderMap() {
   if (m.active) pts.push(...drawRoute(activeLayer, m.active, "#1f2328", 7, false));
   if (m.dest) {
     const d = Object.entries(buildings).find(([, p]) => Math.abs(p.lat - m.dest[0]) < 1e-6 && Math.abs(p.lon - m.dest[1]) < 1e-6);
-    const arrive = m.shown[0]?.next_departures?.[0]?.arrive;
+    const arrive = listed()[0]?.next_departures?.[0]?.arrive;
     pin(m.dest, esc((d ? d[0] : "Destination") + (arrive ? ` · ${arrive}` : "")), "pin light", [50, 34]).addTo(routeLayer);
   }
   return pts;
@@ -503,19 +506,18 @@ function renderRoutes() {
   $("routes").hidden = !m || !m.shown.length;
   if (!m || !m.shown.length) return;
   const routes = listed();
-  $("routes-sub").textContent = showAll ? "All routes the planner found" : "Suggested by the assistant";
+  $("routes-sub").textContent = (showAll ? "All routes the planner found" : "Suggested by the assistant") + " · shortest trip first";
   const destName = Object.entries(buildings).find(([, p]) => m.dest && Math.abs(p.lat - m.dest[0]) < 1e-6)?.[0];
   $("routes-to").textContent = destName ? `to ${destName}` : "";
   $("routes-list").innerHTML = routes.map((r, i) => {
-    const d = r.next_departures[0];
-    const dur = d ? mins(d.arrive) - mins(d.depart) : null;
+    const dur = tripMin(r) === Infinity ? null : tripMin(r);
     const tags = r.labels.filter(l => l !== "least walking" || r.labels.length === 1).slice(0, 2)
       .map(l => `<span class="pill">${esc(l[0].toUpperCase() + l.slice(1))}</span>`).join("");
     const deps = r.next_departures.map(x => `${x.depart} → ${x.arrive}`).join(", ");
     return `<button type="button" class="route ${selected === i ? "on" : ""}" data-i="${i}">
       <span class="bar" style="background:${COLORS[i % COLORS.length]}"></span>
       <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${tags}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span><span class="times">${esc(deps)}</span></span>
-      ${dur !== null ? `<span class="dur">${dur} min</span>` : ""}</button>`;
+      ${dur !== null ? `<span class="dur" title="Door to door, including walking">${dur} min</span>` : ""}</button>`;
   }).join("");
   $("routes-list").querySelectorAll(".route").forEach(b => b.onclick = () => {
     const i = Number(b.dataset.i);

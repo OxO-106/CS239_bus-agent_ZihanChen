@@ -148,7 +148,8 @@ class Session:
             return
         origin, dest = plan["points"]
         geo = [(r, route_geometry(self.router, r["route_id"], origin, dest, self.shapes)) for r in routes]
-        drawn = [{**g, "labels": r["labels"], "next_departures": r["next_departures"], "in_chat": r in shown}
+        drawn = [{**g, "labels": r["labels"], "next_departures": r["next_departures"], "walk_min": r["walk_min"],
+                  "in_chat": r in shown}
                  for r, g in geo if g]
         # shown = what the assistant's reply mentions; others = the rest of plan_routes, for "Show all routes"
         self.map.update(origin=list(origin), dest=list(dest), found=len(routes),
