@@ -53,6 +53,8 @@
   .klass .where { font-size: 12.5px; color: var(--ink-2); }
   .klass .hint { font-size: 12.5px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
   .klass .hint.go { color: var(--accent-ink); }
+  .pill.muted { color: var(--muted); background: var(--soft); }
+  .link { border: 0; background: none; padding: 0; color: var(--accent-ink); font-weight: 600; font-size: 12px; text-decoration: underline; text-underline-offset: 2px; }
   .pill { font-size: 11px; font-weight: 600; color: var(--accent-ink); background: var(--accent-soft); padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
   .empty-cta { display: flex; gap: 10px; align-items: center; border: 1px dashed var(--line-2); border-radius: 10px; padding: 12px; background: none; text-align: left; width: 100%; }
   .route { text-align: left; border: 0; background: transparent; border-radius: 10px; padding: 10px 12px; display: flex; gap: 12px; align-items: center; width: 100%; }
@@ -191,7 +193,7 @@
   <section class="card panel routes-card" aria-labelledby="routes-h" id="routes" hidden>
     <div>
       <div class="panel-head"><h2 id="routes-h">Routes</h2><span class="sub" id="routes-to"></span></div>
-      <div class="sub">Suggested by the assistant</div>
+      <div class="sub" id="routes-sub">Suggested by the assistant</div>
     </div>
     <div id="routes-list" style="display:flex;flex-direction:column;gap:2px"></div>
     <div class="sub" id="routes-count"></div>
@@ -285,7 +287,7 @@ const AGENTS = {concierge: "Concierge", schedule: "Schedule", transit: "Transit"
 const ICON_BUS = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg>';
 const ICON_WALK = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3M8 12l2-4h4l2 4"/></svg>';
 const ICON_DIR = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 10-10 10L2 12z"/><path d="M9 13v-2h5M12 8l2 3-2 3"/></svg>';
-let state = null, contacts = {}, places = {}, buildings = {}, chatOpen = false, unread = false, mapState = null;
+let state = null, contacts = {}, places = {}, buildings = {}, chatOpen = false, unread = false, mapState = null, showAll = false;
 
 // ---------- helpers ----------
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
@@ -462,12 +464,15 @@ function lineName(l) {
   return l;
 }
 
+// routes listed and drawn: the ones the assistant mentioned, plus the rest of plan_routes after "Show all"
+const listed = () => !mapState ? [] : showAll ? mapState.shown.concat(mapState.others || []) : mapState.shown;
+
 function renderMap() {
   const m = mapState;
   routeLayer.clearLayers(); activeLayer.clearLayers();
   if (!m) return;
   const pts = [];
-  m.shown.forEach((r, i) => {
+  listed().forEach((r, i) => {
     const faded = selected !== null && selected !== i;
     pts.push(...drawRoute(routeLayer, r, COLORS[i % COLORS.length], selected === i ? 7 : 5, faded));
   });
@@ -481,7 +486,7 @@ function renderMap() {
 }
 
 function onMap(m) {
-  mapState = m; selected = null;
+  mapState = m; selected = null; showAll = false;
   const pts = renderMap();
   const narrow = innerWidth < 760;
   if (pts && pts.length) map.fitBounds(L.latLngBounds(pts), narrow
@@ -497,9 +502,11 @@ function renderRoutes() {
   const m = mapState;
   $("routes").hidden = !m || !m.shown.length;
   if (!m || !m.shown.length) return;
+  const routes = listed();
+  $("routes-sub").textContent = showAll ? "All routes the planner found" : "Suggested by the assistant";
   const destName = Object.entries(buildings).find(([, p]) => m.dest && Math.abs(p.lat - m.dest[0]) < 1e-6)?.[0];
   $("routes-to").textContent = destName ? `to ${destName}` : "";
-  $("routes-list").innerHTML = m.shown.map((r, i) => {
+  $("routes-list").innerHTML = routes.map((r, i) => {
     const d = r.next_departures[0];
     const dur = d ? mins(d.arrive) - mins(d.depart) : null;
     const tags = r.labels.filter(l => l !== "least walking" || r.labels.length === 1).slice(0, 2)
@@ -507,7 +514,7 @@ function renderRoutes() {
     const deps = r.next_departures.map(x => `${x.depart} → ${x.arrive}`).join(", ");
     return `<button type="button" class="route ${selected === i ? "on" : ""}" data-i="${i}">
       <span class="bar" style="background:${COLORS[i % COLORS.length]}"></span>
-      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${tags}</span><span class="times">${esc(deps)}</span></span>
+      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${tags}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span><span class="times">${esc(deps)}</span></span>
       ${dur !== null ? `<span class="dur">${dur} min</span>` : ""}</button>`;
   }).join("");
   $("routes-list").querySelectorAll(".route").forEach(b => b.onclick = () => {
@@ -515,7 +522,16 @@ function renderRoutes() {
     selected = selected === i ? null : i;
     renderMap(); renderRoutes();
   });
-  $("routes-count").textContent = m.found > m.shown.length ? `${m.shown.length} of ${m.found} routes shown in chat` : `${m.found} routes`;
+  const hidden = (m.others || []).length;
+  $("routes-count").innerHTML = !hidden ? `${m.found} routes` :
+    `<span>${m.shown.length} of ${m.found} routes shown in chat</span> <button type="button" class="link" id="show-all">${showAll ? "Show only the chat's routes" : `Show all ${m.found} routes`}</button>`;
+  if ($("show-all")) $("show-all").onclick = () => {
+    showAll = !showAll; selected = null;
+    const pts = renderMap(); renderRoutes();
+    if (pts && pts.length && showAll) map.fitBounds(L.latLngBounds(pts), innerWidth < 760
+      ? {paddingTopLeft: [24, 200], paddingBottomRight: [24, 160]}
+      : {paddingTopLeft: [430, 60], paddingBottomRight: [chatOpen ? 450 : 100, 60]});
+  };
 }
 
 function moveRider(gps) {

@@ -100,7 +100,7 @@ class Session:
         self.busy = False
         self.question = None               # an ask_user question waiting for the page
         self.answers = queue.Queue()
-        self.map = {"shown": [], "found": 0, "active": None, "origin": None, "dest": None}
+        self.map = {"shown": [], "others": [], "found": 0, "active": None, "origin": None, "dest": None}
         self.sc = json.loads(Path(scenario_path).read_text()) if scenario_path else None
         self.file = Path(scenario_path).name if scenario_path else None
         self.step_i = 0
@@ -147,9 +147,12 @@ class Session:
         if not shown:
             return
         origin, dest = plan["points"]
-        geo = [(r, route_geometry(self.router, r["route_id"], origin, dest, self.shapes)) for r in shown]
-        self.map.update(origin=list(origin), dest=list(dest), found=len(routes), shown=[
-            {**g, "labels": r["labels"], "next_departures": r["next_departures"]} for r, g in geo if g])
+        geo = [(r, route_geometry(self.router, r["route_id"], origin, dest, self.shapes)) for r in routes]
+        drawn = [{**g, "labels": r["labels"], "next_departures": r["next_departures"], "in_chat": r in shown}
+                 for r, g in geo if g]
+        # shown = what the assistant's reply mentions; others = the rest of plan_routes, for "Show all routes"
+        self.map.update(origin=list(origin), dest=list(dest), found=len(routes),
+                        shown=[d for d in drawn if d["in_chat"]], others=[d for d in drawn if not d["in_chat"]])
         self._emit({"type": "map", **self.map})
 
     def state(self):
