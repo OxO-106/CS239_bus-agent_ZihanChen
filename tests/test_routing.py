@@ -149,3 +149,54 @@ def test_services_on_calendar_exception(router):
 def test_clean_name():
     assert clean_name("PICO EB & SEPULVEDA NS (Sepulveda Station)") == "Pico & Sepulveda"
     assert clean_name("Expo / Sepulveda Station") == "Expo & Sepulveda Station"
+
+
+# ---------- which transfer counts are listed ----------
+
+CHAIN_STOPS = {"C1": 34.0100, "C2": 34.0102, "C3": 34.0350, "C4": 34.0352}
+
+
+def small_router(trips):
+    """A network with the base stops plus a C1..C4 chain, and only the given trips."""
+    net = Network()
+    for sid, lat in {**STOPS, **CHAIN_STOPS}.items():
+        net.stops[sid] = Stop(sid, f"{sid} St / Main Ave", lat, -118.400)
+    for t in trips:
+        net.trips[t.id] = t
+        net.lines[t.line] = "bus"
+    net.calendar = {"wk": ("20260101", "20261231", {0, 1, 2, 3, 4})}
+    net.index()
+    return Router(net)
+
+
+DIRECTS = [trip(f"d{i}", f"D{i}", [("A1", f"08:0{i}"), ("B9", f"08:2{i}")]) for i in range(3)]
+ONE_TRANSFER = [trip("t1", "T1", [("A2", "08:00"), ("M1", "08:10")]), trip("t2", "T2", [("M2", "08:15"), ("B8", "08:30")])]
+TWO_TRANSFERS = [trip("p", "P", [("A1", "08:00"), ("C1", "08:05")]), trip("q", "Q", [("C2", "08:10"), ("C3", "08:20")]),
+                 trip("r", "R", [("C4", "08:25"), ("B9", "08:35")])]
+
+
+def test_enough_direct_routes_hide_transfers_with_reason():
+    result = plan_routes(small_router(DIRECTS + ONE_TRANSFER), ORIGIN, DEST, TUESDAY, "07:30")
+    assert {r["transfers"] for r in result["routes"]} == {0} and result["count"] == 3
+    assert {"route_id": "T1:A2St&MainAve>M1St&MainAve|T2:M2St&MainAve>B8St&MainAve",
+            "reason": "more_transfers_than_needed"} in result["excluded"]
+
+
+def test_few_direct_routes_add_one_transfer():
+    result = plan_routes(small_router(DIRECTS[:2] + ONE_TRANSFER + TWO_TRANSFERS), ORIGIN, DEST, TUESDAY, "07:30")
+    assert sorted(r["transfers"] for r in result["routes"]) == [0, 0, 1]  # not two transfers
+
+
+def test_only_transfer_routes_add_two_transfers():
+    result = plan_routes(small_router(ONE_TRANSFER + TWO_TRANSFERS), ORIGIN, DEST, TUESDAY, "07:30")
+    lines = by_line(result)
+    assert set(lines) == {"T1+T2", "P+Q+R"}
+    pqr = lines["P+Q+R"]
+    assert pqr["transfers"] == 2 and pqr["next_departures"][0]["depart"] == "08:00"
+    assert pqr["route_id"] == "P:A1St&MainAve>C1St&MainAve|Q:C2St&MainAve>C3St&MainAve|R:C4St&MainAve>B9St&MainAve"
+
+
+def test_late_routes_do_not_count_toward_three():
+    # three direct lines, but by 08:21 only D0 arrives (08:20 + 1 min walk); D1, D2 are late
+    result = plan_routes(small_router(DIRECTS + ONE_TRANSFER), ORIGIN, DEST, TUESDAY, "07:30", arrive_by="08:21")
+    assert 1 in {r["transfers"] for r in result["routes"]}

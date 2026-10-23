@@ -196,7 +196,7 @@ def route_tools(w):
                      if any(r["route_id"] == route_id for r in p["result"]["routes"])), None)
         if plan is None:
             return {"error": f"route {route_id} not in any plan"}
-        opt = next(o for o in w.router.search(*plan["points"]) if w.router.route_id(o["legs"]) == route_id)
+        opt = w.router.find(*plan["points"], route_id)
         now = parse_hhmm(w.hhmm)
         if w.active_trip and w.active_trip["route_id"] == route_id:
             now = parse_hhmm(w.active_trip["depart"]) - math.ceil(opt["walk"][0]) * 60
