@@ -14,8 +14,10 @@ class Agent:
         self.tools = tools  # name -> (schema, fn(**args) -> result)
         self.trace = trace
         self.history = [{"role": "system", "content": system}]
+        self.last_results = []  # [(tool name, result)] from the latest run()
 
     def run(self, content, images=None):
+        self.last_results = []
         msg = {"role": "user", "content": content}
         if images:
             msg["images"] = images
@@ -36,6 +38,7 @@ class Agent:
                 self.trace.log(self.name, "tool_call", {"name": name, "arguments": args})
                 result = self._call(name, args)
                 self.trace.log(self.name, "tool_result", {"name": name, "result": result})
+                self.last_results.append((name, result))
                 self.history.append({"role": "tool", "tool_name": name,
                                      "content": json.dumps(result, ensure_ascii=False)})
         return "(stopped: too many tool steps)"

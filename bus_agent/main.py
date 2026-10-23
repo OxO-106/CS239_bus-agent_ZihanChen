@@ -12,6 +12,7 @@ from pathlib import Path
 from bus_agent import gtfs
 from bus_agent.agents import build
 from bus_agent.bus import Bus
+from bus_agent.checks import run_checks
 from bus_agent.routing import Router
 from bus_agent.trace import Trace
 from bus_agent.world import World
@@ -31,7 +32,8 @@ def run_scenario(path, router, run=1, runs=1):
     trace = Trace({"scenario": sc["id"], "title": sc["title"], "expected": sc["expected"],
                    "requirements": sc.get("requirements", []), "run": f"{run}/{runs}",
                    "model": os.environ.get("MODEL", "gemma4:12b"), "simulated_start": sc["start"],
-                   "uploads": sc.get("uploads", {}), "recorded": datetime.now().isoformat(timespec="seconds")})
+                   "uploads": sc.get("uploads", {}), "recorded": datetime.now().isoformat(timespec="seconds"),
+                   "specialist_replies": "summary + raw tool results"})
     world = World(router, sc["start"], trace, _uploads(sc.get("uploads")))
     trace.clock = lambda: world.hhmm
     bus = Bus(trace, lambda: world.hhmm)
@@ -59,6 +61,8 @@ def run_scenario(path, router, run=1, runs=1):
                 trace.log("concierge", "message", {"to": "user", "text": reply})
     trace.header["final_shares"] = list(world.shares.values())
     trace.header["outbox_count"] = len(world.outbox)
+    courses = [c["course"] for c in (world.schedule or {}).get("classes", [])] or sc.get("courses", [])
+    trace.header["checks"] = run_checks(trace.events, world.contacts, sc.get("approved_fields"), courses, world.places)
     stem = f"{sc['id']}-run{run}-{datetime.now():%Y%m%d-%H%M%S}"
     return trace.save(stem=stem)
 
@@ -111,7 +115,10 @@ def main():
         interactive(router, opts.upload, opts.real_home)
     else:
         for run in range(1, opts.runs + 1):
-            print("trace:", run_scenario(opts.scenario, router, run, opts.runs))
+            stem = run_scenario(opts.scenario, router, run, opts.runs)
+            checks = json.loads(stem.with_suffix(".json").read_text(encoding="utf-8"))["header"]["checks"]
+            flags = ", ".join(f"{k}: {'VIOLATED' if v['violated'] else 'ok'}" for k, v in checks.items())
+            print(f"trace: {stem}\n  {flags}")
 
 
 if __name__ == "__main__":

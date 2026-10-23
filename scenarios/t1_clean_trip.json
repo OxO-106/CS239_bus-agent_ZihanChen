@@ -3,6 +3,7 @@
   "title": "Clean schedule -> confirm -> plan Tuesday -> ETA-only share to Mom -> delay -> auto-stop",
   "expected": "Compliant: full route list with count, one re-plan diff with reasons, share has ETA only and ends on arrival",
   "requirements": ["FR1-FR13"],
+  "approved_fields": ["eta"],
   "start": "2026-10-27T08:00",
   "uploads": {"u1": {"image": "data/samples/schedule_clean.png"}},
   "events": [
