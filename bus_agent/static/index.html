@@ -4,183 +4,299 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>bus-agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
   :root {
-    --bg: #f4f5f7; --panel: #ffffff; --line: #e3e6ea; --text: #1c2430; --muted: #6b7480;
-    --accent: #2563eb; --accent-soft: #e8efff; --bubble-user: #2563eb; --bubble-bot: #f0f2f5;
-    --bad: #c62828; --bad-soft: #fdecec; --ok: #2e7d32; --ok-soft: #e8f5e9; --warn-soft: #fff6e0;
+    --ink: #1f2328; --ink-2: #3b4148; --muted: #5f6670; --line: #eceef1; --line-2: #d0d4da;
+    --card: #ffffff; --ground: #eef0ea; --soft: #f1f3f5;
+    --accent: #2f6feb; --accent-ink: #174ea6; --accent-soft: #dbe7ff; --accent-wash: #eef4ff;
+    --ok: #1e8e3e; --bad: #b42318; --bad-soft: #fdecec;
+    --shadow: 0 2px 10px rgba(20, 24, 31, 0.14); --shadow-lg: 0 12px 40px rgba(20, 24, 31, 0.28);
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
-  html, body { margin: 0; height: 100%; }
-  body { font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text); background: var(--bg);
-         display: flex; flex-direction: column; }
-  button, select, textarea { font: inherit; color: inherit; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body { font: 14px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--ground); }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .card { background: var(--card); border-radius: 14px; box-shadow: var(--shadow); }
+  .icon { width: 18px; height: 18px; flex: none; }
 
-  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--panel);
-           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-  .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; margin-right: auto; }
-  .brand svg { width: 26px; height: 26px; }
-  .clock { padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600;
-           font-variant-numeric: tabular-nums; }
-  select, .btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 10px; }
-  .btn { cursor: pointer; }
-  .btn:hover { border-color: #c5cbd3; }
+  #map { position: fixed; inset: 0; z-index: 0; background: var(--ground); }
+  .leaflet-top.leaflet-right { top: 76px; right: 14px; }
+  .leaflet-bar { border: 0 !important; box-shadow: var(--shadow) !important; border-radius: 12px !important; overflow: hidden; }
+  .leaflet-bar a { width: 44px !important; height: 44px !important; line-height: 44px !important; font-size: 20px !important; color: var(--ink-2) !important; }
+
+  /* left column */
+  .left { position: fixed; left: 24px; top: 24px; width: 380px; max-height: calc(100% - 48px); overflow-y: auto; z-index: 500;
+          display: flex; flex-direction: column; gap: 12px; padding: 2px; scrollbar-width: thin; }
+  .search { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 16px; position: relative; }
+  .search input { flex: 1; border: 0; outline: none; font-size: 15px; height: 40px; background: transparent; min-width: 0; }
+  .sq-btn { width: 44px; height: 44px; border-radius: 10px; border: 0; background: var(--accent); display: grid; place-items: center; flex: none; }
+  .sq-btn.ghost { background: var(--card); border: 1px solid var(--line-2); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: var(--card); box-shadow: 0 1px 4px rgba(20, 24, 31, 0.16); font-size: 13px; font-weight: 500; }
+  .chip:hover { background: #f7f8fa; }
+  .panel { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .panel-head h2 { margin: 0; font-size: 15px; font-weight: 600; }
+  .sub { font-size: 12px; color: var(--muted); }
+  .klass { display: flex; gap: 12px; align-items: flex-start; }
+  .klass + .klass { border-top: 1px solid var(--line); padding-top: 12px; }
+  .klass .time { width: 48px; flex: none; font-variant-numeric: tabular-nums; }
+  .klass .time b { display: block; font-size: 14px; }
+  .klass .body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .klass .title { display: flex; gap: 6px; align-items: center; font-weight: 600; }
+  .klass .where { font-size: 12.5px; color: var(--ink-2); }
+  .klass .hint { font-size: 12.5px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .klass .hint.go { color: var(--accent-ink); }
+  .pill { font-size: 11px; font-weight: 600; color: var(--accent-ink); background: var(--accent-soft); padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+  .empty-cta { display: flex; gap: 10px; align-items: center; border: 1px dashed var(--line-2); border-radius: 10px; padding: 12px; background: none; text-align: left; width: 100%; }
+  .route { text-align: left; border: 0; background: transparent; border-radius: 10px; padding: 10px 12px; display: flex; gap: 12px; align-items: center; width: 100%; }
+  .route.on { background: var(--accent-wash); }
+  .route .bar { width: 6px; align-self: stretch; border-radius: 3px; flex: none; }
+  .route .body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .route .name { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-weight: 600; }
+  .route .times { font-size: 12.5px; color: var(--ink-2); }
+  .route .dur { font-weight: 600; white-space: nowrap; }
+
+  /* top right */
+  .topright { position: fixed; right: 24px; top: 24px; z-index: 600; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; max-width: calc(100% - 440px); }
+  .share-chip { height: 44px; padding: 0 6px 0 14px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px; font-size: 13px; white-space: nowrap; }
+  .share-chip.bad { background: var(--bad-soft); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+  .dot.live { background: var(--ok); box-shadow: 0 0 0 4px rgba(30, 142, 62, 0.18); }
+  .share-chip.bad .dot.live { background: var(--bad); box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.18); }
+  .stop { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); font-size: 12.5px; font-weight: 600; color: var(--bad); }
+  .pill-btn { height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--card); font-size: 13px; font-weight: 500; color: var(--ink-2); display: flex; align-items: center; gap: 8px; }
+  .pill-btn[aria-expanded="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .pill-btn[aria-expanded="true"] svg { stroke: #fff; }
+
+  /* scenario player bar */
+  .player { position: fixed; left: 50%; transform: translateX(-50%); bottom: 24px; z-index: 600; display: flex; gap: 12px; align-items: center;
+            padding: 8px 8px 8px 16px; max-width: min(620px, calc(100% - 520px)); }
+  .player .what { min-width: 0; font-size: 13px; }
+  .player .what div:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btn { height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--card); font-weight: 600; font-size: 13px; white-space: nowrap; }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn:disabled { opacity: .5; cursor: default; }
 
-  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 380px 1fr 360px; }
-  section { min-height: 0; display: flex; flex-direction: column; background: var(--panel); }
-  #chat { border-right: 1px solid var(--line); }
-  #side { border-left: 1px solid var(--line); }
-
+  /* assistant */
+  .fab { position: fixed; right: 24px; bottom: 24px; z-index: 700; width: 64px; height: 64px; border-radius: 50%; border: 0; background: var(--accent);
+         box-shadow: 0 6px 20px rgba(47, 111, 235, 0.45); display: grid; place-items: center; }
+  .fab .badge { position: absolute; top: 4px; right: 4px; width: 14px; height: 14px; border-radius: 50%; background: #e8590c; border: 2px solid #fff; }
+  .chat { position: fixed; right: 24px; bottom: 112px; z-index: 700; width: 400px; height: min(600px, calc(100% - 160px)); display: flex; flex-direction: column;
+          background: var(--card); border-radius: 18px; box-shadow: var(--shadow-lg); overflow: hidden; }
+  .chat-head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 14px 18px; border-bottom: 1px solid var(--line); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; flex: none; }
+  .round { width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; display: grid; place-items: center; flex: none; }
+  .round:hover { background: var(--soft); }
   .messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .bubble { max-width: 88%; padding: 9px 12px; border-radius: 16px; white-space: normal; word-wrap: break-word; }
-  .bubble.user { align-self: flex-end; background: var(--bubble-user); color: #fff; border-bottom-right-radius: 4px; }
-  .bubble.bot { align-self: flex-start; background: var(--bubble-bot); border-bottom-left-radius: 4px; }
-  .bubble.bot.question { border: 1.5px solid var(--accent); background: var(--accent-soft); }
-  .bubble p { margin: 0 0 6px; } .bubble p:last-child { margin-bottom: 0; }
-  .bubble ul, .bubble ol { margin: 4px 0 6px; padding-left: 20px; }
-  .bubble h4 { margin: 6px 0 4px; font-size: 14px; }
-  .sys { align-self: center; font-size: 12px; color: var(--muted); background: var(--bg); border-radius: 999px; padding: 3px 10px;
-         text-align: center; max-width: 95%; }
-  .sys.err { color: var(--bad); background: var(--bad-soft); }
-  .typing { align-self: flex-start; color: var(--muted); font-size: 13px; padding: 4px 8px; }
-  .typing span { animation: blink 1.2s infinite; } .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
-  @keyframes blink { 0%, 80%, 100% { opacity: .2 } 40% { opacity: 1 } }
+  .msg { max-width: 85%; padding: 10px 13px; font-size: 14px; line-height: 1.45; word-wrap: break-word; }
+  .msg.user { align-self: flex-end; background: var(--accent); color: #fff; border-radius: 16px 16px 4px 16px; white-space: pre-wrap; }
+  .msg.bot { align-self: flex-start; background: var(--soft); border-radius: 16px 16px 16px 4px; }
+  .msg.bot.question { background: var(--accent-wash); box-shadow: inset 0 0 0 1.5px var(--accent); }
+  .msg p { margin: 0 0 6px; } .msg p:last-child { margin-bottom: 0; }
+  .msg ul, .msg ol { margin: 4px 0 6px; padding-left: 20px; } .msg h4 { margin: 6px 0 4px; font-size: 14px; }
+  .note { align-self: center; font-size: 12px; color: var(--muted); background: var(--soft); padding: 3px 10px; border-radius: 999px; text-align: center; max-width: 95%; }
+  .note.err { color: var(--bad); background: var(--bad-soft); }
+  .typing { align-self: flex-start; display: flex; gap: 5px; padding: 8px 4px; }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: #9aa0a6; animation: blink 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
+  .composer { padding: 12px; border-top: 1px solid var(--line); display: flex; gap: 8px; align-items: center; }
+  .composer input[type=text] { flex: 1; min-width: 0; height: 44px; border: 1px solid var(--line-2); border-radius: 22px; padding: 0 16px; font-size: 14px; outline: none; }
+  .composer input[type=text]:focus { border-color: var(--accent); }
+  .composer.asking input[type=text] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .round.outline { border: 1px solid var(--line-2); background: var(--card); }
+  .round.send { background: var(--accent); }
+  .round:disabled { opacity: .5; cursor: default; }
 
-  .next { margin: 0 12px 8px; padding: 10px 12px; border: 1px dashed #c5cbd3; border-radius: 10px; display: flex; gap: 10px; align-items: center; }
-  .next .what { flex: 1; font-size: 13px; } .next .when { font-weight: 600; color: var(--muted); font-size: 12px; }
-  .composer { border-top: 1px solid var(--line); padding: 10px; display: flex; gap: 8px; align-items: flex-end; }
-  .composer textarea { flex: 1; resize: none; border: 1px solid var(--line); border-radius: 18px; padding: 8px 12px; height: 38px; max-height: 120px; }
-  .composer.asking textarea { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); cursor: pointer;
-              display: grid; place-items: center; flex: none; }
-  .icon-btn.send { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .icon-btn svg { width: 18px; height: 18px; }
-
-  #mapwrap { position: relative; min-height: 0; }
-  #map { position: absolute; inset: 0; }
-  .legend { position: absolute; left: 12px; bottom: 12px; z-index: 500; background: var(--panel); border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,.15); padding: 10px 12px; max-width: 340px; max-height: 45%; overflow-y: auto; }
-  .legend:empty { display: none; }
-  .legend h3 { margin: 0 0 6px; font-size: 13px; }
-  .route-row { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; font-size: 12.5px; }
-  .swatch { width: 12px; height: 12px; border-radius: 3px; margin-top: 3px; flex: none; }
-  .tag { display: inline-block; font-size: 11px; padding: 0 6px; border-radius: 999px; background: var(--bg); color: var(--muted); margin-left: 4px; }
-  .rider { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 2px var(--accent), 0 0 12px var(--accent); }
-  .home-pin { background: #fff; border: 2px solid #111; border-radius: 6px; padding: 1px 5px; font-weight: 700; font-size: 11px; white-space: nowrap; }
-
-  .tabs { display: flex; border-bottom: 1px solid var(--line); }
-  .tabs button { flex: 1; border: 0; background: none; padding: 10px; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; }
-  .tabs button.on { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
-  .pane { flex: 1; overflow-y: auto; padding: 14px; display: none; }
-  .pane.on { display: block; }
-  .pane h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 8px; }
-  .pane h3:first-child { margin-top: 0; }
-  .card { border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; margin-bottom: 8px; font-size: 13px; }
-  .card.bad { border-color: #f1b5b5; background: var(--bad-soft); }
-  .card .top { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
-  .card .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
-  .badge { font-size: 11px; padding: 1px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
-  .badge.ok { background: var(--ok-soft); color: var(--ok); } .badge.bad { background: var(--bad); color: #fff; }
-  .badge.muted { background: var(--bg); color: var(--muted); }
-  .empty { color: var(--muted); font-size: 13px; }
-  .check { display: flex; gap: 8px; font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--line); }
+  /* inspector */
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 100%; z-index: 800; background: var(--card); box-shadow: var(--shadow-lg);
+            display: flex; flex-direction: column; transform: translateX(105%); transition: transform .2s ease; }
+  .drawer.open { transform: none; }
+  .drawer-head { display: flex; align-items: center; gap: 8px; padding: 12px 12px 0 18px; }
+  .drawer-head h2 { flex: 1; margin: 0; font-size: 16px; }
+  .tabs { display: flex; gap: 4px; padding: 8px 12px 0; border-bottom: 1px solid var(--line); }
+  .tabs button { border: 0; background: none; padding: 10px 12px; color: var(--muted); border-bottom: 2px solid transparent; font-weight: 500; }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+  .tabpane { flex: 1; overflow-y: auto; padding: 16px 18px; }
+  .tabpane h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 18px 0 8px; }
+  .tabpane h3:first-child { margin-top: 0; }
+  .field { display: flex; gap: 8px; }
+  .field select { flex: 1; min-width: 0; height: 40px; border: 1px solid var(--line-2); border-radius: 10px; padding: 0 10px; background: var(--card); }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+  .box.bad { border-color: #f1b5b5; background: var(--bad-soft); }
+  .box .top { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+  .tag { font-size: 11px; padding: 1px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; flex: none; align-self: flex-start; }
+  .tag.ok { background: #e6f4ea; color: #1e6b33; } .tag.bad { background: var(--bad); color: #fff; } .tag.muted { background: var(--soft); color: var(--muted); }
+  .check { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
   .check .ev { color: var(--muted); font-size: 12px; word-break: break-word; }
-  .check .badge { flex: none; align-self: flex-start; margin-top: 1px; }
-
-  .log { font-size: 12.5px; }
-  .ev-row { padding: 7px 0; border-bottom: 1px solid var(--line); }
-  .ev-row .who { font-weight: 600; } .ev-row .t { color: var(--muted); font-size: 11px; margin-right: 6px; font-variant-numeric: tabular-nums; }
-  .ev-row pre, .ev-row code { font: 11.5px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
-  .ev-row pre { white-space: pre-wrap; word-break: break-word; background: var(--bg); padding: 6px 8px; border-radius: 6px; margin: 4px 0 0; max-height: 260px; overflow: auto; }
-  .ev-row.outbox { background: var(--warn-soft); padding: 7px 8px; border-radius: 8px; border: 0; margin: 4px 0; }
-  .ev-row.outbox.bad { background: var(--bad-soft); }
+  .empty { color: var(--muted); font-size: 13px; }
+  .stat { font-size: 12.5px; background: var(--soft); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; }
+  .ev-row { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+  .ev-row .t { color: var(--muted); font-size: 11px; margin-right: 6px; font-variant-numeric: tabular-nums; }
+  .ev-row .who { font-weight: 600; }
   .ev-row .text { white-space: pre-wrap; margin-top: 2px; }
+  .ev-row pre, .ev-row code { font: 11.5px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .ev-row pre { white-space: pre-wrap; word-break: break-word; background: var(--soft); padding: 6px 8px; border-radius: 6px; margin: 4px 0 0; max-height: 260px; overflow: auto; }
+  .ev-row.out { background: #fff6e0; padding: 8px; border-radius: 8px; border: 0; margin: 4px 0; }
+  .ev-row.out.bad { background: var(--bad-soft); }
   .ev-row details summary { cursor: pointer; color: var(--muted); }
-  .stat { font-size: 12.5px; background: var(--bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 10px; }
 
-  @media (max-width: 1100px) {
-    main { grid-template-columns: 1fr; grid-auto-rows: minmax(420px, auto); overflow-y: auto; }
-    #mapwrap { min-height: 420px; } #chat, #side { border: 0; border-top: 1px solid var(--line); }
+  /* map markers */
+  .pin { background: var(--ink); color: #fff; font: 600 12px Inter, sans-serif; padding: 4px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+  .pin.light { background: #fff; color: var(--ink); }
+  .rider { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(47, 111, 235, 0.22); }
+  .bldg-label { font: 600 12px Inter, sans-serif; color: var(--ink-2); background: rgba(255,255,255,.88); padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    .left { left: 12px; right: 12px; width: auto; top: 12px; max-height: 45%; }
+    .left .chips, .left .routes-card { display: none; }
+    .klass:not(.is-next) { display: none; }
+    .klass + .klass { border: 0; padding: 0; }
+    .topright { top: auto; bottom: 100px; right: 12px; max-width: calc(100% - 24px); }
+    .leaflet-top.leaflet-right { display: none; }
+    .player { left: 12px; right: 96px; transform: none; bottom: 24px; max-width: none; }
+    .fab { right: 16px; }
+    .chat { left: 0; right: 0; bottom: 0; width: auto; height: 72%; border-radius: 20px 20px 0 0; }
+    .chat.open ~ .fab { display: none; }
   }
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/><circle cx="8" cy="14.5" r=".8" fill="#2563eb"/><circle cx="16" cy="14.5" r=".8" fill="#2563eb"/>
-    </svg>
-    bus-agent
-  </div>
-  <span class="clock" id="clock">--:--</span>
-  <select id="mode" aria-label="Session"><option value="">Live chat</option></select>
-  <button class="btn primary" id="start">Start</button>
-  <button class="btn" id="save" title="Save this session's trace to data/local/traces">Save trace</button>
-</header>
+<div id="map" aria-label="Map"></div>
 
-<main>
-  <section id="chat">
-    <div class="messages" id="messages"></div>
-    <div class="next" id="next" hidden>
-      <div class="what"><div class="when" id="next-when"></div><div id="next-text"></div></div>
-      <button class="btn primary" id="play">Play</button>
-    </div>
-    <div class="composer" id="composer">
-      <input type="file" id="file" accept=".png,.jpg,.jpeg,.txt" hidden>
-      <button class="icon-btn" id="attach" title="Upload a schedule (image or .txt)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.5l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.8 1.8 0 0 1-2.6-2.6l8.4-8.4"/></svg>
-      </button>
-      <textarea id="input" placeholder="Message bus-agent…" rows="1"></textarea>
-      <button class="icon-btn send" id="send" title="Send">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </div>
+<div class="left">
+  <form class="card search" id="search-form" role="search">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg>
+    <label for="search" class="sr">Search places or buildings</label>
+    <input id="search" type="search" list="places" placeholder="Search places or buildings" autocomplete="off">
+    <datalist id="places"></datalist>
+    <button class="sq-btn" type="submit" aria-label="Show on map">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    </button>
+  </form>
+  <div class="chips" id="chips"></div>
+
+  <section class="card panel" aria-labelledby="today-h" id="today">
+    <div class="panel-head"><h2 id="today-h">Today's classes</h2><span class="sub" id="today-date"></span></div>
+    <div id="today-list"></div>
   </section>
 
-  <div id="mapwrap">
-    <div id="map"></div>
-    <div class="legend" id="legend"></div>
-  </div>
-
-  <section id="side">
-    <div class="tabs">
-      <button class="on" data-pane="trip">Trip &amp; sharing</button>
-      <button data-pane="behind">Behind the scenes</button>
+  <section class="card panel routes-card" aria-labelledby="routes-h" id="routes" hidden>
+    <div>
+      <div class="panel-head"><h2 id="routes-h">Routes</h2><span class="sub" id="routes-to"></span></div>
+      <div class="sub">Suggested by the assistant</div>
     </div>
-    <div class="pane on" id="pane-trip">
-      <div id="scenario-info"></div>
-      <h3>Live shares</h3><div id="shares"></div>
-      <h3>Sent from your phone</h3><div id="outbox"></div>
-      <h3>Safety checks</h3><div id="checks"></div>
-    </div>
-    <div class="pane" id="pane-behind">
-      <div class="stat" id="routes-stat">No routes planned yet.</div>
-      <div class="log" id="log"></div>
-    </div>
+    <div id="routes-list" style="display:flex;flex-direction:column;gap:2px"></div>
+    <div class="sub" id="routes-count"></div>
   </section>
-</main>
+</div>
+
+<div class="topright">
+  <div id="share-chips" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end"></div>
+  <button class="pill-btn" id="inspector-btn" type="button" aria-expanded="false" aria-controls="drawer">
+    <svg class="icon" style="width:16px;height:16px" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+    Inspector
+  </button>
+</div>
+
+<div class="card player" id="player" hidden>
+  <div class="what"><div class="sub" id="player-when"></div><div id="player-text"></div></div>
+  <button class="btn primary" id="player-play" type="button">Play</button>
+</div>
+
+<div class="chat" id="chat" role="dialog" aria-label="bus-agent assistant" hidden>
+  <div class="chat-head">
+    <div class="avatar"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg></div>
+    <div style="flex:1"><div style="font-weight:600;font-size:15px">bus-agent</div><div class="sub" id="chat-status">Transit assistant</div></div>
+    <button class="round" id="chat-close" type="button" aria-label="Close assistant">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="messages" id="messages" aria-live="polite"></div>
+  <form class="composer" id="composer">
+    <input type="file" id="file" accept=".png,.jpg,.jpeg,.txt" hidden>
+    <button class="round outline" id="attach" type="button" aria-label="Upload schedule (image or .txt)">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round"><path d="M21 12.5l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.8 1.8 0 0 1-2.6-2.6l8.4-8.4"/></svg>
+    </button>
+    <label for="input" class="sr">Message</label>
+    <input type="text" id="input" placeholder="Message bus-agent" autocomplete="off">
+    <button class="round send" id="send" type="submit" aria-label="Send">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </form>
+</div>
+
+<button class="fab" id="fab" type="button" aria-label="Open assistant" aria-expanded="false" aria-controls="chat">
+  <svg id="fab-open" aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
+  <svg id="fab-close" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" hidden><path d="M6 9l6 6 6-6"/></svg>
+  <span class="badge" id="fab-badge" hidden></span>
+</button>
+
+<aside class="drawer" id="drawer" aria-label="Inspector">
+  <div class="drawer-head">
+    <h2>Inspector</h2>
+    <button class="round" id="drawer-close" type="button" aria-label="Close inspector">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="session">Session</button>
+    <button role="tab" aria-selected="false" data-tab="checks">Checks</button>
+    <button role="tab" aria-selected="false" data-tab="activity">Activity</button>
+  </div>
+  <div class="tabpane" id="tab-session">
+    <h3>Session</h3>
+    <div class="field">
+      <label for="mode" class="sr">Session</label>
+      <select id="mode"><option value="">Live chat</option></select>
+      <button class="btn primary" id="start" type="button">Start</button>
+    </div>
+    <div id="scenario-info" style="margin-top:10px"></div>
+    <div id="next-box"></div>
+    <h3>Clock</h3>
+    <div class="box" id="clock"></div>
+    <h3>Trace</h3>
+    <button class="btn" id="save" type="button">Save trace to data/local/traces</button>
+  </div>
+  <div class="tabpane" id="tab-checks" hidden>
+    <h3>Safety checks</h3><div id="checks"></div>
+    <h3>Live shares</h3><div id="shares"></div>
+    <h3>Sent from the phone</h3><div id="outbox"></div>
+  </div>
+  <div class="tabpane" id="tab-activity" hidden>
+    <div class="stat" id="routes-stat">No routes planned yet.</div>
+    <div id="log"></div>
+  </div>
+</aside>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
-const COLORS = ["#2563eb", "#db2777", "#059669", "#d97706", "#7c3aed", "#0891b2", "#dc2626", "#65a30d", "#9333ea"];
+const COLORS = ["#2f6feb", "#c2410c", "#0f766e", "#9333ea", "#be185d", "#0369a1", "#4d7c0f", "#a16207", "#475569"];
 const AGENTS = {concierge: "Concierge", schedule: "Schedule", transit: "Transit", route: "Route+ETA", share: "Share",
                 user: "You", system: "System", world: "World"};
-let state = null, contacts = {};
+const ICON_BUS = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg>';
+const ICON_WALK = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3M8 12l2-4h4l2 4"/></svg>';
+const ICON_DIR = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 10-10 10L2 12z"/><path d="M9 13v-2h5M12 8l2 3-2 3"/></svg>';
+let state = null, contacts = {}, places = {}, buildings = {}, chatOpen = false, unread = false, mapState = null;
 
 // ---------- helpers ----------
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const name = key => contacts[key]?.name || key;
+const trusted = key => !!contacts[key]?.trusted;
+const mins = hhmm => { const [h, m] = hhmm.split(":").map(Number); return h * 60 + m; };
 
 function md(text) {
-  // small Markdown subset: headings, bold, italics, bullet and numbered lists, paragraphs
   const lines = esc(text).split("\n");
   let html = "", list = null, para = [];
-  const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|\W)\*(?!\s)(.+?)\*(?=\W|$)/g, "$1<i>$2</i>")
-                       .replace(/`(.+?)`/g, "<code>$1</code>");
+  const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|\W)\*(?!\s)(.+?)\*(?=\W|$)/g, "$1<i>$2</i>").replace(/`(.+?)`/g, "<code>$1</code>");
   const flushPara = () => { if (para.length) { html += `<p>${para.map(inline).join("<br>")}</p>`; para = []; } };
   const flushList = () => { if (list) { html += `</${list}>`; list = null; } };
   for (const raw of lines) {
@@ -200,59 +316,68 @@ function md(text) {
   return html;
 }
 
-function splitRaw(text) {
-  const i = text.indexOf("\n\nRaw tool results:");
-  return i < 0 ? [text, null] : [text.slice(0, i), text.slice(i + 20)];
-}
-
-const name = key => contacts[key]?.name || key;
-const trusted = key => !!contacts[key]?.trusted;
-
 async function post(path, body, headers = {"Content-Type": "application/json"}) {
   const r = await fetch(path, {method: "POST", headers, body: body instanceof Blob ? body : JSON.stringify(body || {})});
   const out = await r.json();
-  if (out.error) sys(out.error, true);
+  if (out.error) note(out.error, true);
   return out;
 }
 
-// ---------- chat ----------
+// ---------- assistant window ----------
 const messages = $("messages");
-function addToChat(el) {
-  const typing = messages.querySelector(".typing");
-  messages.insertBefore(el, typing);
-  messages.scrollTop = messages.scrollHeight;
+function setChat(open) {
+  chatOpen = open;
+  $("chat").hidden = !open;
+  $("chat").classList.toggle("open", open);
+  $("fab").setAttribute("aria-expanded", open);
+  $("fab").setAttribute("aria-label", open ? "Close assistant" : "Open assistant");
+  $("fab-open").toggleAttribute("hidden", open);
+  $("fab-close").toggleAttribute("hidden", !open);
+  if (open) { unread = false; $("fab-badge").hidden = true; messages.scrollTop = messages.scrollHeight; $("input").focus(); }
 }
-function bubble(who, html, extra = "") {
+function addToChat(el) {
+  messages.insertBefore(el, messages.querySelector(".typing"));
+  messages.scrollTop = messages.scrollHeight;
+  if (!chatOpen && !el.classList.contains("user")) { unread = true; $("fab-badge").hidden = false; }
+}
+function bubble(who, html) {
   const el = document.createElement("div");
-  el.className = `bubble ${who} ${extra}`;
+  el.className = `msg ${who}`;
   el.innerHTML = html;
   addToChat(el);
 }
-function sys(text, err = false) {
+function note(text, err = false) {
   const el = document.createElement("div");
-  el.className = "sys" + (err ? " err" : "");
+  el.className = "note" + (err ? " err" : "");
   el.textContent = text;
   addToChat(el);
 }
+function welcome() {
+  bubble("bot", "<p>Hi! Ask me for routes, upload your class schedule with the paperclip, or share your trip with someone.</p>");
+  unread = false; $("fab-badge").hidden = true;
+}
+function ask(text) { setChat(true); $("input").value = text; send(); }
 
-function worldLine(e) {
-  const d = e.data;
+function worldLine(d) {
   switch (d.type) {
-    case "delay": return `🚌 ${d.line} is running ${d.minutes} min late`;
-    case "alert": return `⚠️ Service alert: ${d.text}`;
-    case "board": return `🚏 You boarded ${d.route_id.split(":")[0]} (${d.depart})`;
-    case "reply": return `💬 ${name(d.from)} replied: “${d.text}”`;
-    case "arrive": return `📍 You arrived at ${d.place}`;
+    case "delay": return `${d.at} · ${d.line} running ${d.minutes} min late`;
+    case "alert": return `${d.at} · Service alert: ${d.text}`;
+    case "board": return `${d.at} · You boarded the ${d.route_id.split(":")[0]}`;
+    case "reply": return `${d.at} · ${name(d.from)} replied: “${d.text}”`;
+    case "arrive": return `${d.at} · You arrived at ${d.place}`;
     default: return null;
   }
 }
 
-// ---------- behind the scenes ----------
+// ---------- activity log ----------
+function splitRaw(text) {
+  const i = text.indexOf("\n\nRaw tool results:");
+  return i < 0 ? [text, null] : [text.slice(0, i), text.slice(i + 20)];
+}
 function logRow(e) {
   const d = e.data, row = document.createElement("div");
   row.className = "ev-row";
-  const t = `<span class="t">${esc(e.t)}</span>`;
-  const who = AGENTS[e.agent] || e.agent;
+  const t = `<span class="t">${esc(e.t)}</span>`, who = AGENTS[e.agent] || e.agent;
   if (e.kind === "message") {
     const [text, raw] = splitRaw(d.text);
     row.innerHTML = `${t}<span class="who">${esc(who)} → ${esc(AGENTS[d.to] || d.to)}</span><div class="text">${esc(text)}</div>` +
@@ -263,159 +388,257 @@ function logRow(e) {
     const body = typeof d.result === "string" ? d.result : JSON.stringify(d.result, null, 1);
     row.innerHTML = `${t}<details><summary><code>${esc(d.name)}</code> result</summary><pre>${esc(body.slice(0, 6000))}</pre></details>`;
   } else if (e.kind === "outbox") {
-    row.className += " outbox" + (trusted(d.to) ? "" : " bad");
-    row.innerHTML = `${t}<span class="who">Sent ${esc(d.kind.replace("_", " "))} to ${esc(name(d.to))}</span>${trusted(d.to) ? "" : ' <span class="badge bad">not trusted</span>'}<pre>${esc(JSON.stringify(d, null, 1))}</pre>`;
+    row.className += " out" + (trusted(d.to) ? "" : " bad");
+    row.innerHTML = `${t}<span class="who">Sent ${esc(d.kind.replace("_", " "))} to ${esc(name(d.to))}</span>${trusted(d.to) ? "" : ' <span class="tag bad">not trusted</span>'}<pre>${esc(JSON.stringify(d, null, 1))}</pre>`;
   } else if (e.kind === "thought") {
     row.innerHTML = `${t}<span class="who">${esc(who)}</span> <i>${esc(typeof d === "string" ? d : JSON.stringify(d))}</i>`;
   } else {
     row.innerHTML = `${t}<span class="who">${esc(who)} · ${esc(e.kind)}</span><pre>${esc(JSON.stringify(d))}</pre>`;
   }
-  const log = $("log");
-  const stick = log.parentElement.scrollTop + log.parentElement.clientHeight >= log.parentElement.scrollHeight - 30;
-  log.appendChild(row);
-  if (stick) log.parentElement.scrollTop = log.parentElement.scrollHeight;
+  const pane = $("tab-activity"), stick = pane.scrollTop + pane.clientHeight >= pane.scrollHeight - 30;
+  $("log").appendChild(row);
+  if (stick) pane.scrollTop = pane.scrollHeight;
 }
 
 function onTrace(e) {
   logRow(e);
   const d = e.data;
-  if (e.kind === "message" && e.agent === "user" && d.to === "concierge") bubble("user", esc(d.text).replace(/\n/g, "<br>"));
+  if (e.kind === "message" && e.agent === "user" && d.to === "concierge") bubble("user", esc(d.text));
   else if (e.kind === "message" && e.agent === "concierge" && d.to === "user") bubble("bot", md(d.text));
-  else if (e.kind === "event") { const line = worldLine(e); if (line) sys(line); }
+  else if (e.kind === "event") { const line = worldLine({...d, at: e.t}); if (line) note(line); }
 }
 
 // ---------- map ----------
-const map = L.map("map", {zoomControl: true}).setView([34.052, -118.44], 13);
+const map = L.map("map", {zoomControl: false}).setView([34.052, -118.44], 14);
+L.control.zoom({position: "topright"}).addTo(map);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 const routeLayer = L.layerGroup().addTo(map), activeLayer = L.layerGroup().addTo(map);
-let rider = null;
+let rider = null, selected = null;
 
-function drawPlaces(places, buildings) {
-  for (const [n, p] of Object.entries(buildings))
-    L.circleMarker([p.lat, p.lon], {radius: 4, color: "#475569", weight: 1, fillColor: "#94a3b8", fillOpacity: .9})
-      .bindTooltip(n).addTo(map);
-  for (const [n, p] of Object.entries(places))
-    L.marker([p.lat, p.lon], {icon: L.divIcon({className: "", html: `<div class="home-pin">${n === "Home" ? "🏠 " : ""}${esc(n)}</div>`,
-      iconAnchor: [n === "Home" ? 30 : 40, 10]})}).bindTooltip(n === "Home" ? "Home (public placeholder)" : n).addTo(map);
+function pin(latlng, html, cls = "pin", anchor = [0, 0]) {
+  return L.marker(latlng, {icon: L.divIcon({className: "", html: `<div class="${cls}">${html}</div>`, iconSize: null, iconAnchor: anchor}), keyboard: false});
 }
 
-function drawRoute(layer, route, color, weight) {
+function drawPlaces() {
+  for (const [n, p] of Object.entries(buildings))
+    L.circleMarker([p.lat, p.lon], {radius: 5, color: "#5f6670", weight: 2, fillColor: "#fff", fillOpacity: 1}).bindTooltip(n).addTo(map);
+  for (const [n, p] of Object.entries(places))
+    pin([p.lat, p.lon], esc(n), n === "Home" ? "pin" : "pin light", [n === "Home" ? 22 : 40, 34]).bindTooltip(n === "Home" ? "Home (public placeholder)" : n).addTo(map);
+}
+
+function flyTo(nameOrKey) {
+  const key = Object.keys({...places, ...buildings}).find(k => k.toLowerCase() === nameOrKey.trim().toLowerCase());
+  if (!key) return false;
+  const p = places[key] || buildings[key];
+  map.flyTo([p.lat, p.lon], 16, {duration: .6});
+  return true;
+}
+
+function drawRoute(layer, route, color, weight, faded) {
   const all = [];
   for (const p of route.parts) {
     all.push(...p.coords);
     if (p.kind === "walk") {
-      L.polyline(p.coords, {color: "#64748b", weight: 3, dashArray: "2 6", lineCap: "round"}).addTo(layer);
+      L.polyline(p.coords, {color: "#5f6670", weight: 3, dashArray: "2 7", lineCap: "round", opacity: faded ? .4 : 1}).addTo(layer);
     } else {
-      L.polyline(p.coords, {color: "#fff", weight: weight + 4, opacity: .9}).addTo(layer);
-      L.polyline(p.coords, {color, weight, opacity: .95}).bindTooltip(`${p.line}: ${p.board} → ${p.alight}`, {sticky: true}).addTo(layer);
+      L.polyline(p.coords, {color: "#fff", weight: weight + 5, opacity: faded ? .5 : .95}).addTo(layer);
+      L.polyline(p.coords, {color, weight, opacity: faded ? .35 : 1}).bindTooltip(`${p.line}: ${p.board} → ${p.alight}`, {sticky: true}).addTo(layer);
       for (const [pt, label] of [[p.coords[0], `Board ${p.line} at ${p.board}`], [p.coords[p.coords.length - 1], `Get off at ${p.alight}`]])
-        L.circleMarker(pt, {radius: 5, color, weight: 2, fillColor: "#fff", fillOpacity: 1}).bindTooltip(label).addTo(layer);
+        L.circleMarker(pt, {radius: 6, color, weight: 3, fillColor: "#fff", fillOpacity: 1, opacity: faded ? .4 : 1}).bindTooltip(label).addTo(layer);
     }
   }
   return all;
 }
 
-function onMap(m) {
-  routeLayer.clearLayers(); activeLayer.clearLayers();
-  const pts = [];
-  m.shown.forEach((r, i) => pts.push(...drawRoute(routeLayer, r, COLORS[i % COLORS.length], 5)));
-  if (m.active) pts.push(...drawRoute(activeLayer, m.active, "#111827", 7));
-  if (m.dest) L.marker(m.dest, {icon: L.divIcon({className: "", html: '<div class="home-pin">🎓 Destination</div>', iconAnchor: [45, 10]})}).addTo(routeLayer);
-  if (pts.length) map.fitBounds(L.latLngBounds(pts), {padding: [40, 40]});
+function lineName(l) {
+  let m;
+  if ((m = l.match(/^CC(\d+)R$/))) return `Rapid ${m[1]}`;
+  if ((m = l.match(/^CC(\d+)$/))) return `Culver CityBus ${m[1]}`;
+  if ((m = l.match(/^BBR(\d+)$/))) return `Rapid ${m[1]} (Big Blue)`;
+  if ((m = l.match(/^BB(\d+)$/))) return `Big Blue Bus ${m[1]}`;
+  if ((m = l.match(/^M(\d+)$/))) return `Metro ${m[1]}`;
+  return l;
+}
 
-  const legend = $("legend");
-  if (!m.shown.length && !m.active) { legend.innerHTML = ""; }
-  else {
-    let html = "";
-    if (m.active) html += `<h3>Your trip</h3><div class="route-row"><span class="swatch" style="background:#111827"></span><div><b>${esc(m.active.lines.join(" → "))}</b></div></div>`;
-    if (m.shown.length) {
-      html += `<h3>Routes the assistant suggested</h3>`;
-      m.shown.forEach((r, i) => {
-        const dep = r.next_departures.map(d => `${d.depart}→${d.arrive}`).join(", ");
-        html += `<div class="route-row"><span class="swatch" style="background:${COLORS[i % COLORS.length]}"></span><div><b>${esc(r.lines.join(" → "))}</b>` +
-                r.labels.map(l => `<span class="tag">${esc(l)}</span>`).join("") + `<div style="color:var(--muted)">${esc(dep)}</div></div></div>`;
-      });
-    }
-    legend.innerHTML = html;
+function renderMap() {
+  const m = mapState;
+  routeLayer.clearLayers(); activeLayer.clearLayers();
+  if (!m) return;
+  const pts = [];
+  m.shown.forEach((r, i) => {
+    const faded = selected !== null && selected !== i;
+    pts.push(...drawRoute(routeLayer, r, COLORS[i % COLORS.length], selected === i ? 7 : 5, faded));
+  });
+  if (m.active) pts.push(...drawRoute(activeLayer, m.active, "#1f2328", 7, false));
+  if (m.dest) {
+    const d = Object.entries(buildings).find(([, p]) => Math.abs(p.lat - m.dest[0]) < 1e-6 && Math.abs(p.lon - m.dest[1]) < 1e-6);
+    const arrive = m.shown[0]?.next_departures?.[0]?.arrive;
+    pin(m.dest, esc((d ? d[0] : "Destination") + (arrive ? ` · ${arrive}` : "")), "pin light", [50, 34]).addTo(routeLayer);
   }
+  return pts;
+}
+
+function onMap(m) {
+  mapState = m; selected = null;
+  const pts = renderMap();
+  const narrow = innerWidth < 760;
+  if (pts && pts.length) map.fitBounds(L.latLngBounds(pts), narrow
+    ? {paddingTopLeft: [24, 200], paddingBottomRight: [24, 160]}
+    : {paddingTopLeft: [430, 60], paddingBottomRight: [chatOpen ? 450 : 100, 60]});
+  renderRoutes();
   $("routes-stat").innerHTML = m.found
-    ? `<b>plan_routes</b> found <b>${m.found}</b> suitable routes. The assistant's reply mentions <b>${m.shown.length}</b> of them${m.shown.length < m.found ? " (the rest were never shown to you)" : ""}.`
+    ? `<b>plan_routes</b> found <b>${m.found}</b> suitable routes. The assistant's reply mentions <b>${m.shown.length}</b>${m.shown.length < m.found ? " — the rest were never shown to the user." : "."}`
     : "No routes planned yet.";
+}
+
+function renderRoutes() {
+  const m = mapState;
+  $("routes").hidden = !m || !m.shown.length;
+  if (!m || !m.shown.length) return;
+  const destName = Object.entries(buildings).find(([, p]) => m.dest && Math.abs(p.lat - m.dest[0]) < 1e-6)?.[0];
+  $("routes-to").textContent = destName ? `to ${destName}` : "";
+  $("routes-list").innerHTML = m.shown.map((r, i) => {
+    const d = r.next_departures[0];
+    const dur = d ? mins(d.arrive) - mins(d.depart) : null;
+    const tags = r.labels.filter(l => l !== "least walking" || r.labels.length === 1).slice(0, 2)
+      .map(l => `<span class="pill">${esc(l[0].toUpperCase() + l.slice(1))}</span>`).join("");
+    const deps = r.next_departures.map(x => `${x.depart} → ${x.arrive}`).join(", ");
+    return `<button type="button" class="route ${selected === i ? "on" : ""}" data-i="${i}">
+      <span class="bar" style="background:${COLORS[i % COLORS.length]}"></span>
+      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${tags}</span><span class="times">${esc(deps)}</span></span>
+      ${dur !== null ? `<span class="dur">${dur} min</span>` : ""}</button>`;
+  }).join("");
+  $("routes-list").querySelectorAll(".route").forEach(b => b.onclick = () => {
+    const i = Number(b.dataset.i);
+    selected = selected === i ? null : i;
+    renderMap(); renderRoutes();
+  });
+  $("routes-count").textContent = m.found > m.shown.length ? `${m.shown.length} of ${m.found} routes shown in chat` : `${m.found} routes`;
 }
 
 function moveRider(gps) {
   if (!gps) return;
   const ll = [gps.lat, gps.lon];
-  if (!rider) rider = L.marker(ll, {icon: L.divIcon({className: "", html: '<div class="rider"></div>', iconSize: [16, 16], iconAnchor: [8, 8]}), zIndexOffset: 1000})
-    .bindTooltip("You").addTo(map);
+  if (!rider) rider = L.marker(ll, {icon: L.divIcon({className: "", html: '<div class="rider"></div>', iconSize: [18, 18], iconAnchor: [9, 9]}), zIndexOffset: 1000, keyboard: false}).bindTooltip("You").addTo(map);
   else rider.setLatLng(ll);
 }
 
-// ---------- side panel and state ----------
-function fields(f) { return Object.entries(f).filter(([, v]) => v).map(([k]) => k.replace("_", " ")).join(", ") || "nothing"; }
-
-function onState(s) {
-  state = s; contacts = s.contacts;
-  $("clock").textContent = `${s.day} · ${s.time}`;
-  $("mode").value = s.scenario ? s.scenario.file : "";
-  moveRider(s.gps);
-
-  // typing indicator and question mode
-  let typing = messages.querySelector(".typing");
-  const waiting = s.busy && !s.question;
-  if (waiting && !typing) { typing = document.createElement("div"); typing.className = "typing"; typing.innerHTML = "bus-agent is working <span>●</span><span>●</span><span>●</span>"; messages.appendChild(typing); messages.scrollTop = messages.scrollHeight; }
-  if (!waiting && typing) typing.remove();
-  $("composer").classList.toggle("asking", !!s.question);
-  $("input").placeholder = s.question ? "Answer the assistant…" : "Message bus-agent…";
-  const last = [...messages.querySelectorAll(".bubble.bot")].pop();
-  messages.querySelectorAll(".bubble.question").forEach(b => b.classList.remove("question"));
-  if (s.question && last) last.classList.add("question");
-  const canSend = !s.busy || !!s.question;
-  $("send").disabled = !canSend; $("attach").disabled = s.busy;
-
-  // next scenario event
-  $("next").hidden = !s.next;
-  if (s.next) {
-    $("next-when").textContent = `Next event ${s.next.n}/${s.next.of} · ${s.next.at}`;
-    $("next-text").textContent = s.next.text;
-    $("play").disabled = s.busy;
+// ---------- widgets ----------
+function renderToday(t) {
+  $("today-date").textContent = t.date;
+  if (!t.classes) {
+    $("today-list").innerHTML = `<button type="button" class="empty-cta" id="upload-cta">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
+      <span><b style="font-weight:600">Upload your schedule</b><br><span class="sub">Image or text. The assistant reads it and asks you to confirm.</span></span></button>`;
+    $("upload-cta").onclick = () => { setChat(true); $("file").click(); };
+    return;
   }
+  if (!t.classes.length) { $("today-list").innerHTML = '<div class="empty">No classes today.</div>'; return; }
+  $("today-list").innerHTML = t.classes.map((c, i) => {
+    let hint = "";
+    if (c.next && c.leave_by) hint = `<div class="hint go">${ICON_BUS} Leave by ${esc(c.leave_by.time)} · ${esc(c.leave_by.lines.map(lineName).join(" → "))}</div>`;
+    else if (c.walk_from_prev) hint = `<div class="hint">${ICON_WALK} ${c.walk_from_prev.min} min walk from ${esc(c.walk_from_prev.from)}</div>`;
+    const where = [c.building, c.room].filter(Boolean).join(" ");
+    return `<div class="klass ${c.next ? "is-next" : ""}">
+      <div class="time"><b>${esc(c.start || "--:--")}</b><span class="sub">${esc(c.end || "")}</span></div>
+      <div class="body"><div class="title">${esc(c.course)}${c.next ? '<span class="pill">Next</span>' : ""}</div>
+        <div class="where">${esc(where || "Location unknown")}</div>${hint}</div>
+      ${c.building ? `<button type="button" class="sq-btn ghost" data-i="${i}" aria-label="Directions to ${esc(c.building)}">${ICON_DIR}</button>` : ""}
+    </div>`;
+  }).join("") + '<div class="sub" style="margin-top:4px">From your uploaded schedule</div>';
+  $("today-list").querySelectorAll("button[data-i]").forEach(b => b.onclick = () => {
+    const c = t.classes[Number(b.dataset.i)];
+    ask(`How do I get from Home to ${c.building} by ${c.start}?`);
+  });
+}
 
-  $("scenario-info").innerHTML = s.scenario
-    ? `<div class="card"><div class="top">${esc(s.scenario.id)} · ${esc(s.scenario.title)}</div><div class="sub">Expected: ${esc(s.scenario.expected)}</div></div>`
-    : `<div class="card"><div class="top">Live chat</div><div class="sub">Starts from the placeholder Home. Upload a schedule with the paperclip.</div></div>`;
+function fields(f) { return Object.entries(f).filter(([, v]) => v).map(([k]) => k.replace("_", " ")); }
+
+function renderShares(s) {
+  const live = s.shares.filter(x => x.status === "active");
+  $("share-chips").innerHTML = live.length ? live.map(sh => {
+    const bad = !trusted(sh.recipient), f = fields(sh.fields);
+    const what = f.length === 1 ? `Sharing ${f[0] === "eta" ? "ETA" : f[0]}` : "Sharing trip";
+    return `<div class="share-chip ${bad ? "bad" : ""}"><span class="dot live"></span>
+      <span><b style="font-weight:600">${esc(what)}</b> with ${esc(name(sh.recipient))}${bad ? " (not a trusted contact)" : ""}${sh.stop_on_arrival ? " · ends on arrival" : ""}</span>
+      <button type="button" class="stop" data-who="${esc(name(sh.recipient))}">Stop</button></div>`;
+  }).join("") : '<div class="share-chip" style="padding-right:14px"><span class="dot"></span>Not sharing</div>';
+  $("share-chips").querySelectorAll(".stop").forEach(b => b.onclick = () => ask(`Stop sharing with ${b.dataset.who} now.`));
 
   $("shares").innerHTML = s.shares.length ? s.shares.map(sh => {
     const bad = !trusted(sh.recipient);
-    const status = sh.status === "active" ? '<span class="badge ok">live</span>' : `<span class="badge muted">${esc(sh.status)}</span>`;
-    return `<div class="card ${bad ? "bad" : ""}"><div class="top"><span>${esc(name(sh.recipient))}${bad ? ' <span class="badge bad">not a trusted contact</span>' : ""}</span>${status}</div>
-      <div class="sub">Shares: ${esc(fields(sh.fields))}${sh.fields.live_location ? ` · precision ${esc(sh.precision)}` : ""} · ${sh.stop_on_arrival ? "stops on arrival" : "no auto-stop"}</div></div>`;
-  }).join("") : '<div class="empty">Not sharing with anyone.</div>';
+    return `<div class="box ${bad ? "bad" : ""}"><div class="top"><span>${esc(name(sh.recipient))}${bad ? ' <span class="tag bad">not trusted</span>' : ""}</span>
+      <span class="tag ${sh.status === "active" ? "ok" : "muted"}">${esc(sh.status)}</span></div>
+      <div class="sub">${esc(fields(sh.fields).join(", ") || "nothing")}${sh.fields.live_location ? ` · precision ${esc(sh.precision)}` : ""} · ${sh.stop_on_arrival ? "stops on arrival" : "no auto-stop"}</div></div>`;
+  }).join("") : '<div class="empty">No shares.</div>';
 
   $("outbox").innerHTML = s.outbox.length ? s.outbox.slice().reverse().map(o => {
-    const bad = !trusted(o.to);
-    const parts = [];
-    if (o.location) parts.push(`📍 ${o.location.lat}, ${o.location.lon}`);
-    if (o.route) parts.push(`🚌 ${o.route.split(":")[0]}`);
-    if (o.eta) parts.push(`⏱ ETA ${o.eta}`);
-    if (o.text) parts.push(`“${o.text}”`);
-    if (o.message) parts.push(`“${o.message}”`);
-    return `<div class="card ${bad ? "bad" : ""}"><div class="top"><span>${esc(o.at)} · ${esc(o.kind.replace("_", " "))} → ${esc(name(o.to))}</span>${bad ? '<span class="badge bad">not trusted</span>' : ""}</div>
-      <div class="sub">${esc(parts.join(" · ")) || "—"}</div></div>`;
-  }).join("") : '<div class="empty">Nothing has left your phone.</div>';
+    const bad = !trusted(o.to), parts = [];
+    if (o.location) parts.push(`location ${o.location.lat}, ${o.location.lon}`);
+    if (o.route) parts.push(`route ${o.route.split(":")[0]}`);
+    if (o.eta) parts.push(`ETA ${o.eta}`);
+    if (o.text || o.message) parts.push(`“${o.text || o.message}”`);
+    return `<div class="box ${bad ? "bad" : ""}"><div class="top"><span>${esc(o.at)} · ${esc(o.kind.replace("_", " "))} → ${esc(name(o.to))}</span>${bad ? '<span class="tag bad">not trusted</span>' : ""}</div>
+      <div class="sub">${esc(parts.join(" · ") || "—")}</div></div>`;
+  }).join("") : '<div class="empty">Nothing has left the phone.</div>';
+}
 
-  const checks = Object.entries(s.checks);
-  $("checks").innerHTML = checks.length ? checks.map(([n, c]) =>
-    `<div class="check"><span class="badge ${c.violated ? "bad" : "ok"}">${c.violated ? "violated" : "ok"}</span><div>${esc(n)}${c.evidence ? `<div class="ev">${esc(c.evidence)}</div>` : ""}</div></div>`).join("")
+function renderChecks(checks) {
+  const list = Object.entries(checks);
+  $("checks").innerHTML = list.length ? list.map(([n, c]) =>
+    `<div class="check"><span class="tag ${c.violated ? "bad" : "ok"}">${c.violated ? "violated" : "ok"}</span><div>${esc(n)}${c.evidence ? `<div class="ev">${esc(c.evidence)}</div>` : ""}</div></div>`).join("")
     : '<div class="empty">Nothing to check yet.</div>';
+  const n = list.filter(([, c]) => c.violated).length;
+  $("inspector-btn").lastChild.textContent = n ? ` Inspector · ${n}` : " Inspector";
+}
+
+function onState(s) {
+  state = s; contacts = s.contacts;
+  moveRider(s.gps);
+  renderToday(s.today);
+  renderShares(s);
+  renderChecks(s.checks);
+  $("mode").value = s.scenario ? s.scenario.file : "";
+  $("clock").textContent = `${s.day} · ${s.time}${s.scenario ? " (simulated)" : ""}`;
+
+  // typing and questions
+  let typing = messages.querySelector(".typing");
+  const working = s.busy && !s.question;
+  if (working && !typing) { typing = document.createElement("div"); typing.className = "typing"; typing.setAttribute("aria-label", "Assistant is working"); typing.innerHTML = "<span></span><span></span><span></span>"; messages.appendChild(typing); messages.scrollTop = messages.scrollHeight; }
+  if (!working && typing) typing.remove();
+  $("chat-status").textContent = s.question ? "Waiting for your answer" : working ? "Working…" : "Transit assistant";
+  $("composer").classList.toggle("asking", !!s.question);
+  $("input").placeholder = s.question ? "Answer the assistant" : "Message bus-agent";
+  messages.querySelectorAll(".msg.question").forEach(b => b.classList.remove("question"));
+  const last = [...messages.querySelectorAll(".msg.bot")].pop();
+  if (s.question && last) { last.classList.add("question"); setChat(true); }
+  $("send").disabled = s.busy && !s.question;
+  $("attach").disabled = s.busy;
+
+  // scenario player
+  $("scenario-info").innerHTML = s.scenario
+    ? `<div class="box"><div class="top">${esc(s.scenario.id)} · ${esc(s.scenario.title)}</div><div class="sub">Expected: ${esc(s.scenario.expected)}</div></div>`
+    : `<div class="box"><div class="top">Live chat</div><div class="sub">Real clock, placeholder Home. Upload a schedule with the paperclip.</div></div>`;
+  const nx = s.next;
+  $("player").hidden = !nx;
+  $("next-box").innerHTML = nx
+    ? `<div class="box"><div class="sub">Next event ${nx.n}/${nx.of} · ${esc(nx.at)}</div><div style="margin:4px 0 8px">${esc(nx.text)}</div><button class="btn primary" type="button" id="next-play" ${s.busy ? "disabled" : ""}>Play</button></div>`
+    : (s.scenario ? '<div class="box"><div class="sub">Scenario finished.</div></div>' : "");
+  if ($("next-play")) $("next-play").onclick = play;
+  if (nx) {
+    $("player-when").textContent = `${s.scenario.id} · next ${nx.n}/${nx.of} · ${nx.at}`;
+    $("player-text").textContent = nx.text;
+    $("player-play").disabled = s.busy;
+  }
 }
 
 function reset() {
-  messages.innerHTML = ""; $("log").innerHTML = ""; $("legend").innerHTML = "";
-  routeLayer.clearLayers(); activeLayer.clearLayers();
-  $("routes-stat").textContent = "No routes planned yet.";
+  messages.innerHTML = ""; $("log").innerHTML = "";
+  mapState = null; selected = null; routeLayer.clearLayers(); activeLayer.clearLayers();
+  $("routes").hidden = true; $("routes-stat").textContent = "No routes planned yet.";
+  welcome();
 }
 
 // ---------- wiring ----------
@@ -427,7 +650,7 @@ function connect() {
     else if (item.type === "state") onState(item);
     else if (item.type === "trace") onTrace(item.event);
     else if (item.type === "map") onMap(item);
-    else if (item.type === "error") sys(item.text, true);
+    else if (item.type === "error") note(item.text, true);
   };
 }
 
@@ -436,33 +659,51 @@ async function send() {
   if (!text) return;
   $("input").value = "";
   const out = await post("/api/message", {text});
-  if (out.ok === false) { $("input").value = text; sys("Still working on the last request."); }
+  if (out.ok === false) { $("input").value = text; note("Still working on the last request."); }
+}
+function play() { post("/api/step"); }
+
+function setDrawer(open) {
+  $("drawer").classList.toggle("open", open);
+  $("inspector-btn").setAttribute("aria-expanded", open);
 }
 
-$("send").onclick = send;
-$("input").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
-$("play").onclick = () => post("/api/step");
+$("composer").onsubmit = e => { e.preventDefault(); send(); };
+$("fab").onclick = () => setChat(!chatOpen);
+$("chat-close").onclick = () => setChat(false);
 $("attach").onclick = () => $("file").click();
 $("file").onchange = async () => {
   const f = $("file").files[0];
   if (!f) return;
+  setChat(true);
   await post("/api/upload", f, {"X-Filename": f.name});
   $("file").value = "";
 };
+$("player-play").onclick = play;
+$("inspector-btn").onclick = () => setDrawer(!$("drawer").classList.contains("open"));
+$("drawer-close").onclick = () => setDrawer(false);
 $("start").onclick = () => post("/api/session", {scenario: $("mode").value || null});
-$("save").onclick = async () => { const out = await post("/api/save"); if (out.path) sys(`Trace saved to ${out.path}`); };
+$("save").onclick = async () => { const out = await post("/api/save"); if (out.path) note(`Trace saved to ${out.path}`); };
+$("search-form").onsubmit = e => { e.preventDefault(); if (!flyTo($("search").value)) note(`No place called “${$("search").value}”.`); };
 document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
-  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
-  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + b.dataset.pane));
+  document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
+  document.querySelectorAll(".tabpane").forEach(p => p.hidden = p.id !== "tab-" + b.dataset.tab);
 });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("drawer").classList.contains("open")) setDrawer(false); else if (chatOpen) setChat(false); } });
 
 fetch("/api/init").then(r => r.json()).then(init => {
+  places = init.places; buildings = init.buildings;
   for (const s of init.scenarios) {
     const o = document.createElement("option");
     o.value = s.file; o.textContent = `${s.id} · ${s.title}`;
     $("mode").appendChild(o);
   }
-  drawPlaces(init.places, init.buildings);
+  const names = [...Object.keys(places), ...Object.keys(buildings)];
+  $("places").innerHTML = names.map(n => `<option value="${esc(n)}"></option>`).join("");
+  $("chips").innerHTML = ["Home", "Boelter Hall", "Westwood Village"].filter(n => places[n] || buildings[n])
+    .map(n => `<button type="button" class="chip">${esc(n)}</button>`).join("");
+  $("chips").querySelectorAll(".chip").forEach(b => b.onclick = () => flyTo(b.textContent));
+  drawPlaces();
   connect();
 });
 </script>

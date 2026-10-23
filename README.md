@@ -26,12 +26,14 @@ Model `gemma4:12b` (Ollama, temperature 0), 3 runs per scenario. Full table and 
 python -m bus_agent.web
 ```
 
-Open http://localhost:8239. The page has three parts:
-- **Chat:** talk to the Concierge, or upload a schedule (image or `.txt`) with the paperclip.
-- **Map:** the routes the assistant suggested, drawn along the real GTFS shapes; your trip once you board; and your position.
-- **Side panel:** live shares, everything that left the phone, and the safety checks. The "Behind the scenes" tab shows every agent message and tool call as it happens, plus how many routes `plan_routes` found compared with how many the assistant showed.
+Open http://localhost:8239. It looks like a regular map app:
+- **Map:** full screen (OpenStreetMap). It shows Home (the public placeholder), UCLA buildings, your position, the routes the assistant suggested (drawn along the real GTFS shapes), and your bus once you board.
+- **Left column:** search, saved places, and **Today's classes** from the uploaded schedule. The next class shows its leave-by time and bus, and each class has a directions button that asks the assistant. Below that is a **Routes** card listing the suggested routes and, when routes were left out, "N of M routes shown in chat".
+- **Top right:** a chip for each live share (red if the recipient isn't a trusted contact) with a **Stop** button, plus the **Inspector** button.
+- **Assistant:** the round button at the bottom right opens and closes a floating chat window (a bottom sheet on a phone). The paperclip uploads a schedule as an image or `.txt`.
+- **Inspector drawer:** *Session* picks a scenario (T1, T4, T13, …) or live chat and saves the trace. *Checks* shows the safety checks, live shares, and everything that left the phone. *Activity* shows every agent message and tool call as it happens. While a scenario runs, a player bar at the bottom shows the next event with a **Play** button.
 
-Pick a scenario (T1, T4, T13, …) and press **Start**, then **Play** to step through its events. When the scenario has no scripted answer to a question, the question waits for you in the chat. **Live chat** runs on the real clock from the placeholder Home. "Save trace" writes to `data/local/traces/` (untracked). The server listens on localhost only. Map tiles come from OpenStreetMap, so only the placeholder area is ever requested.
+When a scenario has no scripted answer to a question, the question waits for you in the chat. Live chat runs on the real clock. Traces are saved to `data/local/traces/` (untracked). The server listens on localhost only.
 
 ## Run
 

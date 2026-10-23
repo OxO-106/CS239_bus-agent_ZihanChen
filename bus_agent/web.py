@@ -9,6 +9,7 @@ Uses the placeholder Home only, and saves traces to data/local/traces/ (untracke
 """
 import argparse
 import json
+import math
 import queue
 import re
 import threading
@@ -23,7 +24,8 @@ from bus_agent.bus import Bus
 from bus_agent.checks import mentions, run_checks
 from bus_agent.gtfs import meters
 from bus_agent.main import _uploads
-from bus_agent.routing import Router, _short, clean_name
+from bus_agent.routing import Router, _short, clean_name, hhmm, parse_hhmm, walk_min
+from bus_agent.tools import DAY_CODES
 from bus_agent.trace import Trace
 from bus_agent.world import World
 
@@ -131,7 +133,8 @@ class Session:
         elif e["kind"] == "event" and e["data"].get("type") == "arrive":
             self.map["active"] = None
             self._emit({"type": "map", **self.map})
-        if e["kind"] in ("outbox", "event"):  # shares, outbox, clock and rider position changed
+        if e["kind"] in ("outbox", "event") or (e["kind"] == "tool_result" and e["data"]["name"] in (
+                "extract_schedule_image", "extract_schedule_text", "plan_routes")):  # side panels changed
             self._push_state()
 
     def _update_shown(self, reply):
@@ -156,8 +159,37 @@ class Session:
         return {"type": "state", "time": w.hhmm, "day": w.now.strftime("%a %b %d"), "gps": w.gps,
                 "busy": self.busy, "question": self.question, "next": self._next_label(),
                 "scenario": {**{k: self.sc[k] for k in ("id", "title", "expected")}, "file": self.file} if self.sc else None,
-                "shares": list(w.shares.values()), "outbox": w.outbox, "checks": checks,
+                "today": self._today(), "shares": list(w.shares.values()), "outbox": w.outbox, "checks": checks,
                 "contacts": {k: {"name": c["name"], "trusted": c.get("trusted", False)} for k, c in w.contacts.items()}}
+
+    def _today(self):
+        """Today's classes from the extracted schedule, with the next one's leave-by from the latest plan to it."""
+        w = self.world
+        if not w.schedule:
+            return {"date": w.now.strftime("%a, %b %d"), "classes": None}
+        code = DAY_CODES[w.now.weekday()]
+        classes = sorted((c for c in w.schedule.get("classes", []) if code in (c.get("days") or [])),
+                         key=lambda c: c.get("start") or "")
+        out, prev = [], None
+        for c in classes:
+            item = {k: c.get(k) for k in ("course", "start", "end", "building", "room")}
+            here = w.buildings.get(c.get("building") or "")
+            if prev and here:
+                item["walk_from_prev"] = {"from": prev[0], "min": math.ceil(walk_min(meters(*prev[1], here["lat"], here["lon"])))}
+            prev = (c.get("building"), (here["lat"], here["lon"])) if here else None
+            out.append(item)
+        nxt = next((c for c in out if (c["end"] or "") > w.hhmm), None)
+        if nxt:
+            nxt["next"] = True
+            plan = next((p for p in reversed(w.plans) if p["destination"] == nxt["building"]), None)
+            if plan:  # earliest arrival among departures the rider can still make
+                catchable = [(d["arrive"], hhmm(parse_hhmm(d["depart"]) - r["walk_min"]["to_stop"] * 60), r["lines"])
+                             for r in plan["result"]["routes"] for d in r["next_departures"]
+                             if parse_hhmm(d["depart"]) - r["walk_min"]["to_stop"] * 60 >= parse_hhmm(w.hhmm)]
+                if catchable:
+                    _, leave, lines = min(catchable)
+                    nxt["leave_by"] = {"time": leave, "lines": lines}
+        return {"date": w.now.strftime("%a, %b %d"), "classes": out}
 
     def _push_state(self):
         self._emit(self.state())
