@@ -1,0 +1,13 @@
+# secrets and local config
+.env
+
+# real personal data (home address, real schedule) — never committed
+data/local/
+
+# raw GTFS downloads; only trimmed feeds are committed
+data/gtfs/raw/
+
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

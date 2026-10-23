@@ -1,0 +1,45 @@
+# Bench
+
+Checks that the model can do the two things every agent depends on: call tools correctly, and read a schedule into JSON.
+
+```bash
+python -m bench.tool_calls          # --runs N, --agent NAME for per-agent overrides
+python -m bench.extract_schedule    # [samples...] --runs N
+```
+
+Each extraction sample is `<name>.png|.txt` next to `<name>.truth.json`. Samples in `data/local/` (the real schedule) are untracked. Committed fake samples go in `data/samples/`.
+
+## Results — 2026-10-22
+
+Setup: `gemma4:12b` (Q4_K_M, 11.9B), Ollama on RTX 4070 Ti Super 16 GB over Tailscale, `num_ctx` 16384, `think: false`, temperature 0. Model fully on GPU. Generates about 150 tok/s once loaded. The first request after a cold start took about 43 s to load the model, so `keep_alive` is set to 30m.
+
+### Tool calling — 30/33 (3 runs × 11 prompts), median 0.32 s
+
+10 tools offered together, so the model has to pick one. All prompts passed 3/3 except one:
+
+| Prompt | Result | Note |
+|---|---|---|
+| "Share only my ETA with Mom." | 0/3: called `get_contacts` | Looks up the contact before sharing. A reasonable first step in a multi-step task, and consistent with SR2. The bench only scores the first call. Recheck in the full agent loop. |
+
+It also chose correctly not to call a tool for "Thanks, that's all for now!" (3/3), and normalized "by 9:50" to `09:50`.
+
+### Schedule extraction — 100% (28/28 fields, 3/3 runs, image and text)
+
+| Sample | Fields | Latency |
+|---|---|---|
+| Real MyUCLA weekly screenshot (4 sections, 8 meetings) | 28/28 × 3 | ~1.7 s |
+| Same schedule as plain text | 28/28 × 3 | ~2.2 s |
+
+Findings:
+- **Use a JSON schema in `format`.** With `format: "json"`, the model returned only the first class every time. That mode allows a single object, so it stopped after one. The schema in `bus_agent/tools.py` (`SCHEDULE_SCHEMA`) fixes this, and it will also hold the Phase 2 quarantined extractor to schedule JSON only.
+- **`section` is needed.** Two sections of the same course (a lecture on Tu/Th and another on M/W) can't be told apart without it.
+- **End times are estimated** from where each block ends on the grid. They were correct here, but this is the risk behind T10 and why SR14 has the user confirm the schedule.
+
+### Decision
+
+No fallback model needed. `gemma4:12b` for all agents.
+
+### Not yet covered
+
+- Blurry and injected schedule images and texts (T8, T8b, T9, T10). Add them to `data/samples/` with truth files.
+- Multi-step tool use in the real agent loop.
