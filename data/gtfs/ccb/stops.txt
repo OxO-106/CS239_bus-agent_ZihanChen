@@ -1,0 +1,383 @@
+stop_id,stop_name,stop_lat,stop_lon
+4,Windward Ave/Main St,33.987966,-118.471525
+5,Pacific Ave/N Venice Blvd,33.985095,-118.470176
+6,Washington Blvd/Pacific Ave,33.979845,-118.465264
+7,Washington Blvd/Via Dolce,33.980894,-118.463570
+8,Washington Blvd/Via Marina,33.982367,-118.461153
+9,Washington Blvd/Palawan Way,33.983925,-118.458711
+10,Washington Blvd/Wilson Ave,33.984934,-118.457152
+11,Washington Blvd/Oxford Ave,33.986364,-118.454940
+12,Washington Blvd/Abbot Kinney Blvd,33.988363,-118.451664
+14,Washington Blvd/Lincoln Blvd,33.990846, -118.446790
+15,Washington Blvd/Glencoe Ave,33.992007,-118.444443
+16,Washington Blvd/Redwood Ave,33.993212,-118.442052
+17,Washington Blvd/Beethoven St,33.995275,-118.437880
+18,Washington Blvd/Rosabell St,33.996215,-118.436028
+19,Washington Blvd/Mildred Ave,33.996656,-118.432026
+20,Washington Blvd/Centinela Ave,33.996917,-118.427921
+21,Washington Blvd/Grand View Blvd,33.997154,-118.425656
+22,Washington Blvd/Inglewood Blvd,33.997633,-118.421564
+23,Washington Blvd/Kensington Rd,33.998044,-118.419511
+25,Washington Blvd/Berryman Ave,34.001665,-118.415888
+26,Washington Blvd/Corinth Ave,34.003231,-118.414999
+27,Washington/Sepulveda,34.007407,-118.412700
+28,Washington Blvd/Harter Ave,34.009841,-118.411333
+29,Washington Blvd/Huron Ave,34.011272,-118.410541
+30,Washington Blvd/Girard Ave,34.013923,-118.408571
+31,Washington Blvd/Culver Center,34.016192,-118.406076
+32,Washington Blvd/Overland Ave,34.017129,-118.404838
+33,Washington Blvd/Motor Ave,34.018881,-118.401928
+34,Washington Blvd/Jasmine Ave,34.019983,-118.400141
+36,Washington Blvd/Madison Ave,34.020967,-118.398430
+37,Washington Blvd/Duquesne Ave,34.021422,-118.397624
+38,Culver/Lafayette,34.021943,-118.395836
+39,Culver/Main,34.024569,-118.393725
+40,Washington/Higuera,34.026057,-118.389868
+41,Washington/Landmark (Culver City Station),34.027288,-118.387810
+42,Washington/Helms,34.029737,-118.383654
+43,Washington/Cattaraugus,34.030452,-118.380790
+44,Washington/Roberts,34.031187,-118.378119
+45,Washington Blvd/Adams Blvd,34.032659,-118.373650
+47,Fairfax/Electric,34.035591,-118.369202
+48,Washington/Fairfax,34.034720,-118.369361
+49,Washington Blvd / La Cienega Blvd,34.032348,-118.374962
+50,Washington/McManus,34.031053,-118.379422
+51,Washington/Cattaraugus,34.030466,-118.381659
+52,Washington/Helms,34.029569,-118.384450
+53,Culver City Station,34.027688,-118.387604
+54,Washington/Robertson,34.025813,-118.390662
+55,Culver/Main,34.024061,-118.394502
+65,Washington Blvd/Clarington Ave,34.020976,-118.398853
+66,Washington Blvd/Jasmine Ave,34.020062,-118.400346
+68,Washington Blvd/Overland Ave,34.017083,-118.405330
+69,Washington Blvd/Culver Center,34.015967,-118.406664
+70,Washington Blvd/Elenda St,34.013363,-118.409509
+71,Washington Blvd/Prospect Ave,34.012339,-118.410261
+72,Washington Blvd/Harter Ave,34.009543,-118.411808
+73,Washington Blvd/Sepulveda Blvd,34.006963,-118.413260
+75,Washington Blvd/Sawtelle Blvd,34.004059,-118.414855
+76,Washington Blvd/Berryman Ave,34.001121,-118.416463
+77,Washington Blvd/East Blvd,33.999663,-118.418411
+78,Washington Blvd/Inglewood Blvd,33.997720,-118.422726
+79,Washington Blvd/Centinela Ave,33.997050,-118.429047
+80,Washington Blvd/Washington Pl,33.996997,-118.434209
+81,Washington Blvd/Meier St,33.996240,-118.436495
+82,Washington Blvd/Beethoven St,33.995412,-118.438143
+83,Washington Blvd/Redwood Ave,33.993190,-118.442619
+85,Washington Blvd/Glencoe Ave,33.991593,-118.445775
+86,Washington Blvd/Lincoln Blvd,33.990269,-118.448435
+87,Washington Blvd/Abbot Kinney Blvd,33.988081,-118.452592
+88,Washington Blvd/Oxford Ave,33.986723,-118.454788
+89,Washington Blvd/Wilson Ave,33.985100,-118.457357
+90,Washington Blvd/Ocean Ave,33.982544,-118.461357
+91,Washington Blvd/Dell Ave,33.981239,-118.463439
+92,Washington Blvd/Strongs Dr,33.980104,-118.465281
+93,Pacific Ave/S Venice Blvd,33.984812,-118.469793
+119,Venice High School/Venice Blvd,33.998074,-118.444243
+120,Venice Blvd/Wade St,34.001419,-118.437713
+121,Venice Blvd/Centinela Ave,34.003419,-118.433712
+122,Inglewood Blvd/Culver Blvd,33.994914,-118.418022
+123,Inglewood Blvd/Braddock Dr,33.992713,-118.414690
+124,Inglewood Blvd/Allin St,33.991450,-118.413394
+125,Inglewood Blvd/Bray St,33.988059,-118.410131
+126,Inglewood Blvd/Lucille Ave,33.985631,-118.407444
+127,Inglewood Blvd/Juniette St,33.984484,-118.406079
+129,Jefferson Blvd/Inglewood Blvd,33.983926,-118.404765
+130,Jefferson Blvd/Mesmer Ave,33.986160,-118.401375
+131,Slauson Ave/Sepulveda Blvd Sw,33.988496,-118.395698
+132,Bristol/Centinela,33.981815,-118.391821
+134,Jefferson Blvd/Mesmer Ave,33.986277,-118.401643
+135,Jefferson Blvd/Margaret Ave,33.985047,-118.403491
+136,Inglewood Blvd/Juniette St,33.984355,-118.405626
+137,Inglewood Blvd/Aneta St,33.986119,-118.407716
+138,Inglewood Blvd/Bray St,33.987933,-118.409723
+140,Inglewood Blvd/Allin St,33.991368,-118.413050
+141,Inglewood Blvd/Braddock Dr,33.992849,-118.414537
+142,Inglewood Blvd/Culver Blvd,33.994842,-118.417603
+144,Lincoln Blvd/Washington Blvd,33.990842,-118.447982
+145,Lincoln Blvd/Zanja St,33.992330,-118.449283
+146,Venice Blvd/Lincoln Blvd,33.994211,-118.452048
+147,Venice Blvd/Glyndon Ave,33.995624,-118.449231
+148,Washington Blvd/Inglewood Blvd,33.997521,-118.422230
+182,Palms Blvd/Motor Ave,34.026247,-118.408669
+231,Green Valley Cir/Sepulveda Blvd,33.983943,-118.393542
+232,Bristol Pkwy/Green Valley Cir,33.984068,-118.390382
+233,Bristol Pkwy/Uplander Wy,33.985063,-118.387854
+234,Hannum Ave/Bristol Pkwy,33.987105,-118.386442
+235,Hannum Ave/Uplander Wy,33.987307,-118.384208
+236,Hannum Ave/Buckingham Pkwy,33.987390,-118.382091
+237,Slauson Ave/Buckingham Pkwy,33.989135,-118.381523
+238,Slauson Ave/Holy Cross Cemetery,33.989029,-118.387320
+240,Culver City Transit Center,33.988012,-118.394806
+241,Hannum Ave/Joanne Pl,33.989524,-118.392631
+242,Playa St/Hannum Ave,33.991073,-118.393645
+243,Playa St/Playa Ct,33.992312,-118.391623
+244,Overland Ave/Sawtelle Blvd,33.995253,-118.390247
+245,Overland Ave/Ranch Rd,33.997407,-118.390236
+246,Overland Ave/Flaxton St,33.999023,-118.390331
+247,Overland Ave/Freshman Dr,34.001628,-118.390885
+248,West Los Angeles College,34.004217,-118.387011
+249,Overland Ave/Jefferson Blvd,34.004761,-118.393816
+251,Overland Ave/Virginia Ave,34.006310,-118.395308
+252,Overland Ave/Farragut Dr,34.010405,-118.399046
+253,Overland Ave/Braddock Dr,34.011824,-118.400398
+254,Overland Ave/Culver Blvd,34.013656,-118.402156
+256,Motor Ave/Venice Blvd,34.020705,-118.403981
+257,Motor Ave/Regent St,34.022683,-118.405521
+258,Motor Ave/Tabor St,34.024850,-118.407195
+264,National Pl/Overland Ave,34.030802,-118.416830
+265,Westwood Blvd/National Blvd,34.030910,-118.421082
+266,Westwood Blvd/Coventry Pl,34.033395,-118.423016
+267,Westwood Blvd/Ashby Blvd (Expo),34.037111,-118.425979
+268,Pico Blvd/Westwood Blvd,34.040286,-118.427836
+269,Pico Blvd/Overland Ave,34.041961,-118.424317
+270,Pico Blvd/Manning Ave,34.042799,-118.422906
+272,Beverly Glen Blvd/Pico Blvd,34.046718,-118.417309
+273,Beverly Glen Blvd/Tennessee Ave,34.048460,-118.418793
+274,Beverly Glen Blvd/Olympic Blvd,34.050279,-118.420324
+275,Century Park West/Olympic Blvd,34.053589,-118.416386
+279,Century Park East/Olympic Blvd,34.058749,-118.412439
+280,Beverly Glen Blvd/Tennessee Ave,34.048570,-118.419161
+281,Beverly Glen Blvd/Pico Blvd,34.046406,-118.417290
+283,Pico Blvd/Patricia Ave,34.045444,-118.418789
+284,Pico Blvd/Prosser Ave,34.044167,-118.421062
+285,Pico Blvd/Manning Ave,34.043124,-118.422854
+286,Pico Blvd/Overland Ave,34.042112,-118.424629
+287,Westwood Blvd/Pico Blvd,34.039555,-118.428196
+288,Westwood Blvd/Exposition Blvd,34.036165,-118.425501
+289,Westwood Blvd/Coventry Pl,34.033402,-118.423310
+290,National Blvd/Westwood Blvd,34.030649,-118.421170
+297,Motor Ave/Tabor St,34.024952,-118.407532
+298,Motor Ave/Regent St,34.022797,-118.405871
+299,Motor Ave/Venice Blvd,34.020655,-118.404231
+301,Overland Ave/Washington Blvd,34.016343,-118.405045
+302,Overland Ave/Culver Blvd,34.013200,-118.402022
+303,Overland Ave/Braddock Dr,34.011540,-118.400462
+305,Overland Ave/Franklin Ave,34.010376,-118.399323
+306,Overland Ave/Culver City Library,34.008042,-118.397102
+307,Overland Ave/Virginia Ave,34.005815,-118.395137
+308,Overland Ave/Jefferson Blvd,34.003336,-118.392849
+310,Overland Ave/Galvin St,34.000062,-118.390766
+311,Overland Ave/Kelmore St,33.997812,-118.390432
+312,Overland Ave/Sawtelle Blvd,33.994897,-118.390495
+313,Playa St/Rudman Dr,33.992529,-118.391742
+314,Hannum Ave/Playa St,33.990442,-118.393754
+316,Hannum Ave/Joanne Pl,33.989432,-118.392844
+317,Slauson Ave/Bristol Pkwy,33.988782,-118.386221
+318,Slauson Ave/200 Corporate Pointe,33.988809,-118.383720
+319,Buckingham Pkwy/Slauson Ave,33.988649,-118.380682
+320,Hannum Ave/Buckingham Pkwy,33.987612,-118.382698
+321,Hannum Ave/Uplander Wy,33.987413,-118.385301
+322,Bristol Pkwy/Hannum Ave,33.986766,-118.386905
+323,Bristol Pkwy/Uplander Wy,33.984970,-118.388550
+324,Bristol Pkwy/Green Valley Cir,33.983731,-118.390938
+327,Overland/Lawler,34.025270,-118.411858
+328,Overland/Rose,34.027560,-118.413611
+329,Palms Blvd/Motor Ave,34.026229,-118.409104
+330,Overland Ave/Palms Blvd,34.024723,-118.411415
+331,Overland Ave/National Blvd,34.030602,-118.416288
+336,Jefferson Blvd/Beethoven St,33.976084,-118.420789
+337,Jefferson Blvd/Mcconnell Ave,33.977015,-118.418665
+338,Jefferson Blvd/Westlawn Ave,33.979144,-118.413721
+339,Campus Center Dr/Jefferson Blvd,33.981017,-118.409012
+340,Campus Center Dr/Millennium Dr,33.979360,-118.407879
+341,Bluff Creek Dr/Campus Center Dr,33.977578,-118.406384
+342,Bluff Creek Dr/Artisans Way,33.981706,-118.402374
+344,Bluff Creek Dr/Centinela Ave,33.983682,-118.401046
+345,Mesmer Ave/Teale St,33.985685,-118.400489
+346,Culver City Transit Center,33.987864,-118.394829
+347,Sepulveda Blvd/Playa St,33.989594,-118.395098
+348,Sepulveda Blvd/Vera Way,33.993587,-118.395171
+349,Sepulveda Blvd/Sawtelle Blvd,33.994977,-118.395214
+350,Jefferson Blvd/Machado Rd,33.996968,-118.395300
+351,Jefferson Blvd/Cota St,34.000865,-118.394977
+352,Jefferson Blvd/Overland Ave,34.004568,-118.393119
+353,Jefferson Blvd/Indian Wood Rd,34.006961,-118.391938
+355,Jefferson Blvd/Raintree Cir,34.010373,-118.390223
+356,Jefferson Blvd/Leahy St,34.013355,-118.388737
+358,Jefferson Blvd/Leahy St,34.013403,-118.388967
+359,Jefferson Blvd/Indian Wood Rd,34.006477,-118.392462
+360,Jefferson Blvd/Overland Ave,34.003789,-118.393808
+468,Jefferson Blvd/Cota St,33.999715,-118.395653
+469,Jefferson Blvd/Ballona Ln,33.998464,-118.395673
+470,Jefferson Blvd/Machado Rd,33.996838,-118.395574
+471,Sepulveda Blvd/Sawtelle Blvd,33.994685,-118.395497
+472,Sepulveda Blvd/Berryman Ave,33.992512,-118.395416
+473,Mesmer Ave/Jefferson Blvd,33.986059,-118.401051
+474,Bluff Creek Dr/Centinela Ave,33.983728,-118.401233
+475,Bluff Creek Dr/Artisans Way,33.981733,-118.402584
+476,Bluff Creek Dr/Campus Center Dr,33.977745,-118.406482
+477,Campus Center Dr/Waterfront Dr,33.979979,-118.408041
+478,Jefferson Blvd/Centinela Ave,33.981278,-118.409520
+479,Jefferson Blvd/Westlawn Ave,33.979372,-118.413867
+480,Jefferson Blvd/Mcconnell Ave,33.977058,-118.419176
+481,Jefferson Blvd/Beethoven St,33.976160,-118.421212
+496,Jefferson Blvd/Raintree Cir,34.009822,-118.390797
+507,Culver Blvd/Duquesne Ave,34.020871,-118.397045
+514,Washington Blvd/Comey Ave,34.032950,-118.373550
+515,Washington Blvd/Grand View Blvd,33.997380,-118.425825
+516,Pico Blvd/Prosser Ave,34.043875,-118.421085
+517,Overland Ave/Rose Ave,34.026610,-118.413236
+518,Jefferson Blvd/Duquesne Ave,34.017063,-118.387680
+519,Jefferson Blvd/Holdrege Ave,34.021012,-118.378521
+520,Obama Blvd/Kalsman Dr,34.021715,-118.374809
+521,La Cienega Blvd/Obama Blvd,34.022237,-118.372179
+522,La Cienega Blvd/Clemson St,34.024085,-118.372086
+523,La Cienega Blvd/Jefferson Blvd,34.026985,-118.371927
+524,Fairfax Ave /Adams Blvd,34.032757,-118.370507
+525,Electric Dr/Fairfax Ave,34.035690,-118.368690
+526,Fairfax/Adams,34.032633,-118.370807
+527,La Cienega Blvd/Jefferson Blvd,34.025977,-118.372254
+528,La Cienega Blvd/Clemson St,34.024556,-118.372343
+529,Obama Blvd/Kalsman Dr,34.021902,-118.373950
+530,Jefferson Blvd/Duquesne Ave,34.016521,-118.388262
+540,Braddock Dr/Overland Ave,34.011708,-118.400053
+541,Braddock Dr/Le Bourget Ave,34.013531,-118.398674
+542,Braddock Dr/Jackson Ave,34.016671,-118.396555
+543,Braddock Dr/Madison Ave,34.018267,-118.395378
+544,Madison Ave/Culver Blvd,34.019620,-118.397604
+545,La Cienega Blvd/Obama Blvd,34.021083,-118.372539
+546,Stoneview Dr/Wrightcrest Dr,34.015911,-118.377799
+547,Lenawee Ave/Wrightcrest Dr,34.016097,-118.374827
+548,Holdredge Ave/Jefferson Blvd,34.021073,-118.378020
+551,Madison Ave/Culver Blvd,34.019466,-118.397605
+552,Madison Ave/Braddock Dr,34.018392,-118.395530
+553,Braddock Dr/Jackson Ave,34.016971,-118.396482
+554,Braddock Dr/Le Bourget Ave,34.014087,-118.398694
+555,Braddock Dr/Overland Ave,34.011293,-118.400509
+556,Braddock Dr/Elenda St,34.008326,-118.402704
+557,Culver City High School,34.007509,-118.401859
+561,Braddock Dr/Lafayette Pl,34.020695,-118.393593
+565,Huron/Washington,34.011442,-118.411157
+566,Venice Ave/Huron Ave,34.014775,-118.413559
+567,Venice Ave/Girard Ave,34.016220,-118.411042
+568,Elenda St/Oregon Ave,34.012868,-118.408715
+569,Elenda St/Aletta Ave,34.010624,-118.406756
+570,Green Valley Cir/Canterbury Rd,33.981596,-118.385574
+571,Buckingham Pkwy/Sumner Way,33.984393,-118.383994
+588,Howard Hughes Pkwy/Park Terrace Dr,33.975877,-118.392420
+589,Center Dr/Park Terrace Dr,33.978219,-118.393064
+590,Sepulveda Blvd/Centinela Ave,33.979684,-118.394214
+591,Culver City Transit Center,33.988170,-118.394765
+592,Sepulveda Blvd/Machado Rd,33.997395,-118.397332
+593,Sepulveda Blvd/Marina Care Ctr,33.998858,-118.399472
+594,Sepulveda Blvd/Lucerne Ave,34.000447,-118.402240
+595,Sepulveda Blvd/Braddock Dr,34.002931,-118.406642
+596,Sepulveda Blvd/Culver Blvd,34.005122,-118.410417
+597,Sepulveda Blvd/Washington Blvd,34.007694,-118.413103
+598,Sepulveda Blvd/Washington Pl,34.009450,-118.414390
+599,Sepulveda Blvd/Venice Blvd,34.012415,-118.416638
+600,Sepulveda Blvd/Charnock Rd,34.017126,-118.420370
+601,Sepulveda Blvd/Palms Blvd,34.019592,-118.422328
+602,Sepulveda Blvd/Queensland St,34.023767,-118.425642
+603,Sepulveda Blvd/National Blvd,34.027275,-118.428398
+604,Sepulveda Blvd/Sardis Ave,34.030114,-118.430076
+605,Sepulveda Blvd/Richland Ave,34.033174,-118.432493
+606,Sepulveda Blvd/Exposition Blvd,34.035640,-118.434242
+607,Sepulveda Blvd/Pico Blvd,34.037361,-118.435302
+608,Sepulveda Blvd/Olympic Blvd,34.040586,-118.438020
+609,Sepulveda Blvd/La Grange Ave,34.043187,-118.440353
+610,Sepulveda Blvd/Santa Monica Blvd,34.048020,-118.444437
+611,Sepulveda Blvd/Ohio Ave,34.050314,-118.446435
+612,Sepulveda Blvd/Westwood Cmnty,34.052425,-118.448227
+613,Westwood Blvd/Weyburn Ave,34.062390,-118.445276
+614,Westwood Plaza,34.065770,-118.445220
+615,UCLA Gateway Plaza,34.068294,-118.444862
+616,Westwood Medical Plaza,34.065522,-118.445483
+617,Westwood Blvd/Weyburn Ave,34.062715,-118.445514
+618,Wilshire Blvd/Veteran Ave,34.057827,-118.448081
+619,Sepulveda Blvd/Salvation Army,34.052663,-118.448756
+620,Sepulveda Blvd/Ohio Ave,34.050103,-118.446567
+621,Sepulveda Blvd/Santa Monica Blvd,34.047156,-118.444041
+622,Sepulveda Blvd/La Grange Ave,34.042854,-118.440331
+623,Sepulveda Blvd/Exposition Blvd,34.035769,-118.434482
+624,Sepulveda Blvd/Richland Ave,34.032819,-118.432496
+625,Sepulveda Blvd/Sardis Ave,34.029952,-118.430162
+626,Sepulveda Blvd/National Blvd,34.026990,-118.428495
+627,Sepulveda Blvd/Sepulveda Ct,34.023973,-118.426114
+628,Sepulveda Blvd/Palms Blvd,34.019426,-118.422521
+629,Sepulveda Blvd/Charnock Rd,34.016186,-118.419970
+630,Sepulveda Blvd/Venice Blvd,34.012273,-118.416852
+631,Sepulveda/Washington Pl,34.008501,-118.413864
+632,Sepulveda Blvd/Washington Blvd,34.006383,-118.412636
+633,Sepulveda Blvd/Culver Blvd,34.004864,-118.410449
+634,Sepulveda Blvd/Braddock Dr,34.002491,-118.406330
+635,Sepulveda Blvd/Lucerne,34.000441,-118.402687
+636,Sepulveda Blvd/Studio Village West,33.998807,-118.399843
+637,Sepulveda Blvd/Janisann Ave,33.996797,-118.396946
+638,Culver City Transit Center,33.988179,-118.394631
+639,Sepulveda Blvd/Centinela Ave,33.980647,-118.394841
+640,Center Dr/Park Terrace Dr,33.977751,-118.392849
+641,Howard Hughes Pkwy/Park Terrace Dr,33.975744,-118.392671
+653,Sepulveda Blvd/Slauson Ave,33.988840,-118.395513
+658,Admiralty Wy/Fiji Wy,33.978056,-118.438734
+659,Admiralty Wy/Bali Wy,33.982012,-118.441480
+660,Maxella Ave/Lincoln Blvd,33.985869,-118.442836
+661,Maxella Ave/Glencoe Ave,33.986483,-118.441583
+662,Mindanao Wy/Glencoe Ave,33.985783,-118.436955
+663,Mindanao Wy/Alla Rd,33.987817,-118.433465
+664,Alla Rd/Glencoe Ave,33.984652,-118.431063
+665,Alla Rd/Panama St,33.983048,-118.429950
+666,Culver Blvd/Marina Fwy,33.982256,-118.427781
+667,Culver Blvd/Braddock Dr,33.986199,-118.424657
+668,Culver Blvd/12500 Culver Blvd,33.988928,-118.422432
+669,Culver Blvd/Centinela Ave,33.991201,-118.420594
+670,Culver Blvd/Inglewood Blvd,33.994691,-118.417801
+671,Culver Blvd/Slauson Ave,33.998303,-118.414881
+672,Culver Blvd/Berryman Ave,34.000091,-118.413425
+673,Culver Blvd/Sawtelle Blvd,34.001987,-118.411889
+674,Culver Blvd/Sepulveda Blvd,34.004854,-118.409589
+675,Culver Blvd/Harter Ave,34.006752,-118.408039
+676,Culver Blvd/Elenda St,34.010278,-118.405269
+677,Culver/Overland,34.013500,-118.402733
+678,Culver/Vinton,34.017048,-118.399700
+679,Culver/Jackson,34.018684,-118.398430
+680,Robertson/Venice,34.027401,-118.390012
+681,Culver Blvd/Madison Ave,34.019482,-118.398158
+682,Culver Blvd/Motor Ave,34.016618,-118.400365
+683,Culver Blvd/Overland Ave,34.013813,-118.402878
+684,Culver Blvd/Elenda St,34.009537,-118.406128
+685,Culver Blvd/Harter Ave,34.006946,-118.408098
+686,Culver Blvd/Sepulveda Blvd,34.004521,-118.410249
+687,Culver Blvd/Sawtelle Blvd,34.002098,-118.412135
+688,Culver Blvd/Berryman Ave,34.000320,-118.413462
+689,Culver Blvd/Slauson Ave,33.998645,-118.414822
+690,Culver Blvd/Inglewood Blvd,33.995048,-118.417756
+691,Culver Blvd/Centinela Ave,33.991199,-118.420848
+692,Culver Blvd/Westlawn Ave,33.988746,-118.422831
+693,Culver Blvd/Braddock Dr,33.985861,-118.425153
+694,Culver Blvd/Marina Fwy,33.982194,-118.428125
+695,Alla Rd/Panama St,33.982965,-118.429609
+696,Alla Rd/Bonaparte Ave,33.984985,-118.431032
+697,Mindanao Wy/Alla Rd,33.987896,-118.433774
+698,Mindanao Wy/Glencoe Ave,33.985705,-118.437288
+699,Maxella Ave/Glencoe Ave,33.986652,-118.441603
+700,Lincoln Blvd/Maxella Ave,33.985293,-118.443412
+701,Admiralty Wy/Bali Wy,33.981815,-118.441618
+702,Admiralty Wy/Mindanao Wy,33.979560,-118.440067
+703,Fiji Wy/Admiralty Wy,33.976826,-118.439466
+704,Washington Blvd/Ince Blvd,34.025056,-118.391988
+705,Century Park West/Solar Way,34.055600,-118.418100
+706,Century Park West/Santa Monica Blvd,34.058900,-118.421100
+707,Santa Monica Blvd/Ave Of The Stars,34.061400,-118.418100
+708,Century Park East/Santa Monica Blvd,34.062500,-118.415800
+709,Century Park East/Constellation Blvd,34.060600,-118.413900
+710,Kinross Ave/Veteran Ave,34.059456,-118.447569
+711,Westwood Blvd/Kinross Ave,34.060981,-118.445553
+712,Kinross Ave/Veteran Ave,34.059517,-118.447925
+713,Westwood Blvd/Kinross Ave,34.060965,-118.445341
+714,Washington/Ince,34.024727,-118.392084
+715,Washington Blvd/National Blvd,34.028331,-118.386078
+717,Culver Blvd/Lafayette Pl,34.022035,-118.396125
+718,Sawtelle Blvd/Sepulveda Blvd,33.995208,-118.395844
+719,Hayter Ave/Berryman Ave,33.992988,-118.400469
+722,Higuera St/Eastham Dr,34.022182,-118.379003
+723,Hayden Ave/Warner Dr,34.023508,-118.381917
+726,Washington Blvd/Hughes Ave,34.021841,-118.397405
+727,Higuera St/Washington Blvd,34.025414,-118.390011
+728,Higuera St/ Helms Ave,34.022671,-118.384339
+729,Hayden Ave/Warner Dr,34.023378,-118.381785
+730,Veteran/Wilshire,34.058508,-118.448110
+741,Motor Ave/Washington Blvd,34.018800,-118.402677
+742,Motor Ave/Washington Blvd,34.018844,-118.402591
+743,Culver City Transit Center,33.987698,-118.394714

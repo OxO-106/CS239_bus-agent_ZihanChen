@@ -1,0 +1,4185 @@
+route_id,service_id,trip_id,trip_headsign,direction_id
+1,7,1028080,Venice Beach,0
+1,2,1031040,Venice Beach,0
+1,2,1040,Venice Beach,0
+1,5,1023100,Venice Beach,0
+1,3,1028090,Venice Beach,0
+1,1,1020,Venice Beach,0
+1,6,1023070,Venice Beach,0
+1,1,1028020,Venice Beach,0
+1,2,1028040,Venice Beach,0
+1,7,1031080,Venice Beach,0
+1,1,1041020,Venice Beach,0
+1,2,1041040,Venice Beach,0
+1,5,1042100,Venice Beach,0
+1,8,1047110,Venice Beach,0
+1,1,1031020,Venice Beach,0
+1,3,1031090,Venice Beach,0
+1,3,1041090,Venice Beach,0
+1,6,1042070,Venice Beach,0
+1,7,1041080,Venice Beach,0
+1,4,1047010,Venice Beach,0
+1,7,1080,Venice Beach,0
+1,2,1081040,Venice Beach,0
+1,3,1081090,Venice Beach,0
+1,7,109080,Venice Beach,0
+1,1,1117020,Venice Beach,0
+1,6,112070,Venice Beach,0
+1,5,112100,Venice Beach,0
+1,1,1114020,Venice Beach,0
+1,7,1114080,Venice Beach,0
+1,3,1114090,Venice Beach,0
+1,4,1130010,Venice Beach,0
+1,3,1090,Venice Beach,0
+1,5,1120100,Venice Beach,0
+1,6,1071070,Venice Beach,0
+1,5,1071100,Venice Beach,0
+1,1,1081020,Venice Beach,0
+1,7,1081080,Venice Beach,0
+1,1,109020,Venice Beach,0
+1,2,109040,Venice Beach,0
+1,3,109090,Venice Beach,0
+1,7,1117080,Venice Beach,0
+1,6,1120070,Venice Beach,0
+1,2,1114040,Venice Beach,0
+1,8,1130110,Venice Beach,0
+1,1,1149020,Venice Beach,0
+1,7,1149080,Venice Beach,0
+1,3,1149090,Venice Beach,0
+1,8,1158110,Venice Beach,0
+1,1,1152020,Venice Beach,0
+1,6,1106070,Venice Beach,0
+1,5,1106100,Venice Beach,0
+1,2,1117040,Venice Beach,0
+1,3,1117090,Venice Beach,0
+1,1,1177020,Venice Beach,0
+1,2,1177040,Venice Beach,0
+1,1,1187020,Venice Beach,0
+1,2,1187040,Venice Beach,0
+1,3,1187090,Venice Beach,0
+1,6,1199070,Venice Beach,0
+1,5,1199100,Venice Beach,0
+1,6,1154070,Venice Beach,0
+1,6,1174070,Venice Beach,0
+1,5,1174100,Venice Beach,0
+1,6,1138070,Venice Beach,0
+1,5,1138100,Venice Beach,0
+1,2,1152040,Venice Beach,0
+1,7,1152080,Venice Beach,0
+1,6,1217070,Venice Beach,0
+1,5,1223100,Venice Beach,0
+1,4,1224010,Venice Beach,0
+1,8,1244110,Venice Beach,0
+1,2,1246040,Venice Beach,0
+1,1,1299020,Venice Beach,0
+1,1,120020,Venice Beach,0
+1,7,120080,Venice Beach,0
+1,3,120090,Venice Beach,0
+1,7,1177080,Venice Beach,0
+1,7,1187080,Venice Beach,0
+1,2,120040,Venice Beach,0
+1,6,1227070,Venice Beach,0
+1,5,1227100,Venice Beach,0
+1,6,1223070,Venice Beach,0
+1,7,1246080,Venice Beach,0
+1,6,1316070,Venice Beach,0
+1,4,1340010,Venice Beach,0
+1,4,1244010,Venice Beach,0
+1,1,1246020,Venice Beach,0
+1,2,1256040,Venice Beach,0
+1,7,1256080,Venice Beach,0
+1,3,1256090,Venice Beach,0
+1,7,1310080,Venice Beach,0
+1,1,1256020,Venice Beach,0
+1,4,1367010,Venice Beach,0
+1,1,137020,Venice Beach,0
+1,2,1374040,Venice Beach,0
+1,3,137090,Venice Beach,0
+1,1,1379020,Venice Beach,0
+1,4,1383010,Venice Beach,0
+1,2,1299040,Venice Beach,0
+1,7,1299080,Venice Beach,0
+1,2,1310040,Venice Beach,0
+1,3,1310090,Venice Beach,0
+1,5,1316100,Venice Beach,0
+1,8,1340110,Venice Beach,0
+1,6,1346070,Venice Beach,0
+1,7,1374080,Venice Beach,0
+1,3,1389090,Venice Beach,0
+1,8,1383110,Venice Beach,0
+1,6,141070,Venice Beach,0
+1,6,1424070,Venice Beach,0
+1,8,1367110,Venice Beach,0
+1,3,1379090,Venice Beach,0
+1,1,1389020,Venice Beach,0
+1,2,1389040,Venice Beach,0
+1,3,1374090,Venice Beach,0
+1,7,1389080,Venice Beach,0
+1,5,1424100,Venice Beach,0
+1,4,1460010,Venice Beach,0
+1,8,1434110,Venice Beach,0
+1,6,1445070,Venice Beach,0
+1,8,1460110,Venice Beach,0
+1,5,1445100,Venice Beach,0
+1,4,1483010,Venice Beach,0
+1,5,150100,Venice Beach,0
+1,6,1479070,Venice Beach,0
+1,5,1479100,Venice Beach,0
+1,1,1512020,Venice Beach,0
+1,2,1512040,Venice Beach,0
+1,2,153040,Venice Beach,0
+1,7,153080,Venice Beach,0
+1,6,1560070,Venice Beach,0
+1,4,1561010,Venice Beach,0
+1,8,1551110,Venice Beach,0
+1,5,1535100,Venice Beach,0
+1,6,1553070,Venice Beach,0
+1,8,1561110,Venice Beach,0
+1,6,1573070,Venice Beach,0
+1,4,1575010,Venice Beach,0
+1,5,1600100,Venice Beach,0
+1,2,1611040,Venice Beach,0
+1,7,1512080,Venice Beach,0
+1,3,1512090,Venice Beach,0
+1,8,157110,Venice Beach,0
+1,5,1573100,Venice Beach,0
+1,1,1611020,Venice Beach,0
+1,7,1623080,Venice Beach,0
+1,7,1611080,Venice Beach,0
+1,3,1623090,Venice Beach,0
+1,7,168080,Venice Beach,0
+1,6,1635070,Venice Beach,0
+1,5,1635100,Venice Beach,0
+1,1,168020,Venice Beach,0
+1,2,168040,Venice Beach,0
+1,3,168090,Venice Beach,0
+1,2,170040,Venice Beach,0
+1,1,185020,Venice Beach,0
+1,3,185090,Venice Beach,0
+1,7,194080,Venice Beach,0
+1,4,196010,Venice Beach,0
+1,8,196110,Venice Beach,0
+1,1,153020,Venice Beach,0
+1,4,1551010,Venice Beach,0
+1,1,194020,Venice Beach,0
+1,2,214040,Venice Beach,0
+1,7,214080,Venice Beach,0
+1,2,244040,Venice Beach,0
+1,7,244080,Venice Beach,0
+1,2,245040,Venice Beach,0
+1,7,245080,Venice Beach,0
+1,5,25100,Venice Beach,0
+1,4,259010,Venice Beach,0
+1,1,302020,Venice Beach,0
+1,3,302090,Venice Beach,0
+1,8,305110,Venice Beach,0
+1,4,231010,Venice Beach,0
+1,5,238100,Venice Beach,0
+1,3,243090,Venice Beach,0
+1,4,252010,Venice Beach,0
+1,1,320020,Venice Beach,0
+1,4,352010,Venice Beach,0
+1,8,352110,Venice Beach,0
+1,1,276020,Venice Beach,0
+1,2,276040,Venice Beach,0
+1,3,276090,Venice Beach,0
+1,3,293090,Venice Beach,0
+1,6,1600070,Venice Beach,0
+1,1,1623020,Venice Beach,0
+1,3,1611090,Venice Beach,0
+1,2,389040,Venice Beach,0
+1,1,170020,Venice Beach,0
+1,4,176010,Venice Beach,0
+1,8,176110,Venice Beach,0
+1,4,183010,Venice Beach,0
+1,8,183110,Venice Beach,0
+1,7,185080,Venice Beach,0
+1,2,194040,Venice Beach,0
+1,7,320080,Venice Beach,0
+1,3,320090,Venice Beach,0
+1,8,417110,Venice Beach,0
+1,6,442070,Venice Beach,0
+1,6,208070,Venice Beach,0
+1,5,208100,Venice Beach,0
+1,1,214020,Venice Beach,0
+1,3,214090,Venice Beach,0
+1,6,224070,Venice Beach,0
+1,1,246020,Venice Beach,0
+1,2,246040,Venice Beach,0
+1,7,246080,Venice Beach,0
+1,3,246090,Venice Beach,0
+1,6,337070,Venice Beach,0
+1,5,337100,Venice Beach,0
+1,5,459100,Venice Beach,0
+1,8,259110,Venice Beach,0
+1,4,376010,Venice Beach,0
+1,1,389020,Venice Beach,0
+1,3,389090,Venice Beach,0
+1,4,398010,Venice Beach,0
+1,5,492100,Venice Beach,0
+1,7,493080,Venice Beach,0
+1,6,519070,Venice Beach,0
+1,7,293080,Venice Beach,0
+1,7,302080,Venice Beach,0
+1,4,305010,Venice Beach,0
+1,8,343110,Venice Beach,0
+1,4,375010,Venice Beach,0
+1,4,528010,Venice Beach,0
+1,2,541040,Venice Beach,0
+1,4,542010,Venice Beach,0
+1,1,544020,Venice Beach,0
+1,1,552020,Venice Beach,0
+1,3,552090,Venice Beach,0
+1,8,375110,Venice Beach,0
+1,7,389080,Venice Beach,0
+1,8,398110,Venice Beach,0
+1,4,447010,Venice Beach,0
+1,6,459070,Venice Beach,0
+1,6,421070,Venice Beach,0
+1,5,421100,Venice Beach,0
+1,8,439110,Venice Beach,0
+1,1,458020,Venice Beach,0
+1,2,458040,Venice Beach,0
+1,4,471010,Venice Beach,0
+1,4,48010,Venice Beach,0
+1,8,48110,Venice Beach,0
+1,1,582020,Venice Beach,0
+1,7,582080,Venice Beach,0
+1,3,582090,Venice Beach,0
+1,1,602020,Venice Beach,0
+1,1,606020,Venice Beach,0
+1,2,493040,Venice Beach,0
+1,3,493090,Venice Beach,0
+1,3,661090,Venice Beach,0
+1,4,678010,Venice Beach,0
+1,6,529070,Venice Beach,0
+1,5,529100,Venice Beach,0
+1,1,541020,Venice Beach,0
+1,7,541080,Venice Beach,0
+1,7,544080,Venice Beach,0
+1,8,542110,Venice Beach,0
+1,3,544090,Venice Beach,0
+1,7,552080,Venice Beach,0
+1,4,595010,Venice Beach,0
+1,8,595110,Venice Beach,0
+1,5,601100,Venice Beach,0
+1,2,606040,Venice Beach,0
+1,2,582040,Venice Beach,0
+1,6,601070,Venice Beach,0
+1,3,602090,Venice Beach,0
+1,1,614020,Venice Beach,0
+1,2,614040,Venice Beach,0
+1,7,614080,Venice Beach,0
+1,3,614090,Venice Beach,0
+1,5,620100,Venice Beach,0
+1,4,631010,Venice Beach,0
+1,1,703020,Venice Beach,0
+1,2,703040,Venice Beach,0
+1,2,708040,Venice Beach,0
+1,5,720100,Venice Beach,0
+1,7,755080,Venice Beach,0
+1,1,719020,Venice Beach,0
+1,2,719040,Venice Beach,0
+1,6,720070,Venice Beach,0
+1,3,755090,Venice Beach,0
+1,4,78010,Venice Beach,0
+1,8,78110,Venice Beach,0
+1,1,79020,Venice Beach,0
+1,7,79080,Venice Beach,0
+1,6,809070,Venice Beach,0
+1,5,809100,Venice Beach,0
+1,4,77010,Venice Beach,0
+1,2,672040,Venice Beach,0
+1,7,672080,Venice Beach,0
+1,7,703080,Venice Beach,0
+1,3,703090,Venice Beach,0
+1,1,825020,Venice Beach,0
+1,3,825090,Venice Beach,0
+1,1,833020,Venice Beach,0
+1,7,833080,Venice Beach,0
+1,3,847090,Venice Beach,0
+1,6,848070,Venice Beach,0
+1,4,849010,Venice Beach,0
+1,1,867020,Venice Beach,0
+1,3,867090,Venice Beach,0
+1,7,825080,Venice Beach,0
+1,3,833090,Venice Beach,0
+1,1,847020,Venice Beach,0
+1,2,847040,Venice Beach,0
+1,5,848100,Venice Beach,0
+1,1,708020,Venice Beach,0
+1,7,708080,Venice Beach,0
+1,3,708090,Venice Beach,0
+1,5,741100,Venice Beach,0
+1,2,867040,Venice Beach,0
+1,2,874040,Venice Beach,0
+1,7,874080,Venice Beach,0
+1,7,886080,Venice Beach,0
+1,1,874020,Venice Beach,0
+1,3,874090,Venice Beach,0
+1,1,886020,Venice Beach,0
+1,2,886040,Venice Beach,0
+1,3,886090,Venice Beach,0
+1,6,92070,Venice Beach,0
+1,5,92100,Venice Beach,0
+1,3,935090,Venice Beach,0
+1,1,935020,Venice Beach,0
+1,8,782110,Venice Beach,0
+1,5,8100,Venice Beach,0
+1,4,968010,Venice Beach,0
+1,7,983080,Venice Beach,0
+1,3,983090,Venice Beach,0
+1,1,991020,Venice Beach,0
+1,3,991090,Venice Beach,0
+1,4,831010,Venice Beach,0
+1,8,831110,Venice Beach,0
+1,2,833040,Venice Beach,0
+1,6,834070,Venice Beach,0
+1,7,847080,Venice Beach,0
+1,8,849110,Venice Beach,0
+1,4,853010,Venice Beach,0
+1,8,853110,Venice Beach,0
+1,7,867080,Venice Beach,0
+1,4,950010,Venice Beach,0
+1,5,895100,Venice Beach,0
+1,6,908070,Venice Beach,0
+1,2,935040,Venice Beach,0
+1,4,963010,Venice Beach,0
+1,8,963110,Venice Beach,0
+1,4,1134010,Venice Beach,0
+1,8,1134110,Venice Beach,0
+1,2,1149040,Venice Beach,0
+1,3,1152090,Venice Beach,0
+1,5,1154100,Venice Beach,0
+1,4,1158010,Venice Beach,0
+1,2,991040,Venice Beach,0
+1,7,991080,Venice Beach,0
+1,4,1173010,Venice Beach,0
+1,8,1173110,Venice Beach,0
+1,3,1177090,Venice Beach,0
+1,5,1217100,Venice Beach,0
+1,8,1224110,Venice Beach,0
+1,3,1246090,Venice Beach,0
+1,3,1299090,Venice Beach,0
+1,1,1310020,Venice Beach,0
+1,5,1346100,Venice Beach,0
+1,2,137040,Venice Beach,0
+1,7,137080,Venice Beach,0
+1,2,1379040,Venice Beach,0
+1,7,1379080,Venice Beach,0
+1,1,1374020,Venice Beach,0
+1,5,141100,Venice Beach,0
+1,4,1434010,Venice Beach,0
+1,8,1483110,Venice Beach,0
+1,6,150070,Venice Beach,0
+1,3,153090,Venice Beach,0
+1,6,1535070,Venice Beach,0
+1,5,1553100,Venice Beach,0
+1,5,1560100,Venice Beach,0
+1,4,157010,Venice Beach,0
+1,8,1575110,Venice Beach,0
+1,2,1623040,Venice Beach,0
+1,7,170080,Venice Beach,0
+1,3,170090,Venice Beach,0
+1,2,185040,Venice Beach,0
+1,3,194090,Venice Beach,0
+1,5,224100,Venice Beach,0
+1,8,231110,Venice Beach,0
+1,1,243020,Venice Beach,0
+1,2,243040,Venice Beach,0
+1,7,243080,Venice Beach,0
+1,1,244020,Venice Beach,0
+1,3,244090,Venice Beach,0
+1,1,245020,Venice Beach,0
+1,3,245090,Venice Beach,0
+1,6,238070,Venice Beach,0
+1,8,252110,Venice Beach,0
+1,6,25070,Venice Beach,0
+1,7,276080,Venice Beach,0
+1,1,293020,Venice Beach,0
+1,2,293040,Venice Beach,0
+1,2,302040,Venice Beach,0
+1,2,320040,Venice Beach,0
+1,4,343010,Venice Beach,0
+1,8,376110,Venice Beach,0
+1,4,417010,Venice Beach,0
+1,4,439010,Venice Beach,0
+1,5,442100,Venice Beach,0
+1,8,447110,Venice Beach,0
+1,7,458080,Venice Beach,0
+1,3,458090,Venice Beach,0
+1,8,471110,Venice Beach,0
+1,6,492070,Venice Beach,0
+1,1,493020,Venice Beach,0
+1,5,519100,Venice Beach,0
+1,8,528110,Venice Beach,0
+1,3,541090,Venice Beach,0
+1,2,544040,Venice Beach,0
+1,6,570070,Venice Beach,0
+1,5,570100,Venice Beach,0
+1,2,552040,Venice Beach,0
+1,2,602040,Venice Beach,0
+1,7,602080,Venice Beach,0
+1,7,606080,Venice Beach,0
+1,3,606090,Venice Beach,0
+1,6,620070,Venice Beach,0
+1,8,631110,Venice Beach,0
+1,1,661020,Venice Beach,0
+1,2,661040,Venice Beach,0
+1,7,661080,Venice Beach,0
+1,1,672020,Venice Beach,0
+1,3,672090,Venice Beach,0
+1,8,678110,Venice Beach,0
+1,7,719080,Venice Beach,0
+1,3,719090,Venice Beach,0
+1,4,74010,Venice Beach,0
+1,6,741070,Venice Beach,0
+1,8,74110,Venice Beach,0
+1,1,755020,Venice Beach,0
+1,2,755040,Venice Beach,0
+1,8,77110,Venice Beach,0
+1,4,782010,Venice Beach,0
+1,2,79040,Venice Beach,0
+1,3,79090,Venice Beach,0
+1,6,8070,Venice Beach,0
+1,4,82010,Venice Beach,0
+1,6,821070,Venice Beach,0
+1,8,82110,Venice Beach,0
+1,5,821100,Venice Beach,0
+1,2,825040,Venice Beach,0
+1,5,834100,Venice Beach,0
+1,6,895070,Venice Beach,0
+1,5,908100,Venice Beach,0
+1,7,935080,Venice Beach,0
+1,8,950110,Venice Beach,0
+1,8,968110,Venice Beach,0
+1,1,983020,Venice Beach,0
+1,2,983040,Venice Beach,0
+1,6,954070,Washington/Fairfax Transit Hub,1
+1,1,957020,Washington/Fairfax Transit Hub,1
+1,7,957080,Washington/Fairfax Transit Hub,1
+1,1,940020,Washington/Fairfax Transit Hub,1
+1,3,940090,Washington/Fairfax Transit Hub,1
+1,2,942040,Washington/Fairfax Transit Hub,1
+1,2,946040,Washington/Fairfax Transit Hub,1
+1,6,912070,Washington/Fairfax Transit Hub,1
+1,5,912100,Washington/Fairfax Transit Hub,1
+1,3,907090,Washington/Fairfax Transit Hub,1
+1,4,917010,Washington/Fairfax Transit Hub,1
+1,6,835070,Washington/Fairfax Transit Hub,1
+1,1,842020,Washington/Fairfax Transit Hub,1
+1,2,842040,Washington/Fairfax Transit Hub,1
+1,7,842080,Washington/Fairfax Transit Hub,1
+1,3,842090,Washington/Fairfax Transit Hub,1
+1,8,850110,Washington/Fairfax Transit Hub,1
+1,5,87100,Washington/Fairfax Transit Hub,1
+1,5,88100,Washington/Fairfax Transit Hub,1
+1,1,810020,Washington/Fairfax Transit Hub,1
+1,3,810090,Washington/Fairfax Transit Hub,1
+1,6,71070,Washington/Fairfax Transit Hub,1
+1,7,697080,Washington/Fairfax Transit Hub,1
+1,3,675090,Washington/Fairfax Transit Hub,1
+1,7,689080,Washington/Fairfax Transit Hub,1
+1,3,689090,Washington/Fairfax Transit Hub,1
+1,1,668020,Washington/Fairfax Transit Hub,1
+1,2,668040,Washington/Fairfax Transit Hub,1
+1,8,645110,Washington/Fairfax Transit Hub,1
+1,6,621070,Washington/Fairfax Transit Hub,1
+1,8,603110,Washington/Fairfax Transit Hub,1
+1,2,561040,Washington/Fairfax Transit Hub,1
+1,4,557010,Washington/Fairfax Transit Hub,1
+1,8,559110,Washington/Fairfax Transit Hub,1
+1,8,522110,Washington/Fairfax Transit Hub,1
+1,2,482040,Washington/Fairfax Transit Hub,1
+1,3,482090,Washington/Fairfax Transit Hub,1
+1,2,495040,Washington/Fairfax Transit Hub,1
+1,3,495090,Washington/Fairfax Transit Hub,1
+1,2,47040,Washington/Fairfax Transit Hub,1
+1,7,47080,Washington/Fairfax Transit Hub,1
+1,3,47090,Washington/Fairfax Transit Hub,1
+1,6,415070,Washington/Fairfax Transit Hub,1
+1,4,423010,Washington/Fairfax Transit Hub,1
+1,8,423110,Washington/Fairfax Transit Hub,1
+1,7,428080,Washington/Fairfax Transit Hub,1
+1,3,428090,Washington/Fairfax Transit Hub,1
+1,6,429070,Washington/Fairfax Transit Hub,1
+1,4,385010,Washington/Fairfax Transit Hub,1
+1,8,385110,Washington/Fairfax Transit Hub,1
+1,6,390070,Washington/Fairfax Transit Hub,1
+1,1,402020,Washington/Fairfax Transit Hub,1
+1,2,402040,Washington/Fairfax Transit Hub,1
+1,5,404100,Washington/Fairfax Transit Hub,1
+1,7,409080,Washington/Fairfax Transit Hub,1
+1,4,407010,Washington/Fairfax Transit Hub,1
+1,4,360010,Washington/Fairfax Transit Hub,1
+1,5,363100,Washington/Fairfax Transit Hub,1
+1,6,369070,Washington/Fairfax Transit Hub,1
+1,1,310020,Washington/Fairfax Transit Hub,1
+1,2,30040,Washington/Fairfax Transit Hub,1
+1,6,251070,Washington/Fairfax Transit Hub,1
+1,4,248010,Washington/Fairfax Transit Hub,1
+1,1,250020,Washington/Fairfax Transit Hub,1
+1,3,233090,Washington/Fairfax Transit Hub,1
+1,6,236070,Washington/Fairfax Transit Hub,1
+1,5,236100,Washington/Fairfax Transit Hub,1
+1,1,211020,Washington/Fairfax Transit Hub,1
+1,3,1644090,Washington/Fairfax Transit Hub,1
+1,6,1628070,Washington/Fairfax Transit Hub,1
+1,8,1640110,Washington/Fairfax Transit Hub,1
+1,6,1592070,Washington/Fairfax Transit Hub,1
+1,6,1599070,Washington/Fairfax Transit Hub,1
+1,7,1604080,Washington/Fairfax Transit Hub,1
+1,1,161020,Washington/Fairfax Transit Hub,1
+1,2,161040,Washington/Fairfax Transit Hub,1
+1,7,161080,Washington/Fairfax Transit Hub,1
+1,4,1574010,Washington/Fairfax Transit Hub,1
+1,8,1574110,Washington/Fairfax Transit Hub,1
+1,3,1533090,Washington/Fairfax Transit Hub,1
+1,3,1529090,Washington/Fairfax Transit Hub,1
+1,5,1493100,Washington/Fairfax Transit Hub,1
+1,4,146010,Washington/Fairfax Transit Hub,1
+1,1,1519020,Washington/Fairfax Transit Hub,1
+1,7,1519080,Washington/Fairfax Transit Hub,1
+1,3,1519090,Washington/Fairfax Transit Hub,1
+1,5,144100,Washington/Fairfax Transit Hub,1
+1,3,1450090,Washington/Fairfax Transit Hub,1
+1,1,1462020,Washington/Fairfax Transit Hub,1
+1,4,1400010,Washington/Fairfax Transit Hub,1
+1,5,1391100,Washington/Fairfax Transit Hub,1
+1,1,1341020,Washington/Fairfax Transit Hub,1
+1,2,1341040,Washington/Fairfax Transit Hub,1
+1,7,1341080,Washington/Fairfax Transit Hub,1
+1,3,1280090,Washington/Fairfax Transit Hub,1
+1,8,1265110,Washington/Fairfax Transit Hub,1
+1,2,1214040,Washington/Fairfax Transit Hub,1
+1,3,1214090,Washington/Fairfax Transit Hub,1
+1,5,1180100,Washington/Fairfax Transit Hub,1
+1,4,1185010,Washington/Fairfax Transit Hub,1
+1,8,1185110,Washington/Fairfax Transit Hub,1
+1,5,1193100,Washington/Fairfax Transit Hub,1
+1,1,1203020,Washington/Fairfax Transit Hub,1
+1,7,1203080,Washington/Fairfax Transit Hub,1
+1,3,1203090,Washington/Fairfax Transit Hub,1
+1,5,1135100,Washington/Fairfax Transit Hub,1
+1,3,957090,Washington/Fairfax Transit Hub,1
+1,7,946080,Washington/Fairfax Transit Hub,1
+1,1,987020,Washington/Fairfax Transit Hub,1
+1,2,987040,Washington/Fairfax Transit Hub,1
+1,7,987080,Washington/Fairfax Transit Hub,1
+1,1,942020,Washington/Fairfax Transit Hub,1
+1,3,942090,Washington/Fairfax Transit Hub,1
+1,2,940040,Washington/Fairfax Transit Hub,1
+1,7,940080,Washington/Fairfax Transit Hub,1
+1,8,917110,Washington/Fairfax Transit Hub,1
+1,6,910070,Washington/Fairfax Transit Hub,1
+1,5,910100,Washington/Fairfax Transit Hub,1
+1,5,954100,Washington/Fairfax Transit Hub,1
+1,6,88070,Washington/Fairfax Transit Hub,1
+1,6,87070,Washington/Fairfax Transit Hub,1
+1,2,957040,Washington/Fairfax Transit Hub,1
+1,5,835100,Washington/Fairfax Transit Hub,1
+1,3,987090,Washington/Fairfax Transit Hub,1
+1,1,811020,Washington/Fairfax Transit Hub,1
+1,2,811040,Washington/Fairfax Transit Hub,1
+1,7,811080,Washington/Fairfax Transit Hub,1
+1,3,811090,Washington/Fairfax Transit Hub,1
+1,8,768110,Washington/Fairfax Transit Hub,1
+1,7,942080,Washington/Fairfax Transit Hub,1
+1,3,946090,Washington/Fairfax Transit Hub,1
+1,1,946020,Washington/Fairfax Transit Hub,1
+1,5,891100,Washington/Fairfax Transit Hub,1
+1,2,907040,Washington/Fairfax Transit Hub,1
+1,1,907020,Washington/Fairfax Transit Hub,1
+1,7,907080,Washington/Fairfax Transit Hub,1
+1,6,868070,Washington/Fairfax Transit Hub,1
+1,6,891070,Washington/Fairfax Transit Hub,1
+1,4,876010,Washington/Fairfax Transit Hub,1
+1,8,876110,Washington/Fairfax Transit Hub,1
+1,5,868100,Washington/Fairfax Transit Hub,1
+1,1,746020,Washington/Fairfax Transit Hub,1
+1,4,727010,Washington/Fairfax Transit Hub,1
+1,1,736020,Washington/Fairfax Transit Hub,1
+1,4,850010,Washington/Fairfax Transit Hub,1
+1,2,810040,Washington/Fairfax Transit Hub,1
+1,7,810080,Washington/Fairfax Transit Hub,1
+1,1,675020,Washington/Fairfax Transit Hub,1
+1,7,675080,Washington/Fairfax Transit Hub,1
+1,2,689040,Washington/Fairfax Transit Hub,1
+1,4,768010,Washington/Fairfax Transit Hub,1
+1,8,727110,Washington/Fairfax Transit Hub,1
+1,5,71100,Washington/Fairfax Transit Hub,1
+1,4,645010,Washington/Fairfax Transit Hub,1
+1,1,697020,Washington/Fairfax Transit Hub,1
+1,2,697040,Washington/Fairfax Transit Hub,1
+1,2,664040,Washington/Fairfax Transit Hub,1
+1,7,664080,Washington/Fairfax Transit Hub,1
+1,7,668080,Washington/Fairfax Transit Hub,1
+1,1,68020,Washington/Fairfax Transit Hub,1
+1,2,68040,Washington/Fairfax Transit Hub,1
+1,7,68080,Washington/Fairfax Transit Hub,1
+1,3,68090,Washington/Fairfax Transit Hub,1
+1,2,746040,Washington/Fairfax Transit Hub,1
+1,7,746080,Washington/Fairfax Transit Hub,1
+1,3,746090,Washington/Fairfax Transit Hub,1
+1,2,736040,Washington/Fairfax Transit Hub,1
+1,7,736080,Washington/Fairfax Transit Hub,1
+1,3,736090,Washington/Fairfax Transit Hub,1
+1,1,704020,Washington/Fairfax Transit Hub,1
+1,2,704040,Washington/Fairfax Transit Hub,1
+1,7,704080,Washington/Fairfax Transit Hub,1
+1,3,704090,Washington/Fairfax Transit Hub,1
+1,5,621100,Washington/Fairfax Transit Hub,1
+1,6,617070,Washington/Fairfax Transit Hub,1
+1,4,589010,Washington/Fairfax Transit Hub,1
+1,3,581090,Washington/Fairfax Transit Hub,1
+1,4,603010,Washington/Fairfax Transit Hub,1
+1,5,575100,Washington/Fairfax Transit Hub,1
+1,2,581040,Washington/Fairfax Transit Hub,1
+1,6,592070,Washington/Fairfax Transit Hub,1
+1,5,592100,Washington/Fairfax Transit Hub,1
+1,6,567070,Washington/Fairfax Transit Hub,1
+1,5,567100,Washington/Fairfax Transit Hub,1
+1,4,554010,Washington/Fairfax Transit Hub,1
+1,8,554110,Washington/Fairfax Transit Hub,1
+1,1,558020,Washington/Fairfax Transit Hub,1
+1,5,562100,Washington/Fairfax Transit Hub,1
+1,2,558040,Washington/Fairfax Transit Hub,1
+1,7,558080,Washington/Fairfax Transit Hub,1
+1,1,561020,Washington/Fairfax Transit Hub,1
+1,7,561080,Washington/Fairfax Transit Hub,1
+1,6,562070,Washington/Fairfax Transit Hub,1
+1,3,697090,Washington/Fairfax Transit Hub,1
+1,1,689020,Washington/Fairfax Transit Hub,1
+1,6,690070,Washington/Fairfax Transit Hub,1
+1,5,690100,Washington/Fairfax Transit Hub,1
+1,3,668090,Washington/Fairfax Transit Hub,1
+1,2,675040,Washington/Fairfax Transit Hub,1
+1,1,664020,Washington/Fairfax Transit Hub,1
+1,3,664090,Washington/Fairfax Transit Hub,1
+1,4,671010,Washington/Fairfax Transit Hub,1
+1,8,671110,Washington/Fairfax Transit Hub,1
+1,1,517020,Washington/Fairfax Transit Hub,1
+1,7,517080,Washington/Fairfax Transit Hub,1
+1,4,522010,Washington/Fairfax Transit Hub,1
+1,1,495020,Washington/Fairfax Transit Hub,1
+1,5,617100,Washington/Fairfax Transit Hub,1
+1,7,495080,Washington/Fairfax Transit Hub,1
+1,6,5070,Washington/Fairfax Transit Hub,1
+1,5,5100,Washington/Fairfax Transit Hub,1
+1,8,53110,Washington/Fairfax Transit Hub,1
+1,1,581020,Washington/Fairfax Transit Hub,1
+1,7,581080,Washington/Fairfax Transit Hub,1
+1,8,589110,Washington/Fairfax Transit Hub,1
+1,1,482020,Washington/Fairfax Transit Hub,1
+1,6,575070,Washington/Fairfax Transit Hub,1
+1,4,473010,Washington/Fairfax Transit Hub,1
+1,1,47020,Washington/Fairfax Transit Hub,1
+1,6,46070,Washington/Fairfax Transit Hub,1
+1,7,450080,Washington/Fairfax Transit Hub,1
+1,7,433080,Washington/Fairfax Transit Hub,1
+1,5,46100,Washington/Fairfax Transit Hub,1
+1,3,450090,Washington/Fairfax Transit Hub,1
+1,5,390100,Washington/Fairfax Transit Hub,1
+1,5,388100,Washington/Fairfax Transit Hub,1
+1,8,557110,Washington/Fairfax Transit Hub,1
+1,3,558090,Washington/Fairfax Transit Hub,1
+1,4,559010,Washington/Fairfax Transit Hub,1
+1,3,561090,Washington/Fairfax Transit Hub,1
+1,4,53010,Washington/Fairfax Transit Hub,1
+1,4,362010,Washington/Fairfax Transit Hub,1
+1,6,345070,Washington/Fairfax Transit Hub,1
+1,6,359070,Washington/Fairfax Transit Hub,1
+1,8,360110,Washington/Fairfax Transit Hub,1
+1,4,336010,Washington/Fairfax Transit Hub,1
+1,4,332010,Washington/Fairfax Transit Hub,1
+1,8,34110,Washington/Fairfax Transit Hub,1
+1,4,425010,Washington/Fairfax Transit Hub,1
+1,1,428020,Washington/Fairfax Transit Hub,1
+1,2,428040,Washington/Fairfax Transit Hub,1
+1,5,429100,Washington/Fairfax Transit Hub,1
+1,2,433040,Washington/Fairfax Transit Hub,1
+1,3,433090,Washington/Fairfax Transit Hub,1
+1,2,3040,Washington/Fairfax Transit Hub,1
+1,7,30080,Washington/Fairfax Transit Hub,1
+1,1,312020,Washington/Fairfax Transit Hub,1
+1,3,312090,Washington/Fairfax Transit Hub,1
+1,7,3080,Washington/Fairfax Transit Hub,1
+1,3,3090,Washington/Fairfax Transit Hub,1
+1,2,32040,Washington/Fairfax Transit Hub,1
+1,5,415100,Washington/Fairfax Transit Hub,1
+1,2,517040,Washington/Fairfax Transit Hub,1
+1,3,517090,Washington/Fairfax Transit Hub,1
+1,8,407110,Washington/Fairfax Transit Hub,1
+1,1,409020,Washington/Fairfax Transit Hub,1
+1,3,409090,Washington/Fairfax Transit Hub,1
+1,4,497010,Washington/Fairfax Transit Hub,1
+1,8,497110,Washington/Fairfax Transit Hub,1
+1,6,50070,Washington/Fairfax Transit Hub,1
+1,5,50100,Washington/Fairfax Transit Hub,1
+1,3,402090,Washington/Fairfax Transit Hub,1
+1,6,404070,Washington/Fairfax Transit Hub,1
+1,8,382110,Washington/Fairfax Transit Hub,1
+1,5,272100,Washington/Fairfax Transit Hub,1
+1,5,369100,Washington/Fairfax Transit Hub,1
+1,8,260110,Washington/Fairfax Transit Hub,1
+1,5,251100,Washington/Fairfax Transit Hub,1
+1,5,269100,Washington/Fairfax Transit Hub,1
+1,8,336110,Washington/Fairfax Transit Hub,1
+1,8,473110,Washington/Fairfax Transit Hub,1
+1,7,482080,Washington/Fairfax Transit Hub,1
+1,5,345100,Washington/Fairfax Transit Hub,1
+1,5,359100,Washington/Fairfax Transit Hub,1
+1,8,362110,Washington/Fairfax Transit Hub,1
+1,1,450020,Washington/Fairfax Transit Hub,1
+1,2,450040,Washington/Fairfax Transit Hub,1
+1,3,211090,Washington/Fairfax Transit Hub,1
+1,4,217010,Washington/Fairfax Transit Hub,1
+1,8,217110,Washington/Fairfax Transit Hub,1
+1,8,425110,Washington/Fairfax Transit Hub,1
+1,1,433020,Washington/Fairfax Transit Hub,1
+1,2,409040,Washington/Fairfax Transit Hub,1
+1,4,311010,Washington/Fairfax Transit Hub,1
+1,8,311110,Washington/Fairfax Transit Hub,1
+1,2,312040,Washington/Fairfax Transit Hub,1
+1,8,332110,Washington/Fairfax Transit Hub,1
+1,7,402080,Washington/Fairfax Transit Hub,1
+1,1,32020,Washington/Fairfax Transit Hub,1
+1,7,32080,Washington/Fairfax Transit Hub,1
+1,3,32090,Washington/Fairfax Transit Hub,1
+1,1,20020,Washington/Fairfax Transit Hub,1
+1,2,20040,Washington/Fairfax Transit Hub,1
+1,7,20080,Washington/Fairfax Transit Hub,1
+1,8,188110,Washington/Fairfax Transit Hub,1
+1,4,382010,Washington/Fairfax Transit Hub,1
+1,4,397010,Washington/Fairfax Transit Hub,1
+1,8,397110,Washington/Fairfax Transit Hub,1
+1,6,388070,Washington/Fairfax Transit Hub,1
+1,6,1650070,Washington/Fairfax Transit Hub,1
+1,6,1632070,Washington/Fairfax Transit Hub,1
+1,6,363070,Washington/Fairfax Transit Hub,1
+1,6,374070,Washington/Fairfax Transit Hub,1
+1,5,374100,Washington/Fairfax Transit Hub,1
+1,6,162070,Washington/Fairfax Transit Hub,1
+1,1,1644020,Washington/Fairfax Transit Hub,1
+1,2,1644040,Washington/Fairfax Transit Hub,1
+1,7,1644080,Washington/Fairfax Transit Hub,1
+1,2,1604040,Washington/Fairfax Transit Hub,1
+1,3,161090,Washington/Fairfax Transit Hub,1
+1,1,30020,Washington/Fairfax Transit Hub,1
+1,1,3020,Washington/Fairfax Transit Hub,1
+1,4,339010,Washington/Fairfax Transit Hub,1
+1,8,339110,Washington/Fairfax Transit Hub,1
+1,4,34010,Washington/Fairfax Transit Hub,1
+1,1,257020,Washington/Fairfax Transit Hub,1
+1,2,257040,Washington/Fairfax Transit Hub,1
+1,4,260010,Washington/Fairfax Transit Hub,1
+1,6,269070,Washington/Fairfax Transit Hub,1
+1,7,310080,Washington/Fairfax Transit Hub,1
+1,3,310090,Washington/Fairfax Transit Hub,1
+1,7,312080,Washington/Fairfax Transit Hub,1
+1,8,248110,Washington/Fairfax Transit Hub,1
+1,2,250040,Washington/Fairfax Transit Hub,1
+1,7,250080,Washington/Fairfax Transit Hub,1
+1,1,233020,Washington/Fairfax Transit Hub,1
+1,2,233040,Washington/Fairfax Transit Hub,1
+1,7,233080,Washington/Fairfax Transit Hub,1
+1,1,23020,Washington/Fairfax Transit Hub,1
+1,7,23080,Washington/Fairfax Transit Hub,1
+1,2,310040,Washington/Fairfax Transit Hub,1
+1,3,30090,Washington/Fairfax Transit Hub,1
+1,7,257080,Washington/Fairfax Transit Hub,1
+1,3,257090,Washington/Fairfax Transit Hub,1
+1,6,272070,Washington/Fairfax Transit Hub,1
+1,3,250090,Washington/Fairfax Transit Hub,1
+1,2,23040,Washington/Fairfax Transit Hub,1
+1,3,23090,Washington/Fairfax Transit Hub,1
+1,2,211040,Washington/Fairfax Transit Hub,1
+1,2,1568040,Washington/Fairfax Transit Hub,1
+1,4,188010,Washington/Fairfax Transit Hub,1
+1,7,1533080,Washington/Fairfax Transit Hub,1
+1,3,20090,Washington/Fairfax Transit Hub,1
+1,7,211080,Washington/Fairfax Transit Hub,1
+1,8,174110,Washington/Fairfax Transit Hub,1
+1,5,1650100,Washington/Fairfax Transit Hub,1
+1,4,1640010,Washington/Fairfax Transit Hub,1
+1,5,1628100,Washington/Fairfax Transit Hub,1
+1,4,174010,Washington/Fairfax Transit Hub,1
+1,5,162100,Washington/Fairfax Transit Hub,1
+1,5,1632100,Washington/Fairfax Transit Hub,1
+1,1,1604020,Washington/Fairfax Transit Hub,1
+1,5,1599100,Washington/Fairfax Transit Hub,1
+1,5,1592100,Washington/Fairfax Transit Hub,1
+1,1,1568020,Washington/Fairfax Transit Hub,1
+1,7,1568080,Washington/Fairfax Transit Hub,1
+1,1,1506020,Washington/Fairfax Transit Hub,1
+1,4,1503010,Washington/Fairfax Transit Hub,1
+1,3,1604090,Washington/Fairfax Transit Hub,1
+1,3,1568090,Washington/Fairfax Transit Hub,1
+1,1,1529020,Washington/Fairfax Transit Hub,1
+1,2,1529040,Washington/Fairfax Transit Hub,1
+1,1,1533020,Washington/Fairfax Transit Hub,1
+1,7,1529080,Washington/Fairfax Transit Hub,1
+1,2,1533040,Washington/Fairfax Transit Hub,1
+1,2,1519040,Washington/Fairfax Transit Hub,1
+1,8,1492110,Washington/Fairfax Transit Hub,1
+1,2,1499040,Washington/Fairfax Transit Hub,1
+1,7,1499080,Washington/Fairfax Transit Hub,1
+1,3,1506090,Washington/Fairfax Transit Hub,1
+1,3,1499090,Washington/Fairfax Transit Hub,1
+1,8,1503110,Washington/Fairfax Transit Hub,1
+1,2,1506040,Washington/Fairfax Transit Hub,1
+1,7,1506080,Washington/Fairfax Transit Hub,1
+1,1,1467020,Washington/Fairfax Transit Hub,1
+1,2,1467040,Washington/Fairfax Transit Hub,1
+1,4,1492010,Washington/Fairfax Transit Hub,1
+1,6,1493070,Washington/Fairfax Transit Hub,1
+1,1,1499020,Washington/Fairfax Transit Hub,1
+1,6,144070,Washington/Fairfax Transit Hub,1
+1,1,1450020,Washington/Fairfax Transit Hub,1
+1,7,1450080,Washington/Fairfax Transit Hub,1
+1,3,1462090,Washington/Fairfax Transit Hub,1
+1,5,1458100,Washington/Fairfax Transit Hub,1
+1,8,146110,Washington/Fairfax Transit Hub,1
+1,2,1462040,Washington/Fairfax Transit Hub,1
+1,7,1462080,Washington/Fairfax Transit Hub,1
+1,3,1467090,Washington/Fairfax Transit Hub,1
+1,7,1467080,Washington/Fairfax Transit Hub,1
+1,6,1458070,Washington/Fairfax Transit Hub,1
+1,2,1450040,Washington/Fairfax Transit Hub,1
+1,6,1391070,Washington/Fairfax Transit Hub,1
+1,8,1400110,Washington/Fairfax Transit Hub,1
+1,1,1381020,Washington/Fairfax Transit Hub,1
+1,7,1381080,Washington/Fairfax Transit Hub,1
+1,3,1381090,Washington/Fairfax Transit Hub,1
+1,5,1338100,Washington/Fairfax Transit Hub,1
+1,2,1381040,Washington/Fairfax Transit Hub,1
+1,2,1323040,Washington/Fairfax Transit Hub,1
+1,4,1385010,Washington/Fairfax Transit Hub,1
+1,8,1385110,Washington/Fairfax Transit Hub,1
+1,7,1372080,Washington/Fairfax Transit Hub,1
+1,1,1372020,Washington/Fairfax Transit Hub,1
+1,2,1372040,Washington/Fairfax Transit Hub,1
+1,3,1372090,Washington/Fairfax Transit Hub,1
+1,2,1330040,Washington/Fairfax Transit Hub,1
+1,7,1330080,Washington/Fairfax Transit Hub,1
+1,4,1336010,Washington/Fairfax Transit Hub,1
+1,6,1338070,Washington/Fairfax Transit Hub,1
+1,4,1265010,Washington/Fairfax Transit Hub,1
+1,8,1270110,Washington/Fairfax Transit Hub,1
+1,1,1280020,Washington/Fairfax Transit Hub,1
+1,7,1280080,Washington/Fairfax Transit Hub,1
+1,4,1302010,Washington/Fairfax Transit Hub,1
+1,1,1323020,Washington/Fairfax Transit Hub,1
+1,7,1323080,Washington/Fairfax Transit Hub,1
+1,4,1270010,Washington/Fairfax Transit Hub,1
+1,3,1341090,Washington/Fairfax Transit Hub,1
+1,3,1323090,Washington/Fairfax Transit Hub,1
+1,1,1330020,Washington/Fairfax Transit Hub,1
+1,3,1330090,Washington/Fairfax Transit Hub,1
+1,8,1336110,Washington/Fairfax Transit Hub,1
+1,8,1302110,Washington/Fairfax Transit Hub,1
+1,4,1233010,Washington/Fairfax Transit Hub,1
+1,8,1233110,Washington/Fairfax Transit Hub,1
+1,5,1208100,Washington/Fairfax Transit Hub,1
+1,2,1203040,Washington/Fairfax Transit Hub,1
+1,6,1208070,Washington/Fairfax Transit Hub,1
+1,1,1214020,Washington/Fairfax Transit Hub,1
+1,7,1214080,Washington/Fairfax Transit Hub,1
+1,2,1280040,Washington/Fairfax Transit Hub,1
+1,6,1135070,Washington/Fairfax Transit Hub,1
+1,4,1165010,Washington/Fairfax Transit Hub,1
+1,6,1193070,Washington/Fairfax Transit Hub,1
+1,6,1180070,Washington/Fairfax Transit Hub,1
+1,5,1119100,Washington/Fairfax Transit Hub,1
+1,3,1102090,Washington/Fairfax Transit Hub,1
+1,4,1110010,Washington/Fairfax Transit Hub,1
+1,8,1165110,Washington/Fairfax Transit Hub,1
+1,8,1110110,Washington/Fairfax Transit Hub,1
+1,2,1102040,Washington/Fairfax Transit Hub,1
+1,1,1102020,Washington/Fairfax Transit Hub,1
+1,6,1119070,Washington/Fairfax Transit Hub,1
+1,3,1064090,Washington/Fairfax Transit Hub,1
+1,7,1067080,Washington/Fairfax Transit Hub,1
+1,5,1088100,Washington/Fairfax Transit Hub,1
+1,6,1088070,Washington/Fairfax Transit Hub,1
+1,7,1102080,Washington/Fairfax Transit Hub,1
+1,7,1064080,Washington/Fairfax Transit Hub,1
+1,2,1067040,Washington/Fairfax Transit Hub,1
+1,4,1051010,Washington/Fairfax Transit Hub,1
+1,8,1051110,Washington/Fairfax Transit Hub,1
+1,2,1056040,Washington/Fairfax Transit Hub,1
+1,4,1055010,Washington/Fairfax Transit Hub,1
+1,3,1056090,Washington/Fairfax Transit Hub,1
+1,8,1035110,Washington/Fairfax Transit Hub,1
+1,2,1064040,Washington/Fairfax Transit Hub,1
+1,3,1067090,Washington/Fairfax Transit Hub,1
+1,4,1035010,Washington/Fairfax Transit Hub,1
+1,8,1055110,Washington/Fairfax Transit Hub,1
+1,1,1056020,Washington/Fairfax Transit Hub,1
+1,7,1056080,Washington/Fairfax Transit Hub,1
+1,1,1064020,Washington/Fairfax Transit Hub,1
+1,1,1067020,Washington/Fairfax Transit Hub,1
+1,3,1014090,Washington/Fairfax Transit Hub,1
+1,5,1021100,Washington/Fairfax Transit Hub,1
+1,1,1002020,Washington/Fairfax Transit Hub,1
+1,2,1014040,Washington/Fairfax Transit Hub,1
+1,7,1014080,Washington/Fairfax Transit Hub,1
+1,6,1011070,Washington/Fairfax Transit Hub,1
+1,1,1014020,Washington/Fairfax Transit Hub,1
+1,6,1021070,Washington/Fairfax Transit Hub,1
+1,2,1002040,Washington/Fairfax Transit Hub,1
+1,7,1002080,Washington/Fairfax Transit Hub,1
+1,3,1002090,Washington/Fairfax Transit Hub,1
+1,5,1011100,Washington/Fairfax Transit Hub,1
+1C1,2,1007040,Washington/Fairfax Transit Hub,1
+1C1,7,1007080,Washington/Fairfax Transit Hub,1
+1C1,3,1007090,Washington/Fairfax Transit Hub,1
+1C1,5,10100,Washington/Fairfax Transit Hub,1
+1C1,2,1004040,Washington/Fairfax Transit Hub,1
+1C1,7,1004080,Washington/Fairfax Transit Hub,1
+1C1,8,1012110,Washington/Fairfax Transit Hub,1
+1C1,5,1018100,Washington/Fairfax Transit Hub,1
+1C1,2,1024040,Washington/Fairfax Transit Hub,1
+1C1,5,1044100,Washington/Fairfax Transit Hub,1
+1C1,4,1000010,Washington/Fairfax Transit Hub,1
+1C1,3,1024090,Washington/Fairfax Transit Hub,1
+1C1,3,1004090,Washington/Fairfax Transit Hub,1
+1C1,1,1007020,Washington/Fairfax Transit Hub,1
+1C1,6,1018070,Washington/Fairfax Transit Hub,1
+1C1,4,102010,Washington/Fairfax Transit Hub,1
+1C1,8,102110,Washington/Fairfax Transit Hub,1
+1C1,8,1000110,Washington/Fairfax Transit Hub,1
+1C1,1,1004020,Washington/Fairfax Transit Hub,1
+1C1,1,1024020,Washington/Fairfax Transit Hub,1
+1C1,7,1024080,Washington/Fairfax Transit Hub,1
+1C1,6,10070,Washington/Fairfax Transit Hub,1
+1C1,4,1012010,Washington/Fairfax Transit Hub,1
+1C1,6,104070,Vets Park/Senior Center,0
+1C1,5,104100,Vets Park/Senior Center,0
+1C1,7,1045080,Washington/Fairfax Transit Hub,1
+1C1,3,1045090,Washington/Fairfax Transit Hub,1
+1C1,8,1054110,Washington/Fairfax Transit Hub,1
+1C1,6,1080070,Vets Park/Senior Center,0
+1C1,2,1045040,Washington/Fairfax Transit Hub,1
+1C1,1,1045020,Washington/Fairfax Transit Hub,1
+1C1,6,1044070,Washington/Fairfax Transit Hub,1
+1C1,4,1054010,Washington/Fairfax Transit Hub,1
+1C1,4,1063010,Washington/Fairfax Transit Hub,1
+1C1,5,1080100,Vets Park/Senior Center,0
+1C1,7,1087080,Washington/Fairfax Transit Hub,1
+1C1,5,1097100,Washington/Fairfax Transit Hub,1
+1C1,4,1089010,Washington/Fairfax Transit Hub,1
+1C1,6,1082070,Vets Park/Senior Center,0
+1C1,5,1121100,Vets Park/Senior Center,0
+1C1,3,1122090,Vets Park/Senior Center,0
+1C1,1,1123020,Vets Park/Senior Center,0
+1C1,2,1123040,Vets Park/Senior Center,0
+1C1,8,1063110,Washington/Fairfax Transit Hub,1
+1C1,6,1121070,Vets Park/Senior Center,0
+1C1,2,1122040,Vets Park/Senior Center,0
+1C1,1,1124020,Vets Park/Senior Center,0
+1C1,5,1093100,Washington/Fairfax Transit Hub,1
+1C1,1,1087020,Washington/Fairfax Transit Hub,1
+1C1,8,1089110,Washington/Fairfax Transit Hub,1
+1C1,6,1097070,Washington/Fairfax Transit Hub,1
+1C1,6,1109070,Washington/Fairfax Transit Hub,1
+1C1,5,1109100,Washington/Fairfax Transit Hub,1
+1C1,3,111090,Washington/Fairfax Transit Hub,1
+1C1,8,11110,Vets Park/Senior Center,0
+1C1,6,1111070,Washington/Fairfax Transit Hub,1
+1C1,4,1099010,Washington/Fairfax Transit Hub,1
+1C1,8,1099110,Washington/Fairfax Transit Hub,1
+1C1,7,1123080,Vets Park/Senior Center,0
+1C1,3,1123090,Vets Park/Senior Center,0
+1C1,2,1124040,Vets Park/Senior Center,0
+1C1,7,1124080,Vets Park/Senior Center,0
+1C1,8,1126110,Washington/Fairfax Transit Hub,1
+1C1,6,1091070,Washington/Fairfax Transit Hub,1
+1C1,5,1091100,Washington/Fairfax Transit Hub,1
+1C1,5,1082100,Vets Park/Senior Center,0
+1C1,2,1087040,Washington/Fairfax Transit Hub,1
+1C1,3,1087090,Washington/Fairfax Transit Hub,1
+1C1,8,1113110,Washington/Fairfax Transit Hub,1
+1C1,5,1151100,Washington/Fairfax Transit Hub,1
+1C1,1,111020,Washington/Fairfax Transit Hub,1
+1C1,2,111040,Washington/Fairfax Transit Hub,1
+1C1,7,111080,Washington/Fairfax Transit Hub,1
+1C1,5,1111100,Washington/Fairfax Transit Hub,1
+1C1,6,1093070,Washington/Fairfax Transit Hub,1
+1C1,4,11010,Vets Park/Senior Center,0
+1C1,1,1122020,Vets Park/Senior Center,0
+1C1,7,1122080,Vets Park/Senior Center,0
+1C1,3,1124090,Vets Park/Senior Center,0
+1C1,4,1125010,Washington/Fairfax Transit Hub,1
+1C1,8,1125110,Washington/Fairfax Transit Hub,1
+1C1,4,1126010,Washington/Fairfax Transit Hub,1
+1C1,5,1181100,Vets Park/Senior Center,0
+1C1,4,1113010,Washington/Fairfax Transit Hub,1
+1C1,8,1201110,Washington/Fairfax Transit Hub,1
+1C1,8,1204110,Washington/Fairfax Transit Hub,1
+1C1,1,1156020,Vets Park/Senior Center,0
+1C1,2,1156040,Vets Park/Senior Center,0
+1C1,3,1156090,Vets Park/Senior Center,0
+1C1,8,1160110,Washington/Fairfax Transit Hub,1
+1C1,7,1156080,Vets Park/Senior Center,0
+1C1,3,1215090,Washington/Fairfax Transit Hub,1
+1C1,8,1132110,Washington/Fairfax Transit Hub,1
+1C1,1,114020,Vets Park/Senior Center,0
+1C1,6,1167070,Vets Park/Senior Center,0
+1C1,4,1137010,Washington/Fairfax Transit Hub,1
+1C1,2,1176040,Vets Park/Senior Center,0
+1C1,7,114080,Vets Park/Senior Center,0
+1C1,6,1151070,Washington/Fairfax Transit Hub,1
+1C1,4,115010,Washington/Fairfax Transit Hub,1
+1C1,6,1247070,Washington/Fairfax Transit Hub,1
+1C1,7,1229080,Washington/Fairfax Transit Hub,1
+1C1,7,1176080,Vets Park/Senior Center,0
+1C1,3,1176090,Vets Park/Senior Center,0
+1C1,3,1220090,Vets Park/Senior Center,0
+1C1,5,1281100,Vets Park/Senior Center,0
+1C1,6,1288070,Washington/Fairfax Transit Hub,1
+1C1,5,1288100,Washington/Fairfax Transit Hub,1
+1C1,6,1261070,Washington/Fairfax Transit Hub,1
+1C1,5,1261100,Washington/Fairfax Transit Hub,1
+1C1,2,127040,Vets Park/Senior Center,0
+1C1,7,127080,Vets Park/Senior Center,0
+1C1,5,1294100,Vets Park/Senior Center,0
+1C1,5,1296100,Vets Park/Senior Center,0
+1C1,1,118020,Washington/Fairfax Transit Hub,1
+1C1,7,118080,Washington/Fairfax Transit Hub,1
+1C1,3,118090,Washington/Fairfax Transit Hub,1
+1C1,1,1191020,Vets Park/Senior Center,0
+1C1,7,1191080,Vets Park/Senior Center,0
+1C1,3,1191090,Vets Park/Senior Center,0
+1C1,1,1215020,Washington/Fairfax Transit Hub,1
+1C1,2,1215040,Washington/Fairfax Transit Hub,1
+1C1,7,1215080,Washington/Fairfax Transit Hub,1
+1C1,8,1216110,Vets Park/Senior Center,0
+1C1,4,1178010,Vets Park/Senior Center,0
+1C1,2,118040,Washington/Fairfax Transit Hub,1
+1C1,3,1229090,Washington/Fairfax Transit Hub,1
+1C1,1,1229020,Washington/Fairfax Transit Hub,1
+1C1,2,1229040,Washington/Fairfax Transit Hub,1
+1C1,5,1237100,Washington/Fairfax Transit Hub,1
+1C1,4,1216010,Vets Park/Senior Center,0
+1C1,2,1220040,Vets Park/Senior Center,0
+1C1,7,1220080,Vets Park/Senior Center,0
+1C1,6,1237070,Washington/Fairfax Transit Hub,1
+1C1,8,1303110,Vets Park/Senior Center,0
+1C1,4,1305010,Washington/Fairfax Transit Hub,1
+1C1,8,1305110,Washington/Fairfax Transit Hub,1
+1C1,1,132020,Vets Park/Senior Center,0
+1C1,7,132080,Vets Park/Senior Center,0
+1C1,4,125010,Vets Park/Senior Center,0
+1C1,6,1281070,Vets Park/Senior Center,0
+1C1,6,1324070,Washington/Fairfax Transit Hub,1
+1C1,2,132040,Vets Park/Senior Center,0
+1C1,6,1294070,Vets Park/Senior Center,0
+1C1,8,1298110,Vets Park/Senior Center,0
+1C1,3,127090,Vets Park/Senior Center,0
+1C1,8,1328110,Washington/Fairfax Transit Hub,1
+1C1,6,1371070,Vets Park/Senior Center,0
+1C1,5,1263100,Vets Park/Senior Center,0
+1C1,4,1361010,Washington/Fairfax Transit Hub,1
+1C1,1,1350020,Washington/Fairfax Transit Hub,1
+1C1,4,1380010,Washington/Fairfax Transit Hub,1
+1C1,4,138010,Washington/Fairfax Transit Hub,1
+1C1,7,1378080,Washington/Fairfax Transit Hub,1
+1C1,6,1293070,Washington/Fairfax Transit Hub,1
+1C1,6,1296070,Vets Park/Senior Center,0
+1C1,6,1297070,Washington/Fairfax Transit Hub,1
+1C1,5,1297100,Washington/Fairfax Transit Hub,1
+1C1,4,1384010,Washington/Fairfax Transit Hub,1
+1C1,5,1388100,Washington/Fairfax Transit Hub,1
+1C1,5,1332100,Vets Park/Senior Center,0
+1C1,7,1350080,Washington/Fairfax Transit Hub,1
+1C1,3,1350090,Washington/Fairfax Transit Hub,1
+1C1,1,1378020,Washington/Fairfax Transit Hub,1
+1C1,2,1378040,Washington/Fairfax Transit Hub,1
+1C1,3,1378090,Washington/Fairfax Transit Hub,1
+1C1,8,1380110,Washington/Fairfax Transit Hub,1
+1C1,4,1386010,Washington/Fairfax Transit Hub,1
+1C1,1,1364020,Washington/Fairfax Transit Hub,1
+1C1,7,1364080,Washington/Fairfax Transit Hub,1
+1C1,2,1405040,Vets Park/Senior Center,0
+1C1,4,1403010,Washington/Fairfax Transit Hub,1
+1C1,1,1405020,Vets Park/Senior Center,0
+1C1,6,1408070,Vets Park/Senior Center,0
+1C1,4,1393010,Vets Park/Senior Center,0
+1C1,8,1393110,Vets Park/Senior Center,0
+1C1,3,1405090,Vets Park/Senior Center,0
+1C1,6,1395070,Washington/Fairfax Transit Hub,1
+1C1,6,1396070,Washington/Fairfax Transit Hub,1
+1C1,8,138110,Washington/Fairfax Transit Hub,1
+1C1,2,1410040,Vets Park/Senior Center,0
+1C1,2,1429040,Vets Park/Senior Center,0
+1C1,3,1429090,Vets Park/Senior Center,0
+1C1,6,1427070,Washington/Fairfax Transit Hub,1
+1C1,1,1429020,Vets Park/Senior Center,0
+1C1,3,1440090,Washington/Fairfax Transit Hub,1
+1C1,3,1441090,Vets Park/Senior Center,0
+1C1,5,1408100,Vets Park/Senior Center,0
+1C1,7,1410080,Vets Park/Senior Center,0
+1C1,3,1410090,Vets Park/Senior Center,0
+1C1,5,1414100,Vets Park/Senior Center,0
+1C1,3,1418090,Vets Park/Senior Center,0
+1C1,6,1420070,Washington/Fairfax Transit Hub,1
+1C1,4,142010,Washington/Fairfax Transit Hub,1
+1C1,5,1420100,Washington/Fairfax Transit Hub,1
+1C1,8,1416110,Vets Park/Senior Center,0
+1C1,6,1425070,Vets Park/Senior Center,0
+1C1,6,1414070,Vets Park/Senior Center,0
+1C1,1,1418020,Vets Park/Senior Center,0
+1C1,5,1425100,Vets Park/Senior Center,0
+1C1,7,1429080,Vets Park/Senior Center,0
+1C1,8,1430110,Washington/Fairfax Transit Hub,1
+1C1,1,1440020,Washington/Fairfax Transit Hub,1
+1C1,2,1440040,Washington/Fairfax Transit Hub,1
+1C1,2,1464040,Vets Park/Senior Center,0
+1C1,7,1464080,Vets Park/Senior Center,0
+1C1,3,147090,Vets Park/Senior Center,0
+1C1,3,1464090,Vets Park/Senior Center,0
+1C1,5,1454100,Vets Park/Senior Center,0
+1C1,1,1451020,Vets Park/Senior Center,0
+1C1,2,1451040,Vets Park/Senior Center,0
+1C1,7,1451080,Vets Park/Senior Center,0
+1C1,1,1441020,Vets Park/Senior Center,0
+1C1,2,1441040,Vets Park/Senior Center,0
+1C1,1,147020,Vets Park/Senior Center,0
+1C1,7,147080,Vets Park/Senior Center,0
+1C1,2,147040,Vets Park/Senior Center,0
+1C1,8,1489110,Vets Park/Senior Center,0
+1C1,4,1496010,Vets Park/Senior Center,0
+1C1,8,1496110,Vets Park/Senior Center,0
+1C1,3,1514090,Washington/Fairfax Transit Hub,1
+1C1,6,1526070,Washington/Fairfax Transit Hub,1
+1C1,8,1556110,Vets Park/Senior Center,0
+1C1,7,1514080,Washington/Fairfax Transit Hub,1
+1C1,1,1570020,Washington/Fairfax Transit Hub,1
+1C1,3,1570090,Washington/Fairfax Transit Hub,1
+1C1,4,1603010,Vets Park/Senior Center,0
+1C1,5,1598100,Washington/Fairfax Transit Hub,1
+1C1,1,1591020,Washington/Fairfax Transit Hub,1
+1C1,3,1591090,Washington/Fairfax Transit Hub,1
+1C1,1,1594020,Washington/Fairfax Transit Hub,1
+1C1,2,1594040,Washington/Fairfax Transit Hub,1
+1C1,7,1594080,Washington/Fairfax Transit Hub,1
+1C1,4,1595010,Vets Park/Senior Center,0
+1C1,1,1576020,Washington/Fairfax Transit Hub,1
+1C1,6,1577070,Washington/Fairfax Transit Hub,1
+1C1,5,1577100,Washington/Fairfax Transit Hub,1
+1C1,7,1581080,Washington/Fairfax Transit Hub,1
+1C1,1,1584020,Vets Park/Senior Center,0
+1C1,7,1584080,Vets Park/Senior Center,0
+1C1,4,1556010,Vets Park/Senior Center,0
+1C1,8,1557110,Vets Park/Senior Center,0
+1C1,1,1508020,Vets Park/Senior Center,0
+1C1,2,1508040,Vets Park/Senior Center,0
+1C1,3,1508090,Vets Park/Senior Center,0
+1C1,2,1514040,Washington/Fairfax Transit Hub,1
+1C1,2,1528040,Washington/Fairfax Transit Hub,1
+1C1,2,1576040,Washington/Fairfax Transit Hub,1
+1C1,7,1576080,Washington/Fairfax Transit Hub,1
+1C1,1,1580020,Vets Park/Senior Center,0
+1C1,1,1581020,Washington/Fairfax Transit Hub,1
+1C1,2,1581040,Washington/Fairfax Transit Hub,1
+1C1,3,1584090,Vets Park/Senior Center,0
+1C1,2,1570040,Washington/Fairfax Transit Hub,1
+1C1,6,1598070,Washington/Fairfax Transit Hub,1
+1C1,3,1594090,Washington/Fairfax Transit Hub,1
+1C1,6,1639070,Washington/Fairfax Transit Hub,1
+1C1,5,175100,Vets Park/Senior Center,0
+1C1,1,1642020,Vets Park/Senior Center,0
+1C1,5,1646100,Vets Park/Senior Center,0
+1C1,6,1648070,Washington/Fairfax Transit Hub,1
+1C1,4,169010,Vets Park/Senior Center,0
+1C1,6,1646070,Vets Park/Senior Center,0
+1C1,5,1648100,Washington/Fairfax Transit Hub,1
+1C1,6,1638070,Washington/Fairfax Transit Hub,1
+1C1,5,1638100,Washington/Fairfax Transit Hub,1
+1C1,4,1641010,Vets Park/Senior Center,0
+1C1,8,1641110,Vets Park/Senior Center,0
+1C1,2,213040,Washington/Fairfax Transit Hub,1
+1C1,7,213080,Washington/Fairfax Transit Hub,1
+1C1,8,216110,Washington/Fairfax Transit Hub,1
+1C1,6,219070,Vets Park/Senior Center,0
+1C1,5,1540100,Washington/Fairfax Transit Hub,1
+1C1,6,195070,Vets Park/Senior Center,0
+1C1,6,172070,Vets Park/Senior Center,0
+1C1,3,167090,Vets Park/Senior Center,0
+1C1,2,1591040,Washington/Fairfax Transit Hub,1
+1C1,5,19100,Vets Park/Senior Center,0
+1C1,7,1570080,Washington/Fairfax Transit Hub,1
+1C1,3,1576090,Washington/Fairfax Transit Hub,1
+1C1,2,1580040,Vets Park/Senior Center,0
+1C1,3,1581090,Washington/Fairfax Transit Hub,1
+1C1,4,1582010,Vets Park/Senior Center,0
+1C1,1,213020,Washington/Fairfax Transit Hub,1
+1C1,3,213090,Washington/Fairfax Transit Hub,1
+1C1,5,209100,Washington/Fairfax Transit Hub,1
+1C1,1,26020,Vets Park/Senior Center,0
+1C1,2,26040,Vets Park/Senior Center,0
+1C1,5,254100,Washington/Fairfax Transit Hub,1
+1C1,6,278070,Vets Park/Senior Center,0
+1C1,7,266080,Vets Park/Senior Center,0
+1C1,1,28020,Washington/Fairfax Transit Hub,1
+1C1,2,28040,Washington/Fairfax Transit Hub,1
+1C1,3,28090,Washington/Fairfax Transit Hub,1
+1C1,4,281010,Vets Park/Senior Center,0
+1C1,8,281110,Vets Park/Senior Center,0
+1C1,1,282020,Washington/Fairfax Transit Hub,1
+1C1,1,283020,Washington/Fairfax Transit Hub,1
+1C1,2,283040,Washington/Fairfax Transit Hub,1
+1C1,6,284070,Washington/Fairfax Transit Hub,1
+1C1,4,301010,Vets Park/Senior Center,0
+1C1,4,295010,Washington/Fairfax Transit Hub,1
+1C1,7,297080,Washington/Fairfax Transit Hub,1
+1C1,1,29020,Vets Park/Senior Center,0
+1C1,5,307100,Washington/Fairfax Transit Hub,1
+1C1,4,226010,Vets Park/Senior Center,0
+1C1,8,249110,Washington/Fairfax Transit Hub,1
+1C1,5,229100,Washington/Fairfax Transit Hub,1
+1C1,2,313040,Vets Park/Senior Center,0
+1C1,4,327010,Washington/Fairfax Transit Hub,1
+1C1,1,334020,Washington/Fairfax Transit Hub,1
+1C1,3,334090,Washington/Fairfax Transit Hub,1
+1C1,1,358020,Washington/Fairfax Transit Hub,1
+1C1,3,358090,Washington/Fairfax Transit Hub,1
+1C1,7,28080,Washington/Fairfax Transit Hub,1
+1C1,3,282090,Washington/Fairfax Transit Hub,1
+1C1,3,283090,Washington/Fairfax Transit Hub,1
+1C1,1,285020,Washington/Fairfax Transit Hub,1
+1C1,3,285090,Washington/Fairfax Transit Hub,1
+1C1,3,29090,Vets Park/Senior Center,0
+1C1,8,301110,Vets Park/Senior Center,0
+1C1,8,1595110,Vets Park/Senior Center,0
+1C1,1,297020,Washington/Fairfax Transit Hub,1
+1C1,2,297040,Washington/Fairfax Transit Hub,1
+1C1,6,274070,Washington/Fairfax Transit Hub,1
+1C1,3,377090,Washington/Fairfax Transit Hub,1
+1C1,7,373080,Vets Park/Senior Center,0
+1C1,2,1642040,Vets Park/Senior Center,0
+1C1,1,367020,Washington/Fairfax Transit Hub,1
+1C1,2,367040,Washington/Fairfax Transit Hub,1
+1C1,5,396100,Vets Park/Senior Center,0
+1C1,4,379010,Vets Park/Senior Center,0
+1C1,8,379110,Vets Park/Senior Center,0
+1C1,6,19070,Vets Park/Senior Center,0
+1C1,1,167020,Vets Park/Senior Center,0
+1C1,8,198110,Vets Park/Senior Center,0
+1C1,7,334080,Washington/Fairfax Transit Hub,1
+1C1,3,313090,Vets Park/Senior Center,0
+1C1,8,4110,Vets Park/Senior Center,0
+1C1,4,420010,Washington/Fairfax Transit Hub,1
+1C1,2,42040,Vets Park/Senior Center,0
+1C1,7,42080,Vets Park/Senior Center,0
+1C1,7,436080,Washington/Fairfax Transit Hub,1
+1C1,2,462040,Vets Park/Senior Center,0
+1C1,3,462090,Vets Park/Senior Center,0
+1C1,1,463020,Vets Park/Senior Center,0
+1C1,8,443110,Washington/Fairfax Transit Hub,1
+1C1,1,341020,Vets Park/Senior Center,0
+1C1,2,341040,Vets Park/Senior Center,0
+1C1,7,341080,Vets Park/Senior Center,0
+1C1,3,341090,Vets Park/Senior Center,0
+1C1,2,342040,Vets Park/Senior Center,0
+1C1,7,342080,Vets Park/Senior Center,0
+1C1,5,474100,Washington/Fairfax Transit Hub,1
+1C1,2,479040,Washington/Fairfax Transit Hub,1
+1C1,5,480100,Washington/Fairfax Transit Hub,1
+1C1,1,481020,Vets Park/Senior Center,0
+1C1,8,472110,Washington/Fairfax Transit Hub,1
+1C1,1,266020,Vets Park/Senior Center,0
+1C1,2,266040,Vets Park/Senior Center,0
+1C1,3,266090,Vets Park/Senior Center,0
+1C1,4,249010,Washington/Fairfax Transit Hub,1
+1C1,4,370010,Vets Park/Senior Center,0
+1C1,8,370110,Vets Park/Senior Center,0
+1C1,8,277110,Vets Park/Senior Center,0
+1C1,5,278100,Vets Park/Senior Center,0
+1C1,2,282040,Washington/Fairfax Transit Hub,1
+1C1,7,283080,Washington/Fairfax Transit Hub,1
+1C1,2,285040,Washington/Fairfax Transit Hub,1
+1C1,7,285080,Washington/Fairfax Transit Hub,1
+1C1,7,377080,Washington/Fairfax Transit Hub,1
+1C1,2,406040,Vets Park/Senior Center,0
+1C1,2,502040,Vets Park/Senior Center,0
+1C1,6,408070,Vets Park/Senior Center,0
+1C1,4,4010,Vets Park/Senior Center,0
+1C1,6,508070,Washington/Fairfax Transit Hub,1
+1C1,5,508100,Washington/Fairfax Transit Hub,1
+1C1,4,509010,Washington/Fairfax Transit Hub,1
+1C1,3,297090,Washington/Fairfax Transit Hub,1
+1C1,4,521010,Vets Park/Senior Center,0
+1C1,8,521110,Vets Park/Senior Center,0
+1C1,1,42020,Vets Park/Senior Center,0
+1C1,3,42090,Vets Park/Senior Center,0
+1C1,5,422100,Vets Park/Senior Center,0
+1C1,8,327110,Washington/Fairfax Transit Hub,1
+1C1,1,313020,Vets Park/Senior Center,0
+1C1,6,307070,Washington/Fairfax Transit Hub,1
+1C1,2,436040,Washington/Fairfax Transit Hub,1
+1C1,4,438010,Washington/Fairfax Transit Hub,1
+1C1,5,440100,Vets Park/Senior Center,0
+1C1,6,43070,Washington/Fairfax Transit Hub,1
+1C1,5,43100,Washington/Fairfax Transit Hub,1
+1C1,3,342090,Vets Park/Senior Center,0
+1C1,4,353010,Vets Park/Senior Center,0
+1C1,2,358040,Washington/Fairfax Transit Hub,1
+1C1,7,367080,Washington/Fairfax Transit Hub,1
+1C1,7,524080,Washington/Fairfax Transit Hub,1
+1C1,2,373040,Vets Park/Senior Center,0
+1C1,3,373090,Vets Park/Senior Center,0
+1C1,1,565020,Vets Park/Senior Center,0
+1C1,2,565040,Vets Park/Senior Center,0
+1C1,7,565080,Vets Park/Senior Center,0
+1C1,5,550100,Washington/Fairfax Transit Hub,1
+1C1,1,377020,Washington/Fairfax Transit Hub,1
+1C1,1,572020,Washington/Fairfax Transit Hub,1
+1C1,7,572080,Washington/Fairfax Transit Hub,1
+1C1,1,381020,Washington/Fairfax Transit Hub,1
+1C1,2,381040,Washington/Fairfax Transit Hub,1
+1C1,7,381080,Washington/Fairfax Transit Hub,1
+1C1,3,381090,Washington/Fairfax Transit Hub,1
+1C1,1,441020,Vets Park/Senior Center,0
+1C1,4,443010,Washington/Fairfax Transit Hub,1
+1C1,4,45010,Vets Park/Senior Center,0
+1C1,6,396070,Vets Park/Senior Center,0
+1C1,7,462080,Vets Park/Senior Center,0
+1C1,7,463080,Vets Park/Senior Center,0
+1C1,6,474070,Washington/Fairfax Transit Hub,1
+1C1,1,479020,Washington/Fairfax Transit Hub,1
+1C1,3,479090,Washington/Fairfax Transit Hub,1
+1C1,2,481040,Vets Park/Senior Center,0
+1C1,7,481080,Vets Park/Senior Center,0
+1C1,6,484070,Washington/Fairfax Transit Hub,1
+1C1,2,486040,Vets Park/Senior Center,0
+1C1,7,486080,Vets Park/Senior Center,0
+1C1,3,406090,Vets Park/Senior Center,0
+1C1,1,436020,Washington/Fairfax Transit Hub,1
+1C1,3,436090,Washington/Fairfax Transit Hub,1
+1C1,6,440070,Vets Park/Senior Center,0
+1C1,6,422070,Vets Park/Senior Center,0
+1C1,8,420110,Washington/Fairfax Transit Hub,1
+1C1,3,441090,Vets Park/Senior Center,0
+1C1,1,462020,Vets Park/Senior Center,0
+1C1,2,463040,Vets Park/Senior Center,0
+1C1,3,463090,Vets Park/Senior Center,0
+1C1,5,448100,Vets Park/Senior Center,0
+1C1,4,476010,Washington/Fairfax Transit Hub,1
+1C1,8,438110,Washington/Fairfax Transit Hub,1
+1C1,5,484100,Washington/Fairfax Transit Hub,1
+1C1,3,572090,Washington/Fairfax Transit Hub,1
+1C1,2,524040,Washington/Fairfax Transit Hub,1
+1C1,1,527020,Washington/Fairfax Transit Hub,1
+1C1,7,527080,Washington/Fairfax Transit Hub,1
+1C1,4,512010,Washington/Fairfax Transit Hub,1
+1C1,6,500070,Vets Park/Senior Center,0
+1C1,8,505110,Washington/Fairfax Transit Hub,1
+1C1,5,630100,Washington/Fairfax Transit Hub,1
+1C1,4,499010,Washington/Fairfax Transit Hub,1
+1C1,5,500100,Vets Park/Senior Center,0
+1C1,5,485100,Vets Park/Senior Center,0
+1C1,4,648010,Vets Park/Senior Center,0
+1C1,1,524020,Washington/Fairfax Transit Hub,1
+1C1,4,525010,Vets Park/Senior Center,0
+1C1,8,525110,Vets Park/Senior Center,0
+1C1,1,502020,Vets Park/Senior Center,0
+1C1,7,502080,Vets Park/Senior Center,0
+1C1,3,502090,Vets Park/Senior Center,0
+1C1,8,512110,Washington/Fairfax Transit Hub,1
+1C1,3,513090,Vets Park/Senior Center,0
+1C1,4,673010,Vets Park/Senior Center,0
+1C1,8,673110,Vets Park/Senior Center,0
+1C1,7,676080,Vets Park/Senior Center,0
+1C1,3,676090,Vets Park/Senior Center,0
+1C1,7,677080,Vets Park/Senior Center,0
+1C1,6,692070,Vets Park/Senior Center,0
+1C1,5,693100,Vets Park/Senior Center,0
+1C1,4,695010,Washington/Fairfax Transit Hub,1
+1C1,6,684070,Vets Park/Senior Center,0
+1C1,2,527040,Washington/Fairfax Transit Hub,1
+1C1,6,543070,Vets Park/Senior Center,0
+1C1,6,534070,Vets Park/Senior Center,0
+1C1,3,565090,Vets Park/Senior Center,0
+1C1,4,569010,Washington/Fairfax Transit Hub,1
+1C1,5,574100,Washington/Fairfax Transit Hub,1
+1C1,4,577010,Vets Park/Senior Center,0
+1C1,8,577110,Vets Park/Senior Center,0
+1C1,2,572040,Washington/Fairfax Transit Hub,1
+1C1,5,534100,Vets Park/Senior Center,0
+1C1,8,569110,Washington/Fairfax Transit Hub,1
+1C1,6,574070,Washington/Fairfax Transit Hub,1
+1C1,5,600100,Vets Park/Senior Center,0
+1C1,6,62070,Vets Park/Senior Center,0
+1C1,3,625090,Washington/Fairfax Transit Hub,1
+1C1,6,600070,Vets Park/Senior Center,0
+1C1,5,613100,Washington/Fairfax Transit Hub,1
+1C1,6,630070,Washington/Fairfax Transit Hub,1
+1C1,5,640100,Washington/Fairfax Transit Hub,1
+1C1,8,723110,Washington/Fairfax Transit Hub,1
+1C1,1,726020,Washington/Fairfax Transit Hub,1
+1C1,2,748040,Vets Park/Senior Center,0
+1C1,6,749070,Vets Park/Senior Center,0
+1C1,1,674020,Washington/Fairfax Transit Hub,1
+1C1,2,674040,Washington/Fairfax Transit Hub,1
+1C1,7,674080,Washington/Fairfax Transit Hub,1
+1C1,3,674090,Washington/Fairfax Transit Hub,1
+1C1,2,676040,Vets Park/Senior Center,0
+1C1,1,677020,Vets Park/Senior Center,0
+1C1,2,677040,Vets Park/Senior Center,0
+1C1,6,693070,Vets Park/Senior Center,0
+1C1,7,757080,Washington/Fairfax Transit Hub,1
+1C1,8,763110,Vets Park/Senior Center,0
+1C1,6,743070,Vets Park/Senior Center,0
+1C1,5,743100,Vets Park/Senior Center,0
+1C1,2,625040,Washington/Fairfax Transit Hub,1
+1C1,1,713020,Washington/Fairfax Transit Hub,1
+1C1,2,713040,Washington/Fairfax Transit Hub,1
+1C1,5,62100,Vets Park/Senior Center,0
+1C1,2,729040,Vets Park/Senior Center,0
+1C1,6,718070,Vets Park/Senior Center,0
+1C1,5,718100,Vets Park/Senior Center,0
+1C1,6,742070,Vets Park/Senior Center,0
+1C1,5,742100,Vets Park/Senior Center,0
+1C1,2,757040,Washington/Fairfax Transit Hub,1
+1C1,5,758100,Vets Park/Senior Center,0
+1C1,6,76070,Washington/Fairfax Transit Hub,1
+1C1,5,749100,Vets Park/Senior Center,0
+1C1,4,723010,Washington/Fairfax Transit Hub,1
+1C1,2,726040,Washington/Fairfax Transit Hub,1
+1C1,7,726080,Washington/Fairfax Transit Hub,1
+1C1,3,726090,Washington/Fairfax Transit Hub,1
+1C1,4,658010,Vets Park/Senior Center,0
+1C1,8,658110,Vets Park/Senior Center,0
+1C1,8,659110,Vets Park/Senior Center,0
+1C1,2,766040,Vets Park/Senior Center,0
+1C1,7,766080,Vets Park/Senior Center,0
+1C1,3,766090,Vets Park/Senior Center,0
+1C1,1,805020,Vets Park/Senior Center,0
+1C1,3,805090,Vets Park/Senior Center,0
+1C1,8,785110,Vets Park/Senior Center,0
+1C1,6,786070,Vets Park/Senior Center,0
+1C1,3,780090,Washington/Fairfax Transit Hub,1
+1C1,5,684100,Vets Park/Senior Center,0
+1C1,3,677090,Vets Park/Senior Center,0
+1C1,8,801110,Washington/Fairfax Transit Hub,1
+1C1,4,792010,Vets Park/Senior Center,0
+1C1,7,805080,Vets Park/Senior Center,0
+1C1,6,806070,Washington/Fairfax Transit Hub,1
+1C1,4,815010,Vets Park/Senior Center,0
+1C1,3,817090,Washington/Fairfax Transit Hub,1
+1C1,5,806100,Washington/Fairfax Transit Hub,1
+1C1,8,826110,Vets Park/Senior Center,0
+1C1,3,837090,Vets Park/Senior Center,0
+1C1,3,714090,Washington/Fairfax Transit Hub,1
+1C1,5,832100,Vets Park/Senior Center,0
+1C1,7,846080,Washington/Fairfax Transit Hub,1
+1C1,8,860110,Vets Park/Senior Center,0
+1C1,7,837080,Vets Park/Senior Center,0
+1C1,4,823010,Vets Park/Senior Center,0
+1C1,8,695110,Washington/Fairfax Transit Hub,1
+1C1,6,696070,Vets Park/Senior Center,0
+1C1,1,817020,Washington/Fairfax Transit Hub,1
+1C1,2,817040,Washington/Fairfax Transit Hub,1
+1C1,3,729090,Vets Park/Senior Center,0
+1C1,2,732040,Washington/Fairfax Transit Hub,1
+1C1,7,732080,Washington/Fairfax Transit Hub,1
+1C1,7,748080,Vets Park/Senior Center,0
+1C1,5,870100,Washington/Fairfax Transit Hub,1
+1C1,6,758070,Vets Park/Senior Center,0
+1C1,5,866100,Washington/Fairfax Transit Hub,1
+1C1,8,897110,Vets Park/Senior Center,0
+1C1,1,888020,Washington/Fairfax Transit Hub,1
+1C1,2,888040,Washington/Fairfax Transit Hub,1
+1C1,8,90110,Vets Park/Senior Center,0
+1C1,8,882110,Washington/Fairfax Transit Hub,1
+1C1,8,904110,Vets Park/Senior Center,0
+1C1,8,932110,Washington/Fairfax Transit Hub,1
+1C1,1,922020,Vets Park/Senior Center,0
+1C1,3,922090,Vets Park/Senior Center,0
+1C1,4,890010,Vets Park/Senior Center,0
+1C1,5,927100,Washington/Fairfax Transit Hub,1
+1C1,2,921040,Washington/Fairfax Transit Hub,1
+1C1,7,922080,Vets Park/Senior Center,0
+1C1,2,929040,Washington/Fairfax Transit Hub,1
+1C1,7,929080,Washington/Fairfax Transit Hub,1
+1C1,4,933010,Vets Park/Senior Center,0
+1C1,2,95040,Vets Park/Senior Center,0
+1C1,3,95090,Vets Park/Senior Center,0
+1C1,5,76100,Washington/Fairfax Transit Hub,1
+1C1,4,779010,Vets Park/Senior Center,0
+1C1,1,780020,Washington/Fairfax Transit Hub,1
+1C1,2,780040,Washington/Fairfax Transit Hub,1
+1C1,7,780080,Washington/Fairfax Transit Hub,1
+1C1,8,792110,Vets Park/Senior Center,0
+1C1,8,962110,Vets Park/Senior Center,0
+1C1,1,975020,Vets Park/Senior Center,0
+1C1,2,975040,Vets Park/Senior Center,0
+1C1,4,788010,Vets Park/Senior Center,0
+1C1,1,951020,Vets Park/Senior Center,0
+1C1,3,951090,Vets Park/Senior Center,0
+1C1,6,832070,Vets Park/Senior Center,0
+1C1,4,826010,Vets Park/Senior Center,0
+1C1,6,870070,Washington/Fairfax Transit Hub,1
+1C1,4,962010,Vets Park/Senior Center,0
+1C1,8,964110,Washington/Fairfax Transit Hub,1
+1C1,6,965070,Vets Park/Senior Center,0
+1C1,5,965100,Vets Park/Senior Center,0
+1C1,5,960100,Washington/Fairfax Transit Hub,1
+1C1,6,971070,Vets Park/Senior Center,0
+1C1,3,977090,Vets Park/Senior Center,0
+1C1,4,979010,Vets Park/Senior Center,0
+1C1,6,997070,Washington/Fairfax Transit Hub,1
+1C1,4,882010,Washington/Fairfax Transit Hub,1
+1C1,3,888090,Washington/Fairfax Transit Hub,1
+1C1,4,893010,Vets Park/Senior Center,0
+1C1,1,846020,Washington/Fairfax Transit Hub,1
+1C1,3,846090,Washington/Fairfax Transit Hub,1
+1C1,6,866070,Washington/Fairfax Transit Hub,1
+1C1,4,857010,Washington/Fairfax Transit Hub,1
+1C1,8,857110,Washington/Fairfax Transit Hub,1
+1C1,4,90010,Vets Park/Senior Center,0
+1C1,1,921020,Washington/Fairfax Transit Hub,1
+1C1,7,921080,Washington/Fairfax Transit Hub,1
+1C1,2,922040,Vets Park/Senior Center,0
+1C1,6,927070,Washington/Fairfax Transit Hub,1
+1C1,1,929020,Washington/Fairfax Transit Hub,1
+1C1,3,929090,Washington/Fairfax Transit Hub,1
+1C1,7,975080,Vets Park/Senior Center,0
+1C1,2,977040,Vets Park/Senior Center,0
+1C1,2,981040,Washington/Fairfax Transit Hub,1
+1C1,7,981080,Washington/Fairfax Transit Hub,1
+1C1,2,951040,Vets Park/Senior Center,0
+1C1,7,951080,Vets Park/Senior Center,0
+1C1,5,997100,Washington/Fairfax Transit Hub,1
+1C1,6,960070,Washington/Fairfax Transit Hub,1
+1C1,4,964010,Washington/Fairfax Transit Hub,1
+1C1,5,971100,Vets Park/Senior Center,0
+1C1,4,1132010,Washington/Fairfax Transit Hub,1
+1C1,8,1137110,Washington/Fairfax Transit Hub,1
+1C1,2,114040,Vets Park/Senior Center,0
+1C1,3,114090,Vets Park/Senior Center,0
+1C1,4,1160010,Washington/Fairfax Transit Hub,1
+1C1,8,115110,Washington/Fairfax Transit Hub,1
+1C1,5,1167100,Vets Park/Senior Center,0
+1C1,4,1201010,Washington/Fairfax Transit Hub,1
+1C1,2,1191040,Vets Park/Senior Center,0
+1C1,6,1181070,Vets Park/Senior Center,0
+1C1,8,1178110,Vets Park/Senior Center,0
+1C1,1,1176020,Vets Park/Senior Center,0
+1C1,4,1204010,Washington/Fairfax Transit Hub,1
+1C1,1,1220020,Vets Park/Senior Center,0
+1C1,8,125110,Vets Park/Senior Center,0
+1C1,5,1247100,Washington/Fairfax Transit Hub,1
+1C1,6,1263070,Vets Park/Senior Center,0
+1C1,1,127020,Vets Park/Senior Center,0
+1C1,4,1298010,Vets Park/Senior Center,0
+1C1,5,1293100,Washington/Fairfax Transit Hub,1
+1C1,4,1303010,Vets Park/Senior Center,0
+1C1,2,1350040,Washington/Fairfax Transit Hub,1
+1C1,8,1361110,Washington/Fairfax Transit Hub,1
+1C1,4,1314010,Vets Park/Senior Center,0
+1C1,8,1314110,Vets Park/Senior Center,0
+1C1,6,1332070,Vets Park/Senior Center,0
+1C1,3,132090,Vets Park/Senior Center,0
+1C1,5,1324100,Washington/Fairfax Transit Hub,1
+1C1,4,1325010,Washington/Fairfax Transit Hub,1
+1C1,8,1325110,Washington/Fairfax Transit Hub,1
+1C1,4,1328010,Washington/Fairfax Transit Hub,1
+1C1,5,1395100,Washington/Fairfax Transit Hub,1
+1C1,5,1396100,Washington/Fairfax Transit Hub,1
+1C1,6,1398070,Vets Park/Senior Center,0
+1C1,5,1398100,Vets Park/Senior Center,0
+1C1,8,1384110,Washington/Fairfax Transit Hub,1
+1C1,8,1386110,Washington/Fairfax Transit Hub,1
+1C1,5,1371100,Vets Park/Senior Center,0
+1C1,2,1364040,Washington/Fairfax Transit Hub,1
+1C1,3,1364090,Washington/Fairfax Transit Hub,1
+1C1,8,1403110,Washington/Fairfax Transit Hub,1
+1C1,7,1405080,Vets Park/Senior Center,0
+1C1,6,1388070,Washington/Fairfax Transit Hub,1
+1C1,1,1410020,Vets Park/Senior Center,0
+1C1,6,1413070,Vets Park/Senior Center,0
+1C1,5,1413100,Vets Park/Senior Center,0
+1C1,4,1416010,Vets Park/Senior Center,0
+1C1,2,1418040,Vets Park/Senior Center,0
+1C1,7,1418080,Vets Park/Senior Center,0
+1C1,5,1427100,Washington/Fairfax Transit Hub,1
+1C1,4,1430010,Washington/Fairfax Transit Hub,1
+1C1,1,1464020,Vets Park/Senior Center,0
+1C1,3,1451090,Vets Park/Senior Center,0
+1C1,6,1454070,Vets Park/Senior Center,0
+1C1,6,1455070,Vets Park/Senior Center,0
+1C1,5,1455100,Vets Park/Senior Center,0
+1C1,7,1441080,Vets Park/Senior Center,0
+1C1,8,142110,Washington/Fairfax Transit Hub,1
+1C1,5,1526100,Washington/Fairfax Transit Hub,1
+1C1,1,1528020,Washington/Fairfax Transit Hub,1
+1C1,7,1528080,Washington/Fairfax Transit Hub,1
+1C1,3,1528090,Washington/Fairfax Transit Hub,1
+1C1,7,1508080,Vets Park/Senior Center,0
+1C1,1,1514020,Washington/Fairfax Transit Hub,1
+1C1,4,1489010,Vets Park/Senior Center,0
+1C1,7,1440080,Washington/Fairfax Transit Hub,1
+1C1,6,1540070,Washington/Fairfax Transit Hub,1
+1C1,4,1579010,Washington/Fairfax Transit Hub,1
+1C1,8,1579110,Washington/Fairfax Transit Hub,1
+1C1,7,1580080,Vets Park/Senior Center,0
+1C1,3,1580090,Vets Park/Senior Center,0
+1C1,8,1582110,Vets Park/Senior Center,0
+1C1,4,1557010,Vets Park/Senior Center,0
+1C1,2,1584040,Vets Park/Senior Center,0
+1C1,7,1591080,Washington/Fairfax Transit Hub,1
+1C1,7,1642080,Vets Park/Senior Center,0
+1C1,3,1642090,Vets Park/Senior Center,0
+1C1,6,1610070,Washington/Fairfax Transit Hub,1
+1C1,5,1610100,Washington/Fairfax Transit Hub,1
+1C1,8,1603110,Vets Park/Senior Center,0
+1C1,2,167040,Vets Park/Senior Center,0
+1C1,7,167080,Vets Park/Senior Center,0
+1C1,8,169110,Vets Park/Senior Center,0
+1C1,5,172100,Vets Park/Senior Center,0
+1C1,6,175070,Vets Park/Senior Center,0
+1C1,6,209070,Washington/Fairfax Transit Hub,1
+1C1,5,1639100,Washington/Fairfax Transit Hub,1
+1C1,4,203010,Washington/Fairfax Transit Hub,1
+1C1,8,203110,Washington/Fairfax Transit Hub,1
+1C1,5,195100,Vets Park/Senior Center,0
+1C1,4,198010,Vets Park/Senior Center,0
+1C1,8,226110,Vets Park/Senior Center,0
+1C1,6,229070,Washington/Fairfax Transit Hub,1
+1C1,4,216010,Washington/Fairfax Transit Hub,1
+1C1,5,219100,Vets Park/Senior Center,0
+1C1,6,254070,Washington/Fairfax Transit Hub,1
+1C1,7,26080,Vets Park/Senior Center,0
+1C1,3,26090,Vets Park/Senior Center,0
+1C1,4,277010,Vets Park/Senior Center,0
+1C1,7,282080,Washington/Fairfax Transit Hub,1
+1C1,5,284100,Washington/Fairfax Transit Hub,1
+1C1,5,274100,Washington/Fairfax Transit Hub,1
+1C1,2,29040,Vets Park/Senior Center,0
+1C1,7,29080,Vets Park/Senior Center,0
+1C1,8,295110,Washington/Fairfax Transit Hub,1
+1C1,7,313080,Vets Park/Senior Center,0
+1C1,3,367090,Washington/Fairfax Transit Hub,1
+1C1,1,342020,Vets Park/Senior Center,0
+1C1,8,353110,Vets Park/Senior Center,0
+1C1,1,321020,Washington/Fairfax Transit Hub,1
+1C1,2,321040,Washington/Fairfax Transit Hub,1
+1C1,7,321080,Washington/Fairfax Transit Hub,1
+1C1,3,321090,Washington/Fairfax Transit Hub,1
+1C1,2,334040,Washington/Fairfax Transit Hub,1
+1C1,5,408100,Vets Park/Senior Center,0
+1C1,1,373020,Vets Park/Senior Center,0
+1C1,1,406020,Vets Park/Senior Center,0
+1C1,7,406080,Vets Park/Senior Center,0
+1C1,2,377040,Washington/Fairfax Transit Hub,1
+1C1,7,358080,Washington/Fairfax Transit Hub,1
+1C1,2,441040,Vets Park/Senior Center,0
+1C1,7,441080,Vets Park/Senior Center,0
+1C1,4,472010,Washington/Fairfax Transit Hub,1
+1C1,6,448070,Vets Park/Senior Center,0
+1C1,8,45110,Vets Park/Senior Center,0
+1C1,8,499110,Washington/Fairfax Transit Hub,1
+1C1,6,485070,Vets Park/Senior Center,0
+1C1,1,486020,Vets Park/Senior Center,0
+1C1,3,486090,Vets Park/Senior Center,0
+1C1,8,476110,Washington/Fairfax Transit Hub,1
+1C1,7,479080,Washington/Fairfax Transit Hub,1
+1C1,6,480070,Washington/Fairfax Transit Hub,1
+1C1,3,481090,Vets Park/Senior Center,0
+1C1,4,505010,Washington/Fairfax Transit Hub,1
+1C1,8,509110,Washington/Fairfax Transit Hub,1
+1C1,1,513020,Vets Park/Senior Center,0
+1C1,2,513040,Vets Park/Senior Center,0
+1C1,7,513080,Vets Park/Senior Center,0
+1C1,3,524090,Washington/Fairfax Transit Hub,1
+1C1,3,527090,Washington/Fairfax Transit Hub,1
+1C1,5,543100,Vets Park/Senior Center,0
+1C1,6,550070,Washington/Fairfax Transit Hub,1
+1C1,1,625020,Washington/Fairfax Transit Hub,1
+1C1,7,625080,Washington/Fairfax Transit Hub,1
+1C1,6,613070,Washington/Fairfax Transit Hub,1
+1C1,4,615010,Washington/Fairfax Transit Hub,1
+1C1,8,615110,Washington/Fairfax Transit Hub,1
+1C1,8,648110,Vets Park/Senior Center,0
+1C1,6,640070,Washington/Fairfax Transit Hub,1
+1C1,1,644020,Washington/Fairfax Transit Hub,1
+1C1,2,644040,Washington/Fairfax Transit Hub,1
+1C1,7,644080,Washington/Fairfax Transit Hub,1
+1C1,3,644090,Washington/Fairfax Transit Hub,1
+1C1,4,659010,Vets Park/Senior Center,0
+1C1,5,692100,Vets Park/Senior Center,0
+1C1,5,696100,Vets Park/Senior Center,0
+1C1,1,676020,Vets Park/Senior Center,0
+1C1,7,713080,Washington/Fairfax Transit Hub,1
+1C1,3,713090,Washington/Fairfax Transit Hub,1
+1C1,1,714020,Washington/Fairfax Transit Hub,1
+1C1,2,714040,Washington/Fairfax Transit Hub,1
+1C1,7,714080,Washington/Fairfax Transit Hub,1
+1C1,1,729020,Vets Park/Senior Center,0
+1C1,7,729080,Vets Park/Senior Center,0
+1C1,1,732020,Washington/Fairfax Transit Hub,1
+1C1,3,732090,Washington/Fairfax Transit Hub,1
+1C1,1,766020,Vets Park/Senior Center,0
+1C1,1,748020,Vets Park/Senior Center,0
+1C1,3,748090,Vets Park/Senior Center,0
+1C1,4,763010,Vets Park/Senior Center,0
+1C1,1,757020,Washington/Fairfax Transit Hub,1
+1C1,3,757090,Washington/Fairfax Transit Hub,1
+1C1,4,801010,Washington/Fairfax Transit Hub,1
+1C1,2,805040,Vets Park/Senior Center,0
+1C1,8,815110,Vets Park/Senior Center,0
+1C1,4,796010,Washington/Fairfax Transit Hub,1
+1C1,8,796110,Washington/Fairfax Transit Hub,1
+1C1,4,785010,Vets Park/Senior Center,0
+1C1,5,786100,Vets Park/Senior Center,0
+1C1,8,779110,Vets Park/Senior Center,0
+1C1,8,788110,Vets Park/Senior Center,0
+1C1,4,860010,Vets Park/Senior Center,0
+1C1,8,823110,Vets Park/Senior Center,0
+1C1,2,846040,Washington/Fairfax Transit Hub,1
+1C1,1,837020,Vets Park/Senior Center,0
+1C1,2,837040,Vets Park/Senior Center,0
+1C1,6,840070,Vets Park/Senior Center,0
+1C1,5,840100,Vets Park/Senior Center,0
+1C1,7,817080,Washington/Fairfax Transit Hub,1
+1C1,4,932010,Washington/Fairfax Transit Hub,1
+1C1,8,933110,Vets Park/Senior Center,0
+1C1,3,921090,Washington/Fairfax Transit Hub,1
+1C1,6,909070,Vets Park/Senior Center,0
+1C1,5,909100,Vets Park/Senior Center,0
+1C1,8,890110,Vets Park/Senior Center,0
+1C1,8,893110,Vets Park/Senior Center,0
+1C1,4,904010,Vets Park/Senior Center,0
+1C1,4,897010,Vets Park/Senior Center,0
+1C1,7,888080,Washington/Fairfax Transit Hub,1
+1C1,1,95020,Vets Park/Senior Center,0
+1C1,7,95080,Vets Park/Senior Center,0
+1C1,3,975090,Vets Park/Senior Center,0
+1C1,1,977020,Vets Park/Senior Center,0
+1C1,7,977080,Vets Park/Senior Center,0
+1C1,8,979110,Vets Park/Senior Center,0
+1C1,1,981020,Washington/Fairfax Transit Hub,1
+1C1,3,981090,Washington/Fairfax Transit Hub,1
+2,2,994040,Culver City Transit Center,1
+2,1,744020,Culver City Transit Center,1
+2,2,744040,Culver City Transit Center,1
+2,7,744080,Culver City Transit Center,1
+2,3,740090,Culver City Transit Center,1
+2,2,72040,Culver City Transit Center,1
+2,1,56020,Culver City Transit Center,1
+2,7,56080,Culver City Transit Center,1
+2,7,539080,Culver City Transit Center,1
+2,1,583020,Culver City Transit Center,1
+2,2,583040,Culver City Transit Center,1
+2,7,583080,Culver City Transit Center,1
+2,2,430040,Culver City Transit Center,1
+2,2,13040,Culver City Transit Center,1
+2,1,13020,Culver City Transit Center,1
+2,3,13090,Culver City Transit Center,1
+2,1,124020,Culver City Transit Center,1
+2,2,1169040,Culver City Transit Center,1
+2,3,1186090,Culver City Transit Center,1
+2,1,994020,Culver City Transit Center,1
+2,3,994090,Culver City Transit Center,1
+2,7,1144080,Culver City Transit Center,1
+2,1,859020,Culver City Transit Center,1
+2,2,859040,Culver City Transit Center,1
+2,7,859080,Culver City Transit Center,1
+2,7,994080,Culver City Transit Center,1
+2,3,859090,Culver City Transit Center,1
+2,3,744090,Culver City Transit Center,1
+2,7,72080,Culver City Transit Center,1
+2,3,72090,Culver City Transit Center,1
+2,1,740020,Culver City Transit Center,1
+2,2,740040,Culver City Transit Center,1
+2,7,740080,Culver City Transit Center,1
+2,1,72020,Culver City Transit Center,1
+2,3,583090,Culver City Transit Center,1
+2,2,539040,Culver City Transit Center,1
+2,3,539090,Culver City Transit Center,1
+2,2,56040,Culver City Transit Center,1
+2,1,430020,Culver City Transit Center,1
+2,3,430090,Culver City Transit Center,1
+2,3,56090,Culver City Transit Center,1
+2,1,539020,Culver City Transit Center,1
+2,7,430080,Culver City Transit Center,1
+2,7,1345080,Culver City Transit Center,1
+2,2,1286040,Culver City Transit Center,1
+2,3,1286090,Culver City Transit Center,1
+2,1,1345020,Culver City Transit Center,1
+2,7,13080,Culver City Transit Center,1
+2,1,1286020,Culver City Transit Center,1
+2,2,1345040,Culver City Transit Center,1
+2,3,1345090,Culver City Transit Center,1
+2,2,124040,Culver City Transit Center,1
+2,7,124080,Culver City Transit Center,1
+2,2,1212040,Culver City Transit Center,1
+2,2,1186040,Culver City Transit Center,1
+2,1,1212020,Culver City Transit Center,1
+2,7,1286080,Culver City Transit Center,1
+2,3,124090,Culver City Transit Center,1
+2,1,1144020,Culver City Transit Center,1
+2,7,1169080,Culver City Transit Center,1
+2,3,1169090,Culver City Transit Center,1
+2,2,1144040,Culver City Transit Center,1
+2,3,1144090,Culver City Transit Center,1
+2,1,1186020,Culver City Transit Center,1
+2,7,1186080,Culver City Transit Center,1
+2,1,1169020,Culver City Transit Center,1
+2,3,1242090,Venice High School,0
+2,3,1025090,Venice High School,0
+2,1,1025020,Venice High School,0
+2,2,1025040,Venice High School,0
+2,7,1025080,Venice High School,0
+2,7,1242080,Venice High School,0
+2,7,414080,Venice High School,0
+2,7,419080,Venice High School,0
+2,1,338020,Venice High School,0
+2,3,338090,Venice High School,0
+2,3,531090,Venice High School,0
+2,1,414020,Venice High School,0
+2,2,419040,Venice High School,0
+2,3,292090,Venice High School,0
+2,1,488020,Venice High School,0
+2,2,488040,Venice High School,0
+2,3,488090,Venice High School,0
+2,7,531080,Venice High School,0
+2,1,532020,Venice High School,0
+2,2,532040,Venice High School,0
+2,3,532090,Venice High School,0
+2,1,553020,Venice High School,0
+2,2,553040,Venice High School,0
+2,2,338040,Venice High School,0
+2,1,1649020,Venice High School,0
+2,2,1649040,Venice High School,0
+2,3,1649090,Venice High School,0
+2,2,1624040,Venice High School,0
+2,2,292040,Venice High School,0
+2,1,292020,Venice High School,0
+2,1,1624020,Venice High School,0
+2,7,1624080,Venice High School,0
+2,3,1624090,Venice High School,0
+2,3,641090,Venice High School,0
+2,2,641040,Venice High School,0
+2,7,641080,Venice High School,0
+2,7,739080,Venice High School,0
+2,3,739090,Venice High School,0
+2,1,889020,Venice High School,0
+2,2,889040,Venice High School,0
+2,7,889080,Venice High School,0
+2,1,899020,Venice High School,0
+2,2,899040,Venice High School,0
+2,7,899080,Venice High School,0
+2,1,1242020,Venice High School,0
+2,2,1242040,Venice High School,0
+2,7,1649080,Venice High School,0
+2,1,419020,Venice High School,0
+2,3,419090,Venice High School,0
+2,2,414040,Venice High School,0
+2,3,414090,Venice High School,0
+2,7,338080,Venice High School,0
+2,7,292080,Venice High School,0
+2,1,531020,Venice High School,0
+2,2,531040,Venice High School,0
+2,7,532080,Venice High School,0
+2,7,488080,Venice High School,0
+2,1,641020,Venice High School,0
+2,1,739020,Venice High School,0
+2,2,739040,Venice High School,0
+2,3,889090,Venice High School,0
+2,3,899090,Venice High School,0
+3,4,978010,Fox Hills,0
+3,3,995090,Fox Hills,0
+3,1,715020,Fox Hills,0
+3,2,715040,Fox Hills,0
+3,1,702020,Fox Hills,0
+3,3,702090,Fox Hills,0
+3,6,579070,Fox Hills,0
+3,6,288070,Fox Hills,0
+3,3,290090,Fox Hills,0
+3,8,27110,Fox Hills,0
+3,4,466010,Fox Hills,0
+3,2,186040,Fox Hills,0
+3,7,186080,Fox Hills,0
+3,3,186090,Fox Hills,0
+3,3,218090,Fox Hills,0
+3,3,230090,Fox Hills,0
+3,1,1596020,Fox Hills,0
+3,3,1615090,Fox Hills,0
+3,1,1607020,Fox Hills,0
+3,2,1607040,Fox Hills,0
+3,4,1586010,Fox Hills,0
+3,8,1586110,Fox Hills,0
+3,3,1583090,Fox Hills,0
+3,3,1274090,Fox Hills,0
+3,3,1200090,Fox Hills,0
+3,3,986090,Fox Hills,0
+3,3,96090,Fox Hills,0
+3,3,967090,Fox Hills,0
+3,8,978110,Fox Hills,0
+3,3,931090,Fox Hills,0
+3,3,919090,Fox Hills,0
+3,7,715080,Fox Hills,0
+3,3,715090,Fox Hills,0
+3,2,702040,Fox Hills,0
+3,7,702080,Fox Hills,0
+3,3,721090,Fox Hills,0
+3,3,753090,Fox Hills,0
+3,7,1607080,Fox Hills,0
+3,7,1596080,Fox Hills,0
+3,3,1596090,Fox Hills,0
+3,5,1507100,Fox Hills,0
+3,2,1596040,Fox Hills,0
+3,7,290080,Fox Hills,0
+3,4,27010,Fox Hills,0
+3,3,228090,Fox Hills,0
+3,3,1538090,Fox Hills,0
+3,4,202010,Fox Hills,0
+3,8,202110,Fox Hills,0
+3,3,289090,Fox Hills,0
+3,2,290040,Fox Hills,0
+3,5,267100,Fox Hills,0
+3,3,1607090,Fox Hills,0
+3,3,1626090,Fox Hills,0
+3,3,391090,Fox Hills,0
+3,1,186020,Fox Hills,0
+3,5,579100,Fox Hills,0
+3,3,523090,Fox Hills,0
+3,7,469080,Fox Hills,0
+3,3,591090,Fox Hills,0
+3,1,469020,Fox Hills,0
+3,3,469090,Fox Hills,0
+3,2,469040,Fox Hills,0
+3,8,466110,Fox Hills,0
+3,3,261090,Fox Hills,0
+3,6,267070,Fox Hills,0
+3,5,288100,Fox Hills,0
+3,3,309090,Fox Hills,0
+3,1,290020,Fox Hills,0
+3,3,457090,Fox Hills,0
+3,3,1342090,Fox Hills,0
+3,3,1228090,Fox Hills,0
+3,6,1307070,Fox Hills,0
+3,3,1352090,Fox Hills,0
+3,5,1307100,Fox Hills,0
+3,8,1544110,Fox Hills,0
+3,4,1544010,Fox Hills,0
+3,6,1507070,Fox Hills,0
+3,3,1472090,Fox Hills,0
+3,7,1456080,Fox Hills,0
+3,3,1456090,Fox Hills,0
+3,1,1456020,Fox Hills,0
+3,2,1456040,Fox Hills,0
+3,3,139090,Fox Hills,0
+3,3,1407090,Fox Hills,0
+3,6,1032070,Fox Hills,0
+3,8,1057110,Fox Hills,0
+3,5,1032100,Fox Hills,0
+3,4,1057010,Fox Hills,0
+3,6,1206070,Fox Hills,0
+3,3,119090,Fox Hills,0
+3,5,1206100,Fox Hills,0
+3,3,1140090,Fox Hills,0
+3,3,1142090,Fox Hills,0
+3,5,1129100,Century City,1
+3,8,1197110,Century City,1
+3,8,1198110,Century City,1
+3,3,1210090,Century City,1
+3,3,1118090,Century City,1
+3,8,1105110,Century City,1
+3,4,1115010,Century City,1
+3,8,1115110,Century City,1
+3,5,1155100,Century City,1
+3,6,1104070,Century City via West LA College,1
+3,1,12020,Century City via West LA College,1
+3,4,1198010,Century City,1
+3,7,12080,Century City via West LA College,1
+3,3,1271090,Century City,1
+3,1,1260020,Century City,1
+3,2,1254040,Century City via West LA College,1
+3,7,1254080,Century City via West LA College,1
+3,3,1166090,Century City,1
+3,4,1105010,Century City,1
+3,3,1069090,Century City,1
+3,7,1006080,Century City via West LA College,1
+3,1,1001020,Century City via West LA College,1
+3,1,1010020,Century City via West LA College,1
+3,6,1048070,Century City,1
+3,5,1048100,Century City,1
+3,4,1017010,Century City,1
+3,8,1017110,Century City,1
+3,3,1013090,Century City,1
+3,2,1001040,Century City via West LA College,1
+3,7,1001080,Century City via West LA College,1
+3,2,1010040,Century City via West LA College,1
+3,7,1010080,Century City via West LA College,1
+3,1,1006020,Century City via West LA College,1
+3,2,1006040,Century City via West LA College,1
+3,1,1426020,Century City via West LA College,1
+3,8,1417110,Century City,1
+3,3,143090,Century City,1
+3,2,1426040,Century City via West LA College,1
+3,7,1426080,Century City via West LA College,1
+3,3,1428090,Century City,1
+3,4,1461010,Century City,1
+3,1,143020,Century City,1
+3,2,143040,Century City,1
+3,7,143080,Century City,1
+3,6,1442070,Century City via West LA College,1
+3,8,1448110,Century City,1
+3,8,1486110,Century City,1
+3,2,1487040,Century City via West LA College,1
+3,4,1448010,Century City,1
+3,6,1484070,Century City via West LA College,1
+3,2,1485040,Century City via West LA College,1
+3,7,1487080,Century City via West LA College,1
+3,1,1504020,Century City via West LA College,1
+3,7,1485080,Century City via West LA College,1
+3,4,1486010,Century City,1
+3,1,1487020,Century City via West LA College,1
+3,2,1549040,Century City,1
+3,7,1549080,Century City,1
+3,3,1549090,Century City,1
+3,4,1317010,Century City,1
+3,7,1353080,Century City via West LA College,1
+3,2,134040,Century City via West LA College,1
+3,4,1417010,Century City,1
+3,2,1353040,Century City via West LA College,1
+3,5,1239100,Century City,1
+3,5,1226100,Century City,1
+3,7,134080,Century City via West LA College,1
+3,4,1275010,Century City,1
+3,1,1254020,Century City via West LA College,1
+3,8,1258110,Century City,1
+3,7,1260080,Century City,1
+3,3,1260090,Century City,1
+3,3,1308090,Century City,1
+3,5,1301100,Century City,1
+3,8,1317110,Century City,1
+3,4,1258010,Century City,1
+3,2,1260040,Century City,1
+3,8,1275110,Century City,1
+3,3,455090,Century City,1
+3,6,456070,Century City,1
+3,3,465090,Century City,1
+3,4,380010,Century City,1
+3,7,383080,Century City,1
+3,4,449010,Century City,1
+3,8,449110,Century City,1
+3,4,393010,Century City,1
+3,7,51080,Century City via West LA College,1
+3,1,316020,Century City,1
+3,5,416100,Century City,1
+3,8,418110,Century City,1
+3,2,279040,Century City,1
+3,6,280070,Century City,1
+3,5,280100,Century City,1
+3,2,383040,Century City,1
+3,5,264100,Century City,1
+3,4,265010,Century City,1
+3,3,576090,Century City,1
+3,7,596080,Century City via West LA College,1
+3,4,618010,Century City,1
+3,6,65070,Century City via West LA College,1
+3,1,51020,Century City via West LA College,1
+3,1,60020,Century City via West LA College,1
+3,2,60040,Century City via West LA College,1
+3,2,548040,Century City via West LA College,1
+3,7,548080,Century City via West LA College,1
+3,3,55090,Century City,1
+3,3,545090,Century City,1
+3,1,533020,Century City via West LA College,1
+3,2,533040,Century City via West LA College,1
+3,7,533080,Century City via West LA College,1
+3,4,568010,Century City,1
+3,1,593020,Century City via West LA College,1
+3,2,593040,Century City via West LA College,1
+3,7,593080,Century City via West LA College,1
+3,3,599090,Century City,1
+3,7,60080,Century City via West LA College,1
+3,1,596020,Century City via West LA College,1
+3,7,54080,Century City via West LA College,1
+3,1,680020,Century City via West LA College,1
+3,1,548020,Century City via West LA College,1
+3,2,551040,Century City via West LA College,1
+3,5,566100,Century City,1
+3,1,54020,Century City via West LA College,1
+3,2,51040,Century City via West LA College,1
+3,2,520040,Century City via West LA College,1
+3,7,192080,Century City via West LA College,1
+3,6,173070,Century City,1
+3,4,418010,Century City,1
+3,4,446010,Century City,1
+3,6,427070,Century City via West LA College,1
+3,6,416070,Century City,1
+3,5,207100,Century City,1
+3,7,221080,Century City via West LA College,1
+3,6,222070,Century City via West LA College,1
+3,1,383020,Century City,1
+3,8,380110,Century City,1
+3,8,1643110,Century City,1
+3,1,160020,Century City via West LA College,1
+3,3,316090,Century City,1
+3,1,279020,Century City,1
+3,6,326070,Century City via West LA College,1
+3,1,192020,Century City via West LA College,1
+3,3,184090,Century City,1
+3,2,192040,Century City via West LA College,1
+3,3,1571090,Century City,1
+3,3,1566090,Century City,1
+3,4,1589010,Century City,1
+3,1,221020,Century City via West LA College,1
+3,3,199090,Century City,1
+3,7,279080,Century City,1
+3,3,279090,Century City,1
+3,8,1589110,Century City,1
+3,8,1590110,Century City,1
+3,1,151020,Century City via West LA College,1
+3,2,151040,Century City via West LA College,1
+3,7,151080,Century City via West LA College,1
+3,2,160040,Century City via West LA College,1
+3,3,1606090,Century City,1
+3,2,1622040,Century City via West LA College,1
+3,6,1617070,Century City,1
+3,5,1629100,Century City,1
+3,8,1630110,Century City,1
+3,7,1634080,Century City,1
+3,6,1637070,Century City,1
+3,5,1637100,Century City,1
+3,4,1643010,Century City,1
+3,6,1636070,Century City via West LA College,1
+3,1,1634020,Century City,1
+3,2,1634040,Century City,1
+3,3,1634090,Century City,1
+3,4,1630010,Century City,1
+3,2,752040,Century City,1
+3,7,752080,Century City,1
+3,3,700090,Century City,1
+3,6,70070,Century City via West LA College,1
+3,2,680040,Century City via West LA College,1
+3,3,66090,Century City,1
+3,2,596040,Century City via West LA College,1
+3,3,604090,Century City,1
+3,6,633070,Century City,1
+3,8,618110,Century City,1
+3,5,710100,Century City,1
+3,5,633100,Century City,1
+3,5,653100,Century City,1
+3,6,774070,Century City via West LA College,1
+3,3,798090,Century City,1
+3,3,772090,Century City,1
+3,1,803020,Century City via West LA College,1
+3,1,752020,Century City,1
+3,3,752090,Century City,1
+3,2,803040,Century City via West LA College,1
+3,5,761100,Century City,1
+3,4,924010,Century City,1
+3,8,939110,Century City,1
+3,1,944020,Century City via West LA College,1
+3,1,916020,Century City via West LA College,1
+3,6,761070,Century City,1
+3,4,939010,Century City,1
+3,1,993020,Century City via West LA College,1
+3,2,993040,Century City via West LA College,1
+3,4,898010,Century City,1
+3,8,898110,Century City,1
+3,3,879090,Century City,1
+3,7,680080,Century City via West LA College,1
+3,5,827100,Century City,1
+3,5,836100,Century City,1
+3,6,855070,Century City,1
+3,7,863080,Century City via West LA College,1
+3,1,854020,Century City via West LA College,1
+3,6,827070,Century City,1
+3,4,956010,Century City,1
+3,3,976090,Century City,1
+3,3,89090,Century City,1
+3,1,863020,Century City via West LA College,1
+3,3,953090,Century City,1
+3,7,944080,Century City via West LA College,1
+3,2,916040,Century City via West LA College,1
+3,4,1197010,Century City,1
+3,2,12040,Century City via West LA College,1
+3,6,1239070,Century City,1
+3,6,126070,Century City via West LA College,1
+3,6,1226070,Century City,1
+3,1,1549020,Century City,1
+3,3,1550090,Century City,1
+3,4,1590010,Century City,1
+3,5,1602100,Century City,1
+3,7,160080,Century City via West LA College,1
+3,1,1622020,Century City via West LA College,1
+3,7,1622080,Century City via West LA College,1
+3,5,1617100,Century City,1
+3,3,164090,Century City,1
+3,2,221040,Century City via West LA College,1
+3,5,193100,Century City,1
+3,5,173100,Century City,1
+3,8,1461110,Century City,1
+3,1,1485020,Century City via West LA College,1
+3,2,1504040,Century City via West LA College,1
+3,7,1504080,Century City via West LA College,1
+3,1,1353020,Century City via West LA College,1
+3,1,134020,Century City via West LA College,1
+3,3,475090,Century City,1
+3,8,446110,Century City,1
+3,5,456100,Century City,1
+3,6,468070,Century City,1
+3,5,468100,Century City,1
+3,3,383090,Century City,1
+3,8,393110,Century City,1
+3,8,265110,Century City,1
+3,2,316040,Century City,1
+3,7,316080,Century City,1
+3,3,317090,Century City,1
+3,8,568110,Century City,1
+3,2,54040,Century City via West LA College,1
+3,1,551020,Century City via West LA College,1
+3,7,551080,Century City via West LA College,1
+3,1,520020,Century City via West LA College,1
+3,7,520080,Century City via West LA College,1
+3,6,494070,Century City via West LA College,1
+3,5,642100,Century City,1
+3,5,650100,Century City,1
+3,6,653070,Century City,1
+3,3,656090,Century City,1
+3,6,619070,Century City via West LA College,1
+3,1,700020,Century City,1
+3,2,700040,Century City,1
+3,7,700080,Century City,1
+3,2,854040,Century City via West LA College,1
+3,7,854080,Century City via West LA College,1
+3,5,855100,Century City,1
+3,2,863040,Century City via West LA College,1
+3,7,803080,Century City via West LA College,1
+3,7,993080,Century City via West LA College,1
+3,8,956110,Century City,1
+3,2,944040,Century City via West LA College,1
+3,7,916080,Century City via West LA College,1
+3,8,924110,Century City,1
+3,1,94020,Fox Hills via West LA College,0
+3,6,790070,Fox Hills via West LA College,0
+3,4,794010,Fox Hills,0
+3,8,794110,Fox Hills,0
+3,1,707020,Fox Hills via West LA College,0
+3,2,707040,Fox Hills via West LA College,0
+3,5,735100,Fox Hills,0
+3,2,586040,Fox Hills via West LA College,0
+3,7,586080,Fox Hills via West LA College,0
+3,1,605020,Fox Hills via West LA College,0
+3,7,605080,Fox Hills via West LA College,0
+3,1,657020,Fox Hills via West LA College,0
+3,2,657040,Fox Hills via West LA College,0
+3,1,667020,Fox Hills via West LA College,0
+3,2,667040,Fox Hills via West LA College,0
+3,6,64070,Fox Hills via West LA College,0
+3,6,535070,Fox Hills,0
+3,4,478010,Fox Hills,0
+3,8,540110,Fox Hills,0
+3,1,563020,Fox Hills via West LA College,0
+3,2,563040,Fox Hills via West LA College,0
+3,7,563080,Fox Hills via West LA College,0
+3,1,331020,Fox Hills via West LA College,0
+3,2,331040,Fox Hills via West LA College,0
+3,2,328040,Fox Hills via West LA College,0
+3,8,395110,Fox Hills,0
+3,1,40020,Fox Hills via West LA College,0
+3,8,372110,Fox Hills,0
+3,8,445110,Fox Hills,0
+3,2,1409040,Fox Hills via West LA College,0
+3,8,1439110,Fox Hills,0
+3,6,2070,Fox Hills via West LA College,0
+3,7,212080,Fox Hills via West LA College,0
+3,8,189110,Fox Hills,0
+3,1,201020,Fox Hills via West LA College,0
+3,2,201040,Fox Hills via West LA College,0
+3,5,1621100,Fox Hills,0
+3,1,159020,Fox Hills via West LA College,0
+3,2,159040,Fox Hills via West LA College,0
+3,1,121020,Fox Hills via West LA College,0
+3,2,121040,Fox Hills via West LA College,0
+3,7,121080,Fox Hills via West LA College,0
+3,6,1290070,Fox Hills via West LA College,0
+3,1,1278020,Fox Hills via West LA College,0
+3,2,1278040,Fox Hills via West LA College,0
+3,8,1189110,Fox Hills,0
+3,6,1143070,Fox Hills,0
+3,8,911110,Fox Hills,0
+3,7,94080,Fox Hills via West LA College,0
+3,8,990110,Fox Hills,0
+3,4,990010,Fox Hills,0
+3,5,843100,Fox Hills,0
+3,7,699080,Fox Hills via West LA College,0
+3,1,892020,Fox Hills via West LA College,0
+3,7,892080,Fox Hills via West LA College,0
+3,5,871100,Fox Hills,0
+3,6,738070,Fox Hills via West LA College,0
+3,1,745020,Fox Hills via West LA College,0
+3,2,745040,Fox Hills via West LA College,0
+3,1,764020,Fox Hills via West LA College,0
+3,2,764040,Fox Hills via West LA College,0
+3,7,764080,Fox Hills via West LA College,0
+3,5,913100,Fox Hills,0
+3,2,94040,Fox Hills via West LA College,0
+3,4,911010,Fox Hills,0
+3,2,892040,Fox Hills via West LA College,0
+3,4,685010,Fox Hills,0
+3,8,685110,Fox Hills,0
+3,6,777070,Fox Hills,0
+3,7,666080,Fox Hills via West LA College,0
+3,5,777100,Fox Hills,0
+3,7,745080,Fox Hills via West LA College,0
+3,6,722070,Fox Hills,0
+3,5,634100,Fox Hills,0
+3,5,705100,Fox Hills,0
+3,6,634070,Fox Hills,0
+3,2,605040,Fox Hills via West LA College,0
+3,1,607020,Fox Hills via West LA College,0
+3,2,607040,Fox Hills via West LA College,0
+3,5,722100,Fox Hills,0
+3,7,707080,Fox Hills via West LA College,0
+3,1,666020,Fox Hills via West LA College,0
+3,7,667080,Fox Hills via West LA College,0
+3,4,670010,Fox Hills,0
+3,2,699040,Fox Hills via West LA College,0
+3,7,159080,Fox Hills via West LA College,0
+3,1,212020,Fox Hills via West LA College,0
+3,2,212040,Fox Hills via West LA College,0
+3,7,201080,Fox Hills via West LA College,0
+3,5,270100,Fox Hills,0
+3,6,273070,Fox Hills,0
+3,5,273100,Fox Hills,0
+3,7,328080,Fox Hills via West LA College,0
+3,6,330070,Fox Hills via West LA College,0
+3,2,299040,Fox Hills via West LA College,0
+3,7,299080,Fox Hills via West LA College,0
+3,4,366010,Fox Hills,0
+3,4,395010,Fox Hills,0
+3,5,431100,Fox Hills,0
+3,8,437110,Fox Hills,0
+3,4,354010,Fox Hills,0
+3,8,354110,Fox Hills,0
+3,1,356020,Fox Hills via West LA College,0
+3,2,356040,Fox Hills via West LA College,0
+3,7,356080,Fox Hills via West LA College,0
+3,1,424020,Fox Hills via West LA College,0
+3,1,328020,Fox Hills via West LA College,0
+3,1,333020,Fox Hills via West LA College,0
+3,2,333040,Fox Hills via West LA College,0
+3,7,40080,Fox Hills via West LA College,0
+3,4,189010,Fox Hills,0
+3,4,510010,Fox Hills,0
+3,8,510110,Fox Hills,0
+3,2,666040,Fox Hills via West LA College,0
+3,5,535100,Fox Hills,0
+3,8,670110,Fox Hills,0
+3,1,699020,Fox Hills via West LA College,0
+3,5,588100,Fox Hills,0
+3,4,540010,Fox Hills,0
+3,5,498100,Fox Hills,0
+3,7,607080,Fox Hills via West LA College,0
+3,6,515070,Fox Hills,0
+3,5,515100,Fox Hills,0
+3,7,657080,Fox Hills via West LA College,0
+3,6,643070,Fox Hills via West LA College,0
+3,1,586020,Fox Hills via West LA College,0
+3,4,445010,Fox Hills,0
+3,6,431070,Fox Hills,0
+3,2,424040,Fox Hills via West LA College,0
+3,4,437010,Fox Hills,0
+3,4,470010,Fox Hills,0
+3,8,470110,Fox Hills,0
+3,8,366110,Fox Hills,0
+3,4,372010,Fox Hills,0
+3,7,424080,Fox Hills via West LA College,0
+3,7,331080,Fox Hills via West LA College,0
+3,1,299020,Fox Hills via West LA College,0
+3,5,511100,Fox Hills,0
+3,2,40040,Fox Hills via West LA College,0
+3,8,478110,Fox Hills,0
+3,5,530100,Fox Hills,0
+3,7,333080,Fox Hills via West LA College,0
+3,4,347010,Fox Hills,0
+3,8,347110,Fox Hills,0
+3,2,1272040,Fox Hills via West LA College,0
+3,7,1272080,Fox Hills via West LA College,0
+3,6,1264070,Fox Hills,0
+3,1,1272020,Fox Hills via West LA College,0
+3,5,1291100,Fox Hills,0
+3,6,1230070,Fox Hills,0
+3,4,1359010,Fox Hills,0
+3,1,1348020,Fox Hills via West LA College,0
+3,7,1348080,Fox Hills via West LA College,0
+3,1,1349020,Fox Hills via West LA College,0
+3,2,1348040,Fox Hills via West LA College,0
+3,7,1349080,Fox Hills via West LA College,0
+3,1,1409020,Fox Hills via West LA College,0
+3,7,1401080,Fox Hills via West LA College,0
+3,8,1359110,Fox Hills,0
+3,2,1349040,Fox Hills via West LA College,0
+3,6,1565070,Fox Hills via West LA College,0
+3,5,1516100,Fox Hills,0
+3,6,1473070,Fox Hills via West LA College,0
+3,4,1439010,Fox Hills,0
+3,1,1401020,Fox Hills via West LA College,0
+3,7,1409080,Fox Hills via West LA College,0
+3,6,1406070,Fox Hills via West LA College,0
+3,2,1401040,Fox Hills via West LA College,0
+3,4,1382010,Fox Hills,0
+3,8,1382110,Fox Hills,0
+3,4,103010,Fox Hills,0
+3,1,1049020,Fox Hills via West LA College,0
+3,7,1049080,Fox Hills via West LA College,0
+3,6,1078070,Fox Hills via West LA College,0
+3,1,1074020,Fox Hills via West LA College,0
+3,8,1083110,Fox Hills,0
+3,6,1103070,Fox Hills via West LA College,0
+3,2,1052040,Fox Hills via West LA College,0
+3,4,1083010,Fox Hills,0
+3,8,103110,Fox Hills,0
+3,7,1074080,Fox Hills via West LA College,0
+3,2,1049040,Fox Hills via West LA College,0
+3,6,1060070,Fox Hills via West LA College,0
+3,1,1052020,Fox Hills via West LA College,0
+3,7,1052080,Fox Hills via West LA College,0
+3,5,1230100,Fox Hills,0
+3,5,1264100,Fox Hills,0
+3,7,1278080,Fox Hills via West LA College,0
+3,2,1074040,Fox Hills via West LA College,0
+3,4,1189010,Fox Hills,0
+3,5,1143100,Fox Hills,0
+4,1,1139020,Playa Vista via West LA College,0
+4,3,1196090,Playa Vista,0
+4,3,1108090,Playa Vista,0
+4,2,1139040,Playa Vista via West LA College,0
+4,1,1221020,Playa Vista via West LA College,0
+4,2,1221040,Playa Vista via West LA College,0
+4,6,1250070,Playa Vista,0
+4,2,1236040,Playa Vista via West LA College,0
+4,7,1139080,Playa Vista via West LA College,0
+4,3,1033090,Playa Vista,0
+4,3,1085090,Playa Vista,0
+4,3,1453090,Playa Vista,0
+4,6,145070,Playa Vista,0
+4,5,145100,Playa Vista,0
+4,3,1452090,Playa Vista,0
+4,3,1541090,Playa Vista,0
+4,1,1532020,Playa Vista via West LA College,0
+4,2,1525040,Playa Vista via West LA College,0
+4,5,1477100,Playa Vista,0
+4,6,1287070,Playa Vista,0
+4,1,1236020,Playa Vista via West LA College,0
+4,5,1250100,Playa Vista,0
+4,2,571040,Playa Vista via West LA College,0
+4,5,452100,Playa Vista,0
+4,1,401020,Playa Vista via West LA College,0
+4,7,401080,Playa Vista via West LA College,0
+4,6,518070,Playa Vista,0
+4,1,637020,Playa Vista via West LA College,0
+4,2,637040,Playa Vista via West LA College,0
+4,5,518100,Playa Vista,0
+4,1,571020,Playa Vista via West LA College,0
+4,7,571080,Playa Vista via West LA College,0
+4,3,58090,Playa Vista,0
+4,1,585020,Playa Vista via West LA College,0
+4,2,401040,Playa Vista via West LA College,0
+4,1,31020,Playa Vista via West LA College,0
+4,7,31080,Playa Vista via West LA College,0
+4,6,452070,Playa Vista,0
+4,3,35090,Playa Vista,0
+4,5,227100,Playa Vista,0
+4,7,247080,Playa Vista,0
+4,6,227070,Playa Vista,0
+4,2,1532040,Playa Vista via West LA College,0
+4,3,156090,Playa Vista,0
+4,3,247090,Playa Vista,0
+4,3,287090,Playa Vista,0
+4,1,1525020,Playa Vista via West LA College,0
+4,2,683040,Playa Vista via West LA College,0
+4,1,688020,Playa Vista via West LA College,0
+4,7,683080,Playa Vista via West LA College,0
+4,6,63070,Playa Vista,0
+4,7,637080,Playa Vista via West LA College,0
+4,1,717020,Playa Vista via West LA College,0
+4,2,717040,Playa Vista via West LA College,0
+4,6,783070,Playa Vista,0
+4,5,783100,Playa Vista,0
+4,7,915080,Playa Vista via West LA College,0
+4,1,941020,Playa Vista,0
+4,3,941090,Playa Vista,0
+4,5,969100,Playa Vista,0
+4,7,717080,Playa Vista via West LA College,0
+4,5,998100,Playa Vista,0
+4,6,856070,Playa Vista,0
+4,5,856100,Playa Vista,0
+4,6,998070,Playa Vista,0
+4,2,941040,Playa Vista,0
+4,7,941080,Playa Vista,0
+4,6,1292070,Playa Vista,0
+4,5,1292100,Playa Vista,0
+4,5,1287100,Playa Vista,0
+4,7,1221080,Playa Vista via West LA College,0
+4,7,1236080,Playa Vista via West LA College,0
+4,7,1525080,Playa Vista via West LA College,0
+4,7,1532080,Playa Vista via West LA College,0
+4,1,247020,Playa Vista,0
+4,2,247040,Playa Vista,0
+4,6,1477070,Playa Vista,0
+4,6,314070,Playa Vista,0
+4,5,314100,Playa Vista,0
+4,2,31040,Playa Vista via West LA College,0
+4,3,564090,Playa Vista,0
+4,2,585040,Playa Vista via West LA College,0
+4,7,585080,Playa Vista via West LA College,0
+4,5,63100,Playa Vista,0
+4,3,734090,Playa Vista,0
+4,1,683020,Playa Vista via West LA College,0
+4,2,688040,Playa Vista via West LA College,0
+4,7,688080,Playa Vista via West LA College,0
+4,3,69090,Playa Vista,0
+4,6,969070,Playa Vista,0
+4,1,915020,Playa Vista via West LA College,0
+4,2,915040,Playa Vista via West LA College,0
+4,2,920040,Washington/Fairfax Transit Hub,1
+4,1,97020,Washington/Fairfax Transit Hub,1
+4,2,97040,Washington/Fairfax Transit Hub,1
+4,3,686090,Washington/Fairfax Transit Hub,1
+4,5,681100,Washington/Fairfax Transit Hub,1
+4,7,725080,Washington/Fairfax Transit Hub,1
+4,6,816070,Washington/Fairfax Transit Hub,1
+4,6,241070,Washington/Fairfax Transit Hub,1
+4,2,1505040,Washington/Fairfax Transit Hub,1
+4,5,140100,Washington/Fairfax Transit Hub,1
+4,1,1334020,Washington/Fairfax Transit Hub,1
+4,2,1334040,Washington/Fairfax Transit Hub,1
+4,6,1318070,Washington/Fairfax Transit Hub,1
+4,6,223070,Washington/Fairfax Transit Hub,1
+4,5,223100,Washington/Fairfax Transit Hub,1
+4,7,232080,Washington/Fairfax Transit Hub,1
+4,5,234100,Washington/Fairfax Transit Hub,1
+4,6,1647070,Washington/Fairfax Transit Hub,1
+4,5,1647100,Washington/Fairfax Transit Hub,1
+4,3,1588090,Washington/Fairfax Transit Hub,1
+4,3,1578090,Washington/Fairfax Transit Hub,1
+4,6,1616070,Washington/Fairfax Transit Hub,1
+4,6,1306070,Washington/Fairfax Transit Hub,1
+4,7,97080,Washington/Fairfax Transit Hub,1
+4,7,920080,Washington/Fairfax Transit Hub,1
+4,2,113040,Washington/Fairfax Transit Hub,1
+4,7,113080,Washington/Fairfax Transit Hub,1
+4,3,841090,Washington/Fairfax Transit Hub,1
+4,7,775080,Washington/Fairfax Transit Hub,1
+4,5,816100,Washington/Fairfax Transit Hub,1
+4,1,945020,Washington/Fairfax Transit Hub,1
+4,2,945040,Washington/Fairfax Transit Hub,1
+4,5,918100,Washington/Fairfax Transit Hub,1
+4,3,93090,Washington/Fairfax Transit Hub,1
+4,6,918070,Washington/Fairfax Transit Hub,1
+4,1,920020,Washington/Fairfax Transit Hub,1
+4,7,945080,Washington/Fairfax Transit Hub,1
+4,1,775020,Washington/Fairfax Transit Hub,1
+4,2,775040,Washington/Fairfax Transit Hub,1
+4,3,709090,Washington/Fairfax Transit Hub,1
+4,1,725020,Washington/Fairfax Transit Hub,1
+4,2,725040,Washington/Fairfax Transit Hub,1
+4,6,681070,Washington/Fairfax Transit Hub,1
+4,3,73090,Washington/Fairfax Transit Hub,1
+4,1,1505020,Washington/Fairfax Transit Hub,1
+4,1,1517020,Washington/Fairfax Transit Hub,1
+4,2,1517040,Washington/Fairfax Transit Hub,1
+4,7,1517080,Washington/Fairfax Transit Hub,1
+4,1,1558020,Washington/Fairfax Transit Hub,1
+4,5,1616100,Washington/Fairfax Transit Hub,1
+4,3,304090,Washington/Fairfax Transit Hub,1
+4,6,242070,Washington/Fairfax Transit Hub,1
+4,6,234070,Washington/Fairfax Transit Hub,1
+4,2,1558040,Washington/Fairfax Transit Hub,1
+4,7,1559080,Washington/Fairfax Transit Hub,1
+4,3,1585090,Washington/Fairfax Transit Hub,1
+4,3,190090,Washington/Fairfax Transit Hub,1
+4,3,350090,Washington/Fairfax Transit Hub,1
+4,5,241100,Washington/Fairfax Transit Hub,1
+4,5,242100,Washington/Fairfax Transit Hub,1
+4,1,232020,Washington/Fairfax Transit Hub,1
+4,2,232040,Washington/Fairfax Transit Hub,1
+4,2,491040,Washington/Fairfax Transit Hub,1
+4,7,491080,Washington/Fairfax Transit Hub,1
+4,1,432020,Washington/Fairfax Transit Hub,1
+4,2,432040,Washington/Fairfax Transit Hub,1
+4,3,578090,Washington/Fairfax Transit Hub,1
+4,1,491020,Washington/Fairfax Transit Hub,1
+4,7,432080,Washington/Fairfax Transit Hub,1
+4,7,1334080,Washington/Fairfax Transit Hub,1
+4,2,1327040,Washington/Fairfax Transit Hub,1
+4,5,1306100,Washington/Fairfax Transit Hub,1
+4,1,1327020,Washington/Fairfax Transit Hub,1
+4,5,1318100,Washington/Fairfax Transit Hub,1
+4,7,1327080,Washington/Fairfax Transit Hub,1
+4,6,140070,Washington/Fairfax Transit Hub,1
+4,5,148100,Washington/Fairfax Transit Hub,1
+4,3,1488090,Washington/Fairfax Transit Hub,1
+4,6,148070,Washington/Fairfax Transit Hub,1
+4,3,1548090,Washington/Fairfax Transit Hub,1
+4,7,1558080,Washington/Fairfax Transit Hub,1
+4,1,1559020,Washington/Fairfax Transit Hub,1
+4,2,1559040,Washington/Fairfax Transit Hub,1
+4,7,1505080,Washington/Fairfax Transit Hub,1
+4,3,14090,Washington/Fairfax Transit Hub,1
+4,1,1100020,Washington/Fairfax Transit Hub,1
+4,2,1100040,Washington/Fairfax Transit Hub,1
+4,7,1100080,Washington/Fairfax Transit Hub,1
+4,3,1100090,Washington/Fairfax Transit Hub,1
+4,6,1066070,Washington/Fairfax Transit Hub,1
+4,5,1066100,Washington/Fairfax Transit Hub,1
+4,1,113020,Washington/Fairfax Transit Hub,1
+5,1,1095020,Blair Hills,1
+5,2,365040,Blair Hills,1
+5,1,1627020,Blair Hills,1
+5,2,824040,Blair Hills,1
+5,1,635020,CCHS,0
+5,2,635040,CCHS,0
+5C1,1,632020,CCHS,0
+5C1,2,21040,CCHS,0
+5C1,1,291020,Culver City Arts District,1
+5C1,1,237020,CCHS,0
+5C1,1,1343020,Culver City Arts District,1
+5C1,2,632040,CCHS,0
+5C1,2,99040,CCHS,0
+5C1,1,99020,CCHS,0
+5C1,1,16020,CCHS,0
+5C1,1,1510020,CCHS,0
+5C1,2,1510040,CCHS,0
+5C1,2,800040,Culver City Arts District,1
+5C2,2,477040,Fox Hills,1
+5C2,1,434020,Fox Hills,1
+5C2,1,537020,Fox Hills,1
+5C2,2,298040,Fox Hills,1
+5C2,2,1564040,CCHS,1
+5C2,1,1564020,CCHS,1
+6,5,1554100,LAX/Metro Transit Center,0
+6,7,1527080,LAX/Metro Transit Center,0
+6,3,1527090,LAX/Metro Transit Center,0
+6,1,1518020,LAX/Metro Transit Center,0
+6,3,1523090,LAX/Metro Transit Center,0
+6,7,154080,LAX/Metro Transit Center,0
+6,6,15070,LAX/Metro Transit Center,0
+6,5,1509100,LAX/Metro Transit Center,0
+6,3,1518090,LAX/Metro Transit Center,0
+6,6,1520070,LAX/Metro Transit Center,0
+6,4,152010,LAX/Metro Transit Center,0
+6,5,1520100,LAX/Metro Transit Center,0
+6,2,1527040,LAX/Metro Transit Center,0
+6,1,1523020,LAX/Metro Transit Center,0
+6,2,1523040,LAX/Metro Transit Center,0
+6,2,1474040,LAX/Metro Transit Center,0
+6,2,1475040,LAX/Metro Transit Center,0
+6,2,1482040,LAX/Metro Transit Center,0
+6,8,1470110,LAX/Metro Transit Center,0
+6,8,1497110,LAX/Metro Transit Center,0
+6,1,1475020,LAX/Metro Transit Center,0
+6,7,1475080,LAX/Metro Transit Center,0
+6,3,1482090,LAX/Metro Transit Center,0
+6,5,1511100,LAX/Metro Transit Center,0
+6,1,1469020,LAX/Metro Transit Center,0
+6,2,1469040,LAX/Metro Transit Center,0
+6,3,1469090,LAX/Metro Transit Center,0
+6,4,1470010,LAX/Metro Transit Center,0
+6,2,1422040,LAX/Metro Transit Center,0
+6,6,1444070,LAX/Metro Transit Center,0
+6,5,1444100,LAX/Metro Transit Center,0
+6,1,1446020,LAX/Metro Transit Center,0
+6,5,1447100,LAX/Metro Transit Center,0
+6,2,1435040,LAX/Metro Transit Center,0
+6,3,1387090,LAX/Metro Transit Center,0
+6,7,1373080,LAX/Metro Transit Center,0
+6,3,1368090,LAX/Metro Transit Center,0
+6,2,1392040,LAX/Metro Transit Center,0
+6,5,1397100,LAX/Metro Transit Center,0
+6,8,1376110,LAX/Metro Transit Center,0
+6,6,1397070,LAX/Metro Transit Center,0
+6,2,1399040,LAX/Metro Transit Center,0
+6,7,1392080,LAX/Metro Transit Center,0
+6,3,1392090,LAX/Metro Transit Center,0
+6,6,1447070,LAX/Metro Transit Center,0
+6,1,1435020,LAX/Metro Transit Center,0
+6,3,1422090,LAX/Metro Transit Center,0
+6,3,1435090,LAX/Metro Transit Center,0
+6,2,1446040,LAX/Metro Transit Center,0
+6,3,1446090,LAX/Metro Transit Center,0
+6,2,1457040,LAX/Metro Transit Center,0
+6,7,1457080,LAX/Metro Transit Center,0
+6,1,1474020,LAX/Metro Transit Center,0
+6,3,1474090,LAX/Metro Transit Center,0
+6,1,1337020,LAX/Metro Transit Center,0
+6,7,1337080,LAX/Metro Transit Center,0
+6,8,1222110,LAX/Metro Transit Center,0
+6,4,1320010,LAX/Metro Transit Center,0
+6,6,1315070,LAX/Metro Transit Center,0
+6,5,1315100,LAX/Metro Transit Center,0
+6,2,1248040,LAX/Metro Transit Center,0
+6,3,1248090,LAX/Metro Transit Center,0
+6,4,1235010,LAX/Metro Transit Center,0
+6,5,1269100,LAX/Metro Transit Center,0
+6,4,1266010,LAX/Metro Transit Center,0
+6,8,1266110,LAX/Metro Transit Center,0
+6,4,1282010,LAX/Metro Transit Center,0
+6,8,1282110,LAX/Metro Transit Center,0
+6,4,1253010,LAX/Metro Transit Center,0
+6,8,1257110,LAX/Metro Transit Center,0
+6,6,1329070,LAX/Metro Transit Center,0
+6,5,1329100,LAX/Metro Transit Center,0
+6,3,1337090,LAX/Metro Transit Center,0
+6,1,1392020,LAX/Metro Transit Center,0
+6,1,1399020,LAX/Metro Transit Center,0
+6,3,1399090,LAX/Metro Transit Center,0
+6,1,1422020,LAX/Metro Transit Center,0
+6,7,1422080,LAX/Metro Transit Center,0
+6,1,1366020,LAX/Metro Transit Center,0
+6,2,1366040,LAX/Metro Transit Center,0
+6,8,1320110,LAX/Metro Transit Center,0
+6,6,1347070,LAX/Metro Transit Center,0
+6,5,1354100,LAX/Metro Transit Center,0
+6,7,1358080,LAX/Metro Transit Center,0
+6,3,1358090,LAX/Metro Transit Center,0
+6,5,1289100,LAX/Metro Transit Center,0
+6,5,1285100,LAX/Metro Transit Center,0
+6,8,135110,LAX/Metro Transit Center,0
+6,1,1373020,LAX/Metro Transit Center,0
+6,2,1368040,LAX/Metro Transit Center,0
+6,7,1366080,LAX/Metro Transit Center,0
+6,1,1387020,LAX/Metro Transit Center,0
+6,2,1387040,LAX/Metro Transit Center,0
+6,6,1354070,LAX/Metro Transit Center,0
+6,1,1358020,LAX/Metro Transit Center,0
+6,6,1285070,LAX/Metro Transit Center,0
+6,5,1347100,LAX/Metro Transit Center,0
+6,1,1101020,LAX/Metro Transit Center,0
+6,3,1101090,LAX/Metro Transit Center,0
+6,8,1086110,LAX/Metro Transit Center,0
+6,4,1086010,LAX/Metro Transit Center,0
+6,2,1128040,LAX/Metro Transit Center,0
+6,1,1128020,LAX/Metro Transit Center,0
+6,7,1128080,LAX/Metro Transit Center,0
+6,1,1096020,LAX/Metro Transit Center,0
+6,3,1096090,LAX/Metro Transit Center,0
+6,6,1053070,LAX/Metro Transit Center,0
+6,4,1076010,LAX/Metro Transit Center,0
+6,5,1036100,LAX/Metro Transit Center,0
+6,5,106100,LAX/Metro Transit Center,0
+6,8,107110,LAX/Metro Transit Center,0
+6,1,108020,LAX/Metro Transit Center,0
+6,2,108040,LAX/Metro Transit Center,0
+6,7,108080,LAX/Metro Transit Center,0
+6,3,108090,LAX/Metro Transit Center,0
+6,6,106070,LAX/Metro Transit Center,0
+6,1,1050020,LAX/Metro Transit Center,0
+6,5,105100,LAX/Metro Transit Center,0
+6,6,1058070,LAX/Metro Transit Center,0
+6,5,1058100,LAX/Metro Transit Center,0
+6,4,1075010,LAX/Metro Transit Center,0
+6,8,1075110,LAX/Metro Transit Center,0
+6,8,1076110,LAX/Metro Transit Center,0
+6,7,1050080,LAX/Metro Transit Center,0
+6,3,1050090,LAX/Metro Transit Center,0
+6,6,105070,LAX/Metro Transit Center,0
+6,2,1050040,LAX/Metro Transit Center,0
+6,5,1053100,LAX/Metro Transit Center,0
+6,4,107010,LAX/Metro Transit Center,0
+6,1,1029020,LAX/Metro Transit Center,0
+6,6,1026070,LAX/Metro Transit Center,0
+6,7,1029080,LAX/Metro Transit Center,0
+6,3,1029090,LAX/Metro Transit Center,0
+6,6,1036070,LAX/Metro Transit Center,0
+6,8,1019110,LAX/Metro Transit Center,0
+6,2,100040,LAX/Metro Transit Center,0
+6,4,1008010,LAX/Metro Transit Center,0
+6,8,1008110,LAX/Metro Transit Center,0
+6,5,1026100,LAX/Metro Transit Center,0
+6,4,1019010,LAX/Metro Transit Center,0
+6,1,100020,LAX/Metro Transit Center,0
+6,7,100080,LAX/Metro Transit Center,0
+6,3,100090,LAX/Metro Transit Center,0
+6,2,1029040,LAX/Metro Transit Center,0
+6,7,1133080,LAX/Metro Transit Center,0
+6,1,1136020,LAX/Metro Transit Center,0
+6,2,1136040,LAX/Metro Transit Center,0
+6,3,1136090,LAX/Metro Transit Center,0
+6,8,1170110,LAX/Metro Transit Center,0
+6,2,116040,LAX/Metro Transit Center,0
+6,7,116080,LAX/Metro Transit Center,0
+6,3,116090,LAX/Metro Transit Center,0
+6,6,1107070,LAX/Metro Transit Center,0
+6,5,1107100,LAX/Metro Transit Center,0
+6,7,1101080,LAX/Metro Transit Center,0
+6,2,1096040,LAX/Metro Transit Center,0
+6,7,1096080,LAX/Metro Transit Center,0
+6,3,1128090,LAX/Metro Transit Center,0
+6,2,1101040,LAX/Metro Transit Center,0
+6,2,1148040,LAX/Metro Transit Center,0
+6,1,116020,LAX/Metro Transit Center,0
+6,1,1133020,LAX/Metro Transit Center,0
+6,2,1133040,LAX/Metro Transit Center,0
+6,4,1170010,LAX/Metro Transit Center,0
+6,5,1175100,LAX/Metro Transit Center,0
+6,7,1148080,LAX/Metro Transit Center,0
+6,3,1148090,LAX/Metro Transit Center,0
+6,1,1248020,LAX/Metro Transit Center,0
+6,4,1257010,LAX/Metro Transit Center,0
+6,8,1234110,LAX/Metro Transit Center,0
+6,8,1235110,LAX/Metro Transit Center,0
+6,6,1289070,LAX/Metro Transit Center,0
+6,5,1190100,LAX/Metro Transit Center,0
+6,4,1209010,LAX/Metro Transit Center,0
+6,8,1209110,LAX/Metro Transit Center,0
+6,5,1567100,LAX/Metro Transit Center,0
+6,6,1567070,LAX/Metro Transit Center,0
+6,5,1555100,LAX/Metro Transit Center,0
+6,8,1587110,LAX/Metro Transit Center,0
+6,5,1563100,LAX/Metro Transit Center,0
+6,7,1518080,LAX/Metro Transit Center,0
+6,4,1521010,LAX/Metro Transit Center,0
+6,8,1521110,LAX/Metro Transit Center,0
+6,6,1608070,LAX/Metro Transit Center,0
+6,6,1511070,LAX/Metro Transit Center,0
+6,1,1527020,LAX/Metro Transit Center,0
+6,7,1523080,LAX/Metro Transit Center,0
+6,6,1631070,LAX/Metro Transit Center,0
+6,2,180040,LAX/Metro Transit Center,0
+6,3,306090,LAX/Metro Transit Center,0
+6,7,258080,LAX/Metro Transit Center,0
+6,8,286110,LAX/Metro Transit Center,0
+6,4,255010,LAX/Metro Transit Center,0
+6,4,253010,LAX/Metro Transit Center,0
+6,5,263100,LAX/Metro Transit Center,0
+6,1,154020,LAX/Metro Transit Center,0
+6,6,1563070,LAX/Metro Transit Center,0
+6,8,1552110,LAX/Metro Transit Center,0
+6,6,1555070,LAX/Metro Transit Center,0
+6,7,410080,LAX/Metro Transit Center,0
+6,5,329100,LAX/Metro Transit Center,0
+6,1,180020,LAX/Metro Transit Center,0
+6,7,180080,LAX/Metro Transit Center,0
+6,3,180090,LAX/Metro Transit Center,0
+6,1,306020,LAX/Metro Transit Center,0
+6,2,44040,LAX/Metro Transit Center,0
+6,8,215110,LAX/Metro Transit Center,0
+6,1,348020,LAX/Metro Transit Center,0
+6,3,348090,LAX/Metro Transit Center,0
+6,4,349010,LAX/Metro Transit Center,0
+6,8,349110,LAX/Metro Transit Center,0
+6,5,344100,LAX/Metro Transit Center,0
+6,1,451020,LAX/Metro Transit Center,0
+6,2,348040,LAX/Metro Transit Center,0
+6,7,271080,LAX/Metro Transit Center,0
+6,3,271090,LAX/Metro Transit Center,0
+6,1,258020,LAX/Metro Transit Center,0
+6,6,38070,LAX/Metro Transit Center,0
+6,4,166010,LAX/Metro Transit Center,0
+6,8,166110,LAX/Metro Transit Center,0
+6,2,378040,LAX/Metro Transit Center,0
+6,6,1625070,LAX/Metro Transit Center,0
+6,5,1625100,LAX/Metro Transit Center,0
+6,7,52080,LAX/Metro Transit Center,0
+6,1,501020,LAX/Metro Transit Center,0
+6,7,501080,LAX/Metro Transit Center,0
+6,8,300110,LAX/Metro Transit Center,0
+6,1,410020,LAX/Metro Transit Center,0
+6,2,410040,LAX/Metro Transit Center,0
+6,5,413100,LAX/Metro Transit Center,0
+6,4,286010,LAX/Metro Transit Center,0
+6,3,387090,LAX/Metro Transit Center,0
+6,3,394090,LAX/Metro Transit Center,0
+6,4,461010,LAX/Metro Transit Center,0
+6,8,461110,LAX/Metro Transit Center,0
+6,1,271020,LAX/Metro Transit Center,0
+6,2,271040,LAX/Metro Transit Center,0
+6,2,258040,LAX/Metro Transit Center,0
+6,8,253110,LAX/Metro Transit Center,0
+6,4,560010,LAX/Metro Transit Center,0
+6,4,549010,LAX/Metro Transit Center,0
+6,8,549110,LAX/Metro Transit Center,0
+6,7,44080,LAX/Metro Transit Center,0
+6,2,394040,LAX/Metro Transit Center,0
+6,7,394080,LAX/Metro Transit Center,0
+6,4,386010,LAX/Metro Transit Center,0
+6,1,387020,LAX/Metro Transit Center,0
+6,2,387040,LAX/Metro Transit Center,0
+6,5,38100,LAX/Metro Transit Center,0
+6,7,378080,LAX/Metro Transit Center,0
+6,5,41100,LAX/Metro Transit Center,0
+6,5,611100,LAX/Metro Transit Center,0
+6,2,501040,LAX/Metro Transit Center,0
+6,3,52090,LAX/Metro Transit Center,0
+6,3,501090,LAX/Metro Transit Center,0
+6,6,580070,LAX/Metro Transit Center,0
+6,5,580100,LAX/Metro Transit Center,0
+6,1,587020,LAX/Metro Transit Center,0
+6,7,587080,LAX/Metro Transit Center,0
+6,5,598100,LAX/Metro Transit Center,0
+6,1,44020,LAX/Metro Transit Center,0
+6,3,44090,LAX/Metro Transit Center,0
+6,2,451040,LAX/Metro Transit Center,0
+6,7,451080,LAX/Metro Transit Center,0
+6,2,587040,LAX/Metro Transit Center,0
+6,3,587090,LAX/Metro Transit Center,0
+6,5,573100,LAX/Metro Transit Center,0
+6,6,573070,LAX/Metro Transit Center,0
+6,8,560110,LAX/Metro Transit Center,0
+6,5,556100,LAX/Metro Transit Center,0
+6,2,665040,LAX/Metro Transit Center,0
+6,3,679090,LAX/Metro Transit Center,0
+6,1,52020,LAX/Metro Transit Center,0
+6,2,52040,LAX/Metro Transit Center,0
+6,6,556070,LAX/Metro Transit Center,0
+6,8,627110,LAX/Metro Transit Center,0
+6,1,638020,LAX/Metro Transit Center,0
+6,2,638040,LAX/Metro Transit Center,0
+6,3,612090,LAX/Metro Transit Center,0
+6,4,663010,LAX/Metro Transit Center,0
+6,3,665090,LAX/Metro Transit Center,0
+6,8,654110,LAX/Metro Transit Center,0
+6,6,263070,LAX/Metro Transit Center,0
+6,2,306040,LAX/Metro Transit Center,0
+6,7,306080,LAX/Metro Transit Center,0
+6,4,300010,LAX/Metro Transit Center,0
+6,6,329070,LAX/Metro Transit Center,0
+6,6,344070,LAX/Metro Transit Center,0
+6,7,348080,LAX/Metro Transit Center,0
+6,3,451090,LAX/Metro Transit Center,0
+6,1,378020,LAX/Metro Transit Center,0
+6,3,378090,LAX/Metro Transit Center,0
+6,8,386110,LAX/Metro Transit Center,0
+6,7,387080,LAX/Metro Transit Center,0
+6,1,394020,LAX/Metro Transit Center,0
+6,6,413070,LAX/Metro Transit Center,0
+6,3,410090,LAX/Metro Transit Center,0
+6,6,41070,LAX/Metro Transit Center,0
+6,7,81080,LAX/Metro Transit Center,0
+6,4,813010,LAX/Metro Transit Center,0
+6,8,813110,LAX/Metro Transit Center,0
+6,4,795010,LAX/Metro Transit Center,0
+6,1,771020,LAX/Metro Transit Center,0
+6,2,880040,LAX/Metro Transit Center,0
+6,7,880080,LAX/Metro Transit Center,0
+6,1,861020,LAX/Metro Transit Center,0
+6,2,861040,LAX/Metro Transit Center,0
+6,7,861080,LAX/Metro Transit Center,0
+6,3,861090,LAX/Metro Transit Center,0
+6,8,733110,LAX/Metro Transit Center,0
+6,6,776070,LAX/Metro Transit Center,0
+6,1,701020,LAX/Metro Transit Center,0
+6,1,724020,LAX/Metro Transit Center,0
+6,2,724040,LAX/Metro Transit Center,0
+6,7,724080,LAX/Metro Transit Center,0
+6,8,938110,LAX/Metro Transit Center,0
+6,1,900020,LAX/Metro Transit Center,0
+6,4,902010,LAX/Metro Transit Center,0
+6,2,903040,LAX/Metro Transit Center,0
+6,2,885040,LAX/Metro Transit Center,0
+6,8,9110,LAX/Metro Transit Center,0
+6,8,80110,LAX/Metro Transit Center,0
+6,8,795110,LAX/Metro Transit Center,0
+6,6,731070,LAX/Metro Transit Center,0
+6,3,81090,LAX/Metro Transit Center,0
+6,4,812010,LAX/Metro Transit Center,0
+6,8,812110,LAX/Metro Transit Center,0
+6,5,814100,LAX/Metro Transit Center,0
+6,5,776100,LAX/Metro Transit Center,0
+6,3,771090,LAX/Metro Transit Center,0
+6,7,679080,LAX/Metro Transit Center,0
+6,1,612020,LAX/Metro Transit Center,0
+6,4,627010,LAX/Metro Transit Center,0
+6,3,638090,LAX/Metro Transit Center,0
+6,1,665020,LAX/Metro Transit Center,0
+6,7,665080,LAX/Metro Transit Center,0
+6,6,747070,LAX/Metro Transit Center,0
+6,6,75070,LAX/Metro Transit Center,0
+6,5,75100,LAX/Metro Transit Center,0
+6,1,751020,LAX/Metro Transit Center,0
+6,5,731100,LAX/Metro Transit Center,0
+6,4,733010,LAX/Metro Transit Center,0
+6,1,679020,LAX/Metro Transit Center,0
+6,2,679040,LAX/Metro Transit Center,0
+6,8,663110,LAX/Metro Transit Center,0
+6,3,751090,LAX/Metro Transit Center,0
+6,2,771040,LAX/Metro Transit Center,0
+6,7,771080,LAX/Metro Transit Center,0
+6,3,701090,LAX/Metro Transit Center,0
+6,6,760070,LAX/Metro Transit Center,0
+6,4,737010,LAX/Metro Transit Center,0
+6,8,737110,LAX/Metro Transit Center,0
+6,7,638080,LAX/Metro Transit Center,0
+6,4,654010,LAX/Metro Transit Center,0
+6,2,701040,LAX/Metro Transit Center,0
+6,7,701080,LAX/Metro Transit Center,0
+6,6,598070,LAX/Metro Transit Center,0
+6,6,611070,LAX/Metro Transit Center,0
+6,2,612040,LAX/Metro Transit Center,0
+6,7,612080,LAX/Metro Transit Center,0
+6,4,936010,LAX/Metro Transit Center,0
+6,1,91020,LAX/Metro Transit Center,0
+6,7,903080,LAX/Metro Transit Center,0
+6,3,903090,LAX/Metro Transit Center,0
+6,6,914070,LAX/Metro Transit Center,0
+6,5,914100,LAX/Metro Transit Center,0
+6,5,948100,LAX/Metro Transit Center,0
+6,8,936110,LAX/Metro Transit Center,0
+6,2,83040,LAX/Metro Transit Center,0
+6,3,83090,LAX/Metro Transit Center,0
+6,4,84010,LAX/Metro Transit Center,0
+6,2,81040,LAX/Metro Transit Center,0
+6,6,814070,LAX/Metro Transit Center,0
+6,4,793010,LAX/Metro Transit Center,0
+6,8,793110,LAX/Metro Transit Center,0
+6,6,797070,LAX/Metro Transit Center,0
+6,5,797100,LAX/Metro Transit Center,0
+6,4,80010,LAX/Metro Transit Center,0
+6,6,966070,LAX/Metro Transit Center,0
+6,8,980110,LAX/Metro Transit Center,0
+6,8,952110,LAX/Metro Transit Center,0
+6,1,81020,LAX/Metro Transit Center,0
+6,4,845010,LAX/Metro Transit Center,0
+6,8,845110,LAX/Metro Transit Center,0
+6,3,724090,LAX/Metro Transit Center,0
+6,2,852040,LAX/Metro Transit Center,0
+6,1,83020,LAX/Metro Transit Center,0
+6,8,84110,LAX/Metro Transit Center,0
+6,7,83080,LAX/Metro Transit Center,0
+6,5,747100,LAX/Metro Transit Center,0
+6,2,751040,LAX/Metro Transit Center,0
+6,7,751080,LAX/Metro Transit Center,0
+6,5,760100,LAX/Metro Transit Center,0
+6,1,885020,LAX/Metro Transit Center,0
+6,3,885090,LAX/Metro Transit Center,0
+6,5,896100,LAX/Metro Transit Center,0
+6,3,900090,LAX/Metro Transit Center,0
+6,4,9010,LAX/Metro Transit Center,0
+6,8,902110,LAX/Metro Transit Center,0
+6,2,1518040,LAX/Metro Transit Center,0
+6,6,1509070,LAX/Metro Transit Center,0
+6,5,15100,LAX/Metro Transit Center,0
+6,8,152110,LAX/Metro Transit Center,0
+6,1,1482020,LAX/Metro Transit Center,0
+6,7,1482080,LAX/Metro Transit Center,0
+6,4,1497010,LAX/Metro Transit Center,0
+6,7,1469080,LAX/Metro Transit Center,0
+6,7,1474080,LAX/Metro Transit Center,0
+6,3,1475090,LAX/Metro Transit Center,0
+6,7,1446080,LAX/Metro Transit Center,0
+6,7,1435080,LAX/Metro Transit Center,0
+6,1,1457020,LAX/Metro Transit Center,0
+6,3,1457090,LAX/Metro Transit Center,0
+6,4,131010,LAX/Metro Transit Center,0
+6,8,131110,LAX/Metro Transit Center,0
+6,2,1337040,LAX/Metro Transit Center,0
+6,2,1358040,LAX/Metro Transit Center,0
+6,4,135010,LAX/Metro Transit Center,0
+6,4,1376010,LAX/Metro Transit Center,0
+6,3,1366090,LAX/Metro Transit Center,0
+6,1,1368020,LAX/Metro Transit Center,0
+6,7,1368080,LAX/Metro Transit Center,0
+6,2,1373040,LAX/Metro Transit Center,0
+6,3,1373090,LAX/Metro Transit Center,0
+6,7,1387080,LAX/Metro Transit Center,0
+6,7,1399080,LAX/Metro Transit Center,0
+6,5,1608100,LAX/Metro Transit Center,0
+6,4,1609010,LAX/Metro Transit Center,0
+6,8,1609110,LAX/Metro Transit Center,0
+6,5,1631100,LAX/Metro Transit Center,0
+6,4,1587010,LAX/Metro Transit Center,0
+6,4,1552010,LAX/Metro Transit Center,0
+6,6,1554070,LAX/Metro Transit Center,0
+6,2,154040,LAX/Metro Transit Center,0
+6,3,154090,LAX/Metro Transit Center,0
+6,4,215010,LAX/Metro Transit Center,0
+6,8,255110,LAX/Metro Transit Center,0
+6,3,258090,LAX/Metro Transit Center,0
+6,6,1164070,LAX/Metro Transit Center,0
+6,5,1164100,LAX/Metro Transit Center,0
+6,1,1148020,LAX/Metro Transit Center,0
+6,3,1133090,LAX/Metro Transit Center,0
+6,7,1136080,LAX/Metro Transit Center,0
+6,6,1190070,LAX/Metro Transit Center,0
+6,6,1175070,LAX/Metro Transit Center,0
+6,6,1269070,LAX/Metro Transit Center,0
+6,4,1234010,LAX/Metro Transit Center,0
+6,7,1248080,LAX/Metro Transit Center,0
+6,6,1249070,LAX/Metro Transit Center,0
+6,5,1249100,LAX/Metro Transit Center,0
+6,8,1253110,LAX/Metro Transit Center,0
+6,4,1222010,LAX/Metro Transit Center,0
+6,7,885080,LAX/Metro Transit Center,0
+6,2,900040,LAX/Metro Transit Center,0
+6,7,900080,LAX/Metro Transit Center,0
+6,5,966100,LAX/Metro Transit Center,0
+6,4,980010,LAX/Metro Transit Center,0
+6,1,880020,LAX/Metro Transit Center,0
+6,3,880090,LAX/Metro Transit Center,0
+6,6,881070,LAX/Metro Transit Center,0
+6,5,881100,LAX/Metro Transit Center,0
+6,6,948070,LAX/Metro Transit Center,0
+6,1,851020,LAX/Metro Transit Center,0
+6,2,851040,LAX/Metro Transit Center,0
+6,7,851080,LAX/Metro Transit Center,0
+6,3,851090,LAX/Metro Transit Center,0
+6,1,852020,LAX/Metro Transit Center,0
+6,7,852080,LAX/Metro Transit Center,0
+6,3,852090,LAX/Metro Transit Center,0
+6,4,952010,LAX/Metro Transit Center,0
+6,4,938010,LAX/Metro Transit Center,0
+6,1,903020,LAX/Metro Transit Center,0
+6,6,896070,LAX/Metro Transit Center,0
+6,2,91040,LAX/Metro Transit Center,0
+6,7,91080,LAX/Metro Transit Center,0
+6,3,91090,LAX/Metro Transit Center,0
+6,8,905110,UCLA,1
+6,1,923020,UCLA,1
+6,2,923040,UCLA,1
+6,8,925110,UCLA,1
+6,1,928020,UCLA,1
+6,5,949100,UCLA,1
+6,5,970100,UCLA,1
+6,4,1131010,UCLA,1
+6,8,1131110,UCLA,1
+6,1,982020,UCLA,1
+6,3,982090,UCLA,1
+6,1,98020,UCLA,1
+6,2,98040,UCLA,1
+6,2,85040,UCLA,1
+6,3,85090,UCLA,1
+6,6,865070,UCLA,1
+6,6,869070,UCLA,1
+6,2,982040,UCLA,1
+6,6,973070,UCLA,1
+6,4,884010,UCLA,1
+6,8,884110,UCLA,1
+6,8,123110,UCLA,1
+6,6,1268070,UCLA,1
+6,5,1268100,UCLA,1
+6,3,1241090,UCLA,1
+6,4,1273010,UCLA,1
+6,1,1279020,UCLA,1
+6,3,1279090,UCLA,1
+6,1,1277020,UCLA,1
+6,3,1277090,UCLA,1
+6,5,1309100,UCLA,1
+6,8,1300110,UCLA,1
+6,4,1172010,UCLA,1
+6,7,992080,UCLA,1
+6,8,1188110,UCLA,1
+6,5,973100,UCLA,1
+6,6,996070,UCLA,1
+6,5,996100,UCLA,1
+6,1,1168020,UCLA,1
+6,6,1161070,UCLA,1
+6,5,1161100,UCLA,1
+6,6,239070,UCLA,1
+6,6,235070,UCLA,1
+6,7,22080,UCLA,1
+6,3,22090,UCLA,1
+6,4,210010,UCLA,1
+6,1,165020,UCLA,1
+6,3,165090,UCLA,1
+6,4,171010,UCLA,1
+6,1,177020,UCLA,1
+6,6,179070,UCLA,1
+6,5,179100,UCLA,1
+6,6,18070,UCLA,1
+6,8,182110,UCLA,1
+6,6,1531070,UCLA,1
+6,5,1531100,UCLA,1
+6,7,163080,UCLA,1
+6,3,1618090,UCLA,1
+6,8,1369110,UCLA,1
+6,4,1402010,UCLA,1
+6,1,1431020,UCLA,1
+6,2,1431040,UCLA,1
+6,5,1433100,UCLA,1
+6,6,1344070,UCLA,1
+6,5,1344100,UCLA,1
+6,2,1362040,UCLA,1
+6,1,1459020,UCLA,1
+6,2,1459040,UCLA,1
+6,7,1459080,UCLA,1
+6,6,1423070,UCLA,1
+6,6,1466070,UCLA,1
+6,5,1466100,UCLA,1
+6,1,1463020,UCLA,1
+6,2,1463040,UCLA,1
+6,7,1463080,UCLA,1
+6,1,1481020,UCLA,1
+6,7,1481080,UCLA,1
+6,5,869100,UCLA,1
+6,4,877010,UCLA,1
+6,6,750070,UCLA,1
+6,4,839010,UCLA,1
+6,5,865100,UCLA,1
+6,6,86070,UCLA,1
+6,1,85020,UCLA,1
+6,3,698090,UCLA,1
+6,6,820070,UCLA,1
+6,2,706040,UCLA,1
+6,7,706080,UCLA,1
+6,3,706090,UCLA,1
+6,8,839110,UCLA,1
+6,7,789080,UCLA,1
+6,3,789090,UCLA,1
+6,3,98090,UCLA,1
+6,4,802010,UCLA,1
+6,1,804020,UCLA,1
+6,3,804090,UCLA,1
+6,6,808070,UCLA,1
+6,1,992020,UCLA,1
+6,3,992090,UCLA,1
+6,5,844100,UCLA,1
+6,5,820100,UCLA,1
+6,4,943010,UCLA,1
+6,4,925010,UCLA,1
+6,3,928090,UCLA,1
+6,7,923080,UCLA,1
+6,3,923090,UCLA,1
+6,4,636010,UCLA,1
+6,8,629110,UCLA,1
+6,2,623040,UCLA,1
+6,7,623080,UCLA,1
+6,5,616100,UCLA,1
+6,1,706020,UCLA,1
+6,8,639110,UCLA,1
+6,3,651090,UCLA,1
+6,8,716110,UCLA,1
+6,7,762080,UCLA,1
+6,1,767020,UCLA,1
+6,5,687100,UCLA,1
+6,2,698040,UCLA,1
+6,7,698080,UCLA,1
+6,2,67040,UCLA,1
+6,7,67080,UCLA,1
+6,2,662040,UCLA,1
+6,7,662080,UCLA,1
+6,6,730070,UCLA,1
+6,1,662020,UCLA,1
+6,4,639010,UCLA,1
+6,4,629010,UCLA,1
+6,1,651020,UCLA,1
+6,2,651040,UCLA,1
+6,7,651080,UCLA,1
+6,2,652040,UCLA,1
+6,8,711110,UCLA,1
+6,6,712070,UCLA,1
+6,4,716010,UCLA,1
+6,6,622070,UCLA,1
+6,5,622100,UCLA,1
+6,3,623090,UCLA,1
+6,5,808100,UCLA,1
+6,1,67020,UCLA,1
+6,6,687070,UCLA,1
+6,6,781070,UCLA,1
+6,2,804040,UCLA,1
+6,7,804080,UCLA,1
+6,2,762040,UCLA,1
+6,2,767040,UCLA,1
+6,3,767090,UCLA,1
+6,4,905010,UCLA,1
+6,8,877110,UCLA,1
+6,2,928040,UCLA,1
+6,7,928080,UCLA,1
+6,8,943110,UCLA,1
+6,6,949070,UCLA,1
+6,7,98080,UCLA,1
+6,6,970070,UCLA,1
+6,2,992040,UCLA,1
+6,7,982080,UCLA,1
+6,7,767080,UCLA,1
+6,5,750100,UCLA,1
+6,1,762020,UCLA,1
+6,3,762090,UCLA,1
+6,5,730100,UCLA,1
+6,4,711010,UCLA,1
+6,5,712100,UCLA,1
+6,5,86100,UCLA,1
+6,7,85080,UCLA,1
+6,6,844070,UCLA,1
+6,1,789020,UCLA,1
+6,2,789040,UCLA,1
+6,5,781100,UCLA,1
+6,8,802110,UCLA,1
+6,4,822010,UCLA,1
+6,8,822110,UCLA,1
+6,4,384010,UCLA,1
+6,8,384110,UCLA,1
+6,3,453090,UCLA,1
+6,2,467040,UCLA,1
+6,5,444100,UCLA,1
+6,2,426040,UCLA,1
+6,7,340080,UCLA,1
+6,3,340090,UCLA,1
+6,2,364040,UCLA,1
+6,1,36020,UCLA,1
+6,7,36080,UCLA,1
+6,1,319020,UCLA,1
+6,2,319040,UCLA,1
+6,4,335010,UCLA,1
+6,8,303110,UCLA,1
+6,6,262070,UCLA,1
+6,1,660020,UCLA,1
+6,7,660080,UCLA,1
+6,3,660090,UCLA,1
+6,3,67090,UCLA,1
+6,1,652020,UCLA,1
+6,3,652090,UCLA,1
+6,3,608090,UCLA,1
+6,4,609010,UCLA,1
+6,2,59040,UCLA,1
+6,3,59090,UCLA,1
+6,8,636110,UCLA,1
+6,6,616070,UCLA,1
+6,1,623020,UCLA,1
+6,3,504090,UCLA,1
+6,1,506020,UCLA,1
+6,7,514080,UCLA,1
+6,7,516080,UCLA,1
+6,4,49010,UCLA,1
+6,3,662090,UCLA,1
+6,1,514020,UCLA,1
+6,2,516040,UCLA,1
+6,2,504040,UCLA,1
+6,7,506080,UCLA,1
+6,6,526070,UCLA,1
+6,1,698020,UCLA,1
+6,5,546100,UCLA,1
+6,5,547100,UCLA,1
+6,6,546070,UCLA,1
+6,1,608020,UCLA,1
+6,8,609110,UCLA,1
+6,1,59020,UCLA,1
+6,7,59080,UCLA,1
+6,8,584110,UCLA,1
+6,2,453040,UCLA,1
+6,6,444070,UCLA,1
+6,7,464080,UCLA,1
+6,3,464090,UCLA,1
+6,3,467090,UCLA,1
+6,7,426080,UCLA,1
+6,4,590010,UCLA,1
+6,8,590110,UCLA,1
+6,4,584010,UCLA,1
+6,6,483070,UCLA,1
+6,5,483100,UCLA,1
+6,1,504020,UCLA,1
+6,2,608040,UCLA,1
+6,7,608080,UCLA,1
+6,1,516020,UCLA,1
+6,2,514040,UCLA,1
+6,8,49110,UCLA,1
+6,2,660040,UCLA,1
+6,7,652080,UCLA,1
+6,7,453080,UCLA,1
+6,7,467080,UCLA,1
+6,1,464020,UCLA,1
+6,7,399080,UCLA,1
+6,2,36040,UCLA,1
+6,6,361070,UCLA,1
+6,8,335110,UCLA,1
+6,2,340040,UCLA,1
+6,6,547070,UCLA,1
+6,5,526100,UCLA,1
+6,6,371070,UCLA,1
+6,5,371100,UCLA,1
+6,7,364080,UCLA,1
+6,5,256100,UCLA,1
+6,5,262100,UCLA,1
+6,1,467020,UCLA,1
+6,3,399090,UCLA,1
+6,3,364090,UCLA,1
+6,5,322100,UCLA,1
+6,3,319090,UCLA,1
+6,7,504080,UCLA,1
+6,2,506040,UCLA,1
+6,3,506090,UCLA,1
+6,4,496010,UCLA,1
+6,8,496110,UCLA,1
+6,3,514090,UCLA,1
+6,3,516090,UCLA,1
+6,5,1612100,UCLA,1
+6,2,1618040,UCLA,1
+6,7,1645080,UCLA,1
+6,3,1645090,UCLA,1
+6,8,1593110,UCLA,1
+6,1,364020,UCLA,1
+6,1,399020,UCLA,1
+6,2,399040,UCLA,1
+6,4,268010,UCLA,1
+6,8,268110,UCLA,1
+6,5,239100,UCLA,1
+6,3,36090,UCLA,1
+6,6,322070,UCLA,1
+6,1,453020,UCLA,1
+6,2,464040,UCLA,1
+6,5,361100,UCLA,1
+6,1,340020,UCLA,1
+6,5,220100,UCLA,1
+6,1,22020,UCLA,1
+6,5,235100,UCLA,1
+6,2,225040,UCLA,1
+6,7,225080,UCLA,1
+6,4,303010,UCLA,1
+6,6,200070,UCLA,1
+6,4,324010,UCLA,1
+6,8,324110,UCLA,1
+6,7,319080,UCLA,1
+6,1,426020,UCLA,1
+6,3,426090,UCLA,1
+6,5,155100,UCLA,1
+6,4,204010,UCLA,1
+6,4,1593010,UCLA,1
+6,7,177080,UCLA,1
+6,1,1542020,UCLA,1
+6,2,1542040,UCLA,1
+6,2,22040,UCLA,1
+6,4,182010,UCLA,1
+6,8,204110,UCLA,1
+6,6,197070,UCLA,1
+6,5,197100,UCLA,1
+6,6,256070,UCLA,1
+6,6,220070,UCLA,1
+6,5,200100,UCLA,1
+6,8,210110,UCLA,1
+6,1,225020,UCLA,1
+6,3,225090,UCLA,1
+6,5,18100,UCLA,1
+6,2,177040,UCLA,1
+6,3,177090,UCLA,1
+6,7,165080,UCLA,1
+6,1,1645020,UCLA,1
+6,2,1645040,UCLA,1
+6,1,163020,UCLA,1
+6,2,163040,UCLA,1
+6,8,171110,UCLA,1
+6,2,165040,UCLA,1
+6,3,163090,UCLA,1
+6,7,1618080,UCLA,1
+6,6,1612070,UCLA,1
+6,1,1618020,UCLA,1
+6,4,1530010,UCLA,1
+6,8,1530110,UCLA,1
+6,6,158070,UCLA,1
+6,5,158100,UCLA,1
+6,5,1515100,UCLA,1
+6,8,1207110,UCLA,1
+6,4,1207010,UCLA,1
+6,1,1218020,UCLA,1
+6,4,1188010,UCLA,1
+6,8,1194110,UCLA,1
+6,3,1195090,UCLA,1
+6,4,1194010,UCLA,1
+6,1,1195020,UCLA,1
+6,2,1195040,UCLA,1
+6,7,1195080,UCLA,1
+6,6,129070,UCLA,1
+6,7,1279080,UCLA,1
+6,5,1262100,UCLA,1
+6,2,1277040,UCLA,1
+6,4,123010,UCLA,1
+6,2,1168040,UCLA,1
+6,1,1255020,UCLA,1
+6,1,1243020,UCLA,1
+6,2,1240040,UCLA,1
+6,3,1240090,UCLA,1
+6,1,1241020,UCLA,1
+6,7,1241080,UCLA,1
+6,8,1146110,UCLA,1
+6,6,1141070,UCLA,1
+6,5,1141100,UCLA,1
+6,7,1162080,UCLA,1
+6,7,1168080,UCLA,1
+6,3,1168090,UCLA,1
+6,4,1146010,UCLA,1
+6,1,1213020,UCLA,1
+6,2,1213040,UCLA,1
+6,7,1213080,UCLA,1
+6,3,1213090,UCLA,1
+6,2,110040,UCLA,1
+6,2,1116040,UCLA,1
+6,1,1077020,UCLA,1
+6,8,1094110,UCLA,1
+6,4,1092010,UCLA,1
+6,2,1090040,UCLA,1
+6,7,1090080,UCLA,1
+6,1,1090020,UCLA,1
+6,3,1090090,UCLA,1
+6,2,1072040,UCLA,1
+6,7,1072080,UCLA,1
+6,3,1072090,UCLA,1
+6,6,1073070,UCLA,1
+6,1,1162020,UCLA,1
+6,2,1162040,UCLA,1
+6,3,1162090,UCLA,1
+6,8,1172110,UCLA,1
+6,8,1092110,UCLA,1
+6,3,1116090,UCLA,1
+6,4,1030010,UCLA,1
+6,8,1027110,UCLA,1
+6,7,1037080,UCLA,1
+6,2,1003040,UCLA,1
+6,5,1009100,UCLA,1
+6,1,1003020,UCLA,1
+6,7,1003080,UCLA,1
+6,3,1003090,UCLA,1
+6,4,1027010,UCLA,1
+6,6,1009070,UCLA,1
+6,1,1072020,UCLA,1
+6,2,1077040,UCLA,1
+6,3,1077090,UCLA,1
+6,4,1059010,UCLA,1
+6,8,1059110,UCLA,1
+6,4,1061010,UCLA,1
+6,8,1046110,UCLA,1
+6,8,1061110,UCLA,1
+6,8,1030110,UCLA,1
+6,5,1073100,UCLA,1
+6,4,1065010,UCLA,1
+6,8,1065110,UCLA,1
+6,6,1084070,UCLA,1
+6,1,1037020,UCLA,1
+6,2,1037040,UCLA,1
+6,3,1037090,UCLA,1
+6,7,1077080,UCLA,1
+6,4,1046010,UCLA,1
+6,1,110020,UCLA,1
+6,7,110080,UCLA,1
+6,3,110090,UCLA,1
+6,1,1116020,UCLA,1
+6,7,1116080,UCLA,1
+6,5,1084100,UCLA,1
+6,4,1094010,UCLA,1
+6,1,1362020,UCLA,1
+6,3,1362090,UCLA,1
+6,4,1365010,UCLA,1
+6,7,1355080,UCLA,1
+6,2,1355040,UCLA,1
+6,5,129100,UCLA,1
+6,4,1300010,UCLA,1
+6,1,1355020,UCLA,1
+6,3,1355090,UCLA,1
+6,6,1311070,UCLA,1
+6,5,1311100,UCLA,1
+6,4,1312010,UCLA,1
+6,4,1313010,UCLA,1
+6,8,1313110,UCLA,1
+6,8,1365110,UCLA,1
+6,8,1402110,UCLA,1
+6,4,1404010,UCLA,1
+6,7,1362080,UCLA,1
+6,2,1255040,UCLA,1
+6,7,1277080,UCLA,1
+6,4,1284010,UCLA,1
+6,8,1284110,UCLA,1
+6,6,1262070,UCLA,1
+6,2,1279040,UCLA,1
+6,8,1273110,UCLA,1
+6,7,1255080,UCLA,1
+6,3,1255090,UCLA,1
+6,6,1309070,UCLA,1
+6,8,1312110,UCLA,1
+6,2,1218040,UCLA,1
+6,7,1218080,UCLA,1
+6,3,1218090,UCLA,1
+6,1,1240020,UCLA,1
+6,2,1241040,UCLA,1
+6,3,1243090,UCLA,1
+6,7,1240080,UCLA,1
+6,2,1243040,UCLA,1
+6,7,1243080,UCLA,1
+6,3,1463090,UCLA,1
+6,5,1423100,UCLA,1
+6,3,1459090,UCLA,1
+6,8,1411110,UCLA,1
+6,6,1433070,UCLA,1
+6,4,1411010,UCLA,1
+6,8,1404110,UCLA,1
+6,4,1369010,UCLA,1
+6,7,1431080,UCLA,1
+6,3,1431090,UCLA,1
+6,6,1432070,UCLA,1
+6,5,1432100,UCLA,1
+6,2,1481040,UCLA,1
+6,3,1494090,UCLA,1
+6,6,149070,UCLA,1
+6,3,1481090,UCLA,1
+6,5,149100,UCLA,1
+6,7,1494080,UCLA,1
+6,7,1542080,UCLA,1
+6,3,1542090,UCLA,1
+6,4,1534010,UCLA,1
+6,8,1534110,UCLA,1
+6,1,1494020,UCLA,1
+6,2,1494040,UCLA,1
+6,6,155070,UCLA,1
+6,6,1515070,UCLA,1
+6R,1,1546020,LAX/Metro Transit Center,0
+6R,1,1539020,LAX/Metro Transit Center,0
+6R,2,1539040,LAX/Metro Transit Center,0
+6R,1,1562020,LAX/Metro Transit Center,0
+6R,2,1562040,LAX/Metro Transit Center,0
+6R,7,1491080,LAX/Metro Transit Center,0
+6R,1,1522020,LAX/Metro Transit Center,0
+6R,7,1546080,LAX/Metro Transit Center,0
+6R,3,1546090,LAX/Metro Transit Center,0
+6R,1,1491020,LAX/Metro Transit Center,0
+6R,3,1491090,LAX/Metro Transit Center,0
+6R,1,1500020,LAX/Metro Transit Center,0
+6R,3,1500090,LAX/Metro Transit Center,0
+6R,2,1471040,LAX/Metro Transit Center,0
+6R,3,1471090,LAX/Metro Transit Center,0
+6R,7,1468080,LAX/Metro Transit Center,0
+6R,3,1468090,LAX/Metro Transit Center,0
+6R,2,1500040,LAX/Metro Transit Center,0
+6R,7,1500080,LAX/Metro Transit Center,0
+6R,7,1415080,LAX/Metro Transit Center,0
+6R,3,1415090,LAX/Metro Transit Center,0
+6R,1,1421020,LAX/Metro Transit Center,0
+6R,2,1421040,LAX/Metro Transit Center,0
+6R,3,1438090,LAX/Metro Transit Center,0
+6R,1,1438020,LAX/Metro Transit Center,0
+6R,7,1438080,LAX/Metro Transit Center,0
+6R,1,1471020,LAX/Metro Transit Center,0
+6R,7,1471080,LAX/Metro Transit Center,0
+6R,1,1468020,LAX/Metro Transit Center,0
+6R,1,1251020,LAX/Metro Transit Center,0
+6R,3,1251090,LAX/Metro Transit Center,0
+6R,2,1259040,LAX/Metro Transit Center,0
+6R,7,1259080,LAX/Metro Transit Center,0
+6R,3,1259090,LAX/Metro Transit Center,0
+6R,7,1421080,LAX/Metro Transit Center,0
+6R,1,1415020,LAX/Metro Transit Center,0
+6R,2,1415040,LAX/Metro Transit Center,0
+6R,2,1356040,LAX/Metro Transit Center,0
+6R,2,136040,LAX/Metro Transit Center,0
+6R,7,136080,LAX/Metro Transit Center,0
+6R,3,136090,LAX/Metro Transit Center,0
+6R,2,1363040,LAX/Metro Transit Center,0
+6R,3,1363090,LAX/Metro Transit Center,0
+6R,1,136020,LAX/Metro Transit Center,0
+6R,7,1356080,LAX/Metro Transit Center,0
+6R,3,1356090,LAX/Metro Transit Center,0
+6R,3,1127090,LAX/Metro Transit Center,0
+6R,2,1127040,LAX/Metro Transit Center,0
+6R,7,1127080,LAX/Metro Transit Center,0
+6R,7,1043080,LAX/Metro Transit Center,0
+6R,1,1040020,LAX/Metro Transit Center,0
+6R,7,1079080,LAX/Metro Transit Center,0
+6R,3,1079090,LAX/Metro Transit Center,0
+6R,1,1043020,LAX/Metro Transit Center,0
+6R,1,1079020,LAX/Metro Transit Center,0
+6R,3,1043090,LAX/Metro Transit Center,0
+6R,1,101020,LAX/Metro Transit Center,0
+6R,2,101040,LAX/Metro Transit Center,0
+6R,7,101080,LAX/Metro Transit Center,0
+6R,2,1040040,LAX/Metro Transit Center,0
+6R,7,1040080,LAX/Metro Transit Center,0
+6R,3,101090,LAX/Metro Transit Center,0
+6R,3,1040090,LAX/Metro Transit Center,0
+6R,2,1043040,LAX/Metro Transit Center,0
+6R,1,1163020,LAX/Metro Transit Center,0
+6R,2,1079040,LAX/Metro Transit Center,0
+6R,1,1127020,LAX/Metro Transit Center,0
+6R,7,1205080,LAX/Metro Transit Center,0
+6R,3,1205090,LAX/Metro Transit Center,0
+6R,2,1192040,LAX/Metro Transit Center,0
+6R,2,1163040,LAX/Metro Transit Center,0
+6R,7,1163080,LAX/Metro Transit Center,0
+6R,2,1251040,LAX/Metro Transit Center,0
+6R,3,1192090,LAX/Metro Transit Center,0
+6R,7,1192080,LAX/Metro Transit Center,0
+6R,1,1205020,LAX/Metro Transit Center,0
+6R,2,1205040,LAX/Metro Transit Center,0
+6R,2,1522040,LAX/Metro Transit Center,0
+6R,2,1597040,LAX/Metro Transit Center,0
+6R,3,1597090,LAX/Metro Transit Center,0
+6R,3,1562090,LAX/Metro Transit Center,0
+6R,7,1597080,LAX/Metro Transit Center,0
+6R,3,191090,LAX/Metro Transit Center,0
+6R,7,206080,LAX/Metro Transit Center,0
+6R,1,191020,LAX/Metro Transit Center,0
+6R,2,191040,LAX/Metro Transit Center,0
+6R,7,191080,LAX/Metro Transit Center,0
+6R,1,315020,LAX/Metro Transit Center,0
+6R,3,315090,LAX/Metro Transit Center,0
+6R,1,206020,LAX/Metro Transit Center,0
+6R,2,206040,LAX/Metro Transit Center,0
+6R,3,206090,LAX/Metro Transit Center,0
+6R,7,351080,LAX/Metro Transit Center,0
+6R,1,454020,LAX/Metro Transit Center,0
+6R,1,351020,LAX/Metro Transit Center,0
+6R,2,351040,LAX/Metro Transit Center,0
+6R,3,351090,LAX/Metro Transit Center,0
+6R,1,368020,LAX/Metro Transit Center,0
+6R,3,368090,LAX/Metro Transit Center,0
+6R,1,1597020,LAX/Metro Transit Center,0
+6R,1,294020,LAX/Metro Transit Center,0
+6R,3,294090,LAX/Metro Transit Center,0
+6R,2,296040,LAX/Metro Transit Center,0
+6R,2,294040,LAX/Metro Transit Center,0
+6R,2,315040,LAX/Metro Transit Center,0
+6R,7,315080,LAX/Metro Transit Center,0
+6R,2,368040,LAX/Metro Transit Center,0
+6R,2,392040,LAX/Metro Transit Center,0
+6R,3,392090,LAX/Metro Transit Center,0
+6R,1,649020,LAX/Metro Transit Center,0
+6R,2,649040,LAX/Metro Transit Center,0
+6R,7,647080,LAX/Metro Transit Center,0
+6R,1,61020,LAX/Metro Transit Center,0
+6R,2,626040,LAX/Metro Transit Center,0
+6R,7,626080,LAX/Metro Transit Center,0
+6R,3,626090,LAX/Metro Transit Center,0
+6R,1,503020,LAX/Metro Transit Center,0
+6R,2,503040,LAX/Metro Transit Center,0
+6R,7,503080,LAX/Metro Transit Center,0
+6R,7,594080,LAX/Metro Transit Center,0
+6R,2,454040,LAX/Metro Transit Center,0
+6R,3,454090,LAX/Metro Transit Center,0
+6R,2,594040,LAX/Metro Transit Center,0
+6R,2,61040,LAX/Metro Transit Center,0
+6R,1,594020,LAX/Metro Transit Center,0
+6R,7,57080,LAX/Metro Transit Center,0
+6R,7,691080,LAX/Metro Transit Center,0
+6R,3,503090,LAX/Metro Transit Center,0
+6R,1,57020,LAX/Metro Transit Center,0
+6R,2,57040,LAX/Metro Transit Center,0
+6R,3,57090,LAX/Metro Transit Center,0
+6R,1,626020,LAX/Metro Transit Center,0
+6R,3,594090,LAX/Metro Transit Center,0
+6R,3,61090,LAX/Metro Transit Center,0
+6R,7,649080,LAX/Metro Transit Center,0
+6R,3,649090,LAX/Metro Transit Center,0
+6R,2,646040,LAX/Metro Transit Center,0
+6R,1,647020,LAX/Metro Transit Center,0
+6R,2,647040,LAX/Metro Transit Center,0
+6R,7,294080,LAX/Metro Transit Center,0
+6R,1,296020,LAX/Metro Transit Center,0
+6R,7,296080,LAX/Metro Transit Center,0
+6R,3,296090,LAX/Metro Transit Center,0
+6R,7,368080,LAX/Metro Transit Center,0
+6R,7,454080,LAX/Metro Transit Center,0
+6R,1,392020,LAX/Metro Transit Center,0
+6R,7,392080,LAX/Metro Transit Center,0
+6R,7,883080,LAX/Metro Transit Center,0
+6R,3,883090,LAX/Metro Transit Center,0
+6R,2,765040,LAX/Metro Transit Center,0
+6R,3,691090,LAX/Metro Transit Center,0
+6R,3,984090,LAX/Metro Transit Center,0
+6R,7,958080,LAX/Metro Transit Center,0
+6R,1,947020,LAX/Metro Transit Center,0
+6R,7,947080,LAX/Metro Transit Center,0
+6R,1,765020,LAX/Metro Transit Center,0
+6R,7,769080,LAX/Metro Transit Center,0
+6R,3,769090,LAX/Metro Transit Center,0
+6R,1,691020,LAX/Metro Transit Center,0
+6R,2,691040,LAX/Metro Transit Center,0
+6R,1,646020,LAX/Metro Transit Center,0
+6R,3,647090,LAX/Metro Transit Center,0
+6R,1,769020,LAX/Metro Transit Center,0
+6R,2,769040,LAX/Metro Transit Center,0
+6R,7,765080,LAX/Metro Transit Center,0
+6R,3,765090,LAX/Metro Transit Center,0
+6R,7,646080,LAX/Metro Transit Center,0
+6R,3,646090,LAX/Metro Transit Center,0
+6R,7,61080,LAX/Metro Transit Center,0
+6R,7,934080,LAX/Metro Transit Center,0
+6R,1,901020,LAX/Metro Transit Center,0
+6R,3,901090,LAX/Metro Transit Center,0
+6R,3,947090,LAX/Metro Transit Center,0
+6R,2,934040,LAX/Metro Transit Center,0
+6R,7,984080,LAX/Metro Transit Center,0
+6R,1,830020,LAX/Metro Transit Center,0
+6R,2,830040,LAX/Metro Transit Center,0
+6R,7,830080,LAX/Metro Transit Center,0
+6R,3,830090,LAX/Metro Transit Center,0
+6R,1,883020,LAX/Metro Transit Center,0
+6R,2,883040,LAX/Metro Transit Center,0
+6R,2,1491040,LAX/Metro Transit Center,0
+6R,7,1522080,LAX/Metro Transit Center,0
+6R,3,1522090,LAX/Metro Transit Center,0
+6R,2,1468040,LAX/Metro Transit Center,0
+6R,2,1438040,LAX/Metro Transit Center,0
+6R,1,1363020,LAX/Metro Transit Center,0
+6R,7,1363080,LAX/Metro Transit Center,0
+6R,1,1356020,LAX/Metro Transit Center,0
+6R,3,1421090,LAX/Metro Transit Center,0
+6R,7,1539080,LAX/Metro Transit Center,0
+6R,3,1539090,LAX/Metro Transit Center,0
+6R,2,1546040,LAX/Metro Transit Center,0
+6R,7,1562080,LAX/Metro Transit Center,0
+6R,3,1163090,LAX/Metro Transit Center,0
+6R,1,1192020,LAX/Metro Transit Center,0
+6R,7,1251080,LAX/Metro Transit Center,0
+6R,1,1259020,LAX/Metro Transit Center,0
+6R,2,958040,LAX/Metro Transit Center,0
+6R,1,984020,LAX/Metro Transit Center,0
+6R,2,984040,LAX/Metro Transit Center,0
+6R,1,958020,LAX/Metro Transit Center,0
+6R,3,958090,LAX/Metro Transit Center,0
+6R,2,947040,LAX/Metro Transit Center,0
+6R,1,934020,LAX/Metro Transit Center,0
+6R,3,934090,LAX/Metro Transit Center,0
+6R,2,901040,LAX/Metro Transit Center,0
+6R,7,901080,LAX/Metro Transit Center,0
+6R,7,930080,UCLA,1
+6R,7,937080,UCLA,1
+6R,7,955080,UCLA,1
+6R,7,961080,UCLA,1
+6R,7,985080,UCLA,1
+6R,1,955020,UCLA,1
+6R,2,122040,UCLA,1
+6R,3,1219090,UCLA,1
+6R,2,1304040,UCLA,1
+6R,3,1304090,UCLA,1
+6R,1,128020,UCLA,1
+6R,2,128040,UCLA,1
+6R,7,128080,UCLA,1
+6R,3,128090,UCLA,1
+6R,2,1283040,UCLA,1
+6R,7,1283080,UCLA,1
+6R,3,117090,UCLA,1
+6R,2,1179040,UCLA,1
+6R,7,1179080,UCLA,1
+6R,1,1182020,UCLA,1
+6R,2,1182040,UCLA,1
+6R,1,1183020,UCLA,1
+6R,3,1183090,UCLA,1
+6R,2,1153040,UCLA,1
+6R,2,1150040,UCLA,1
+6R,2,1633040,UCLA,1
+6R,2,178040,UCLA,1
+6R,7,1370080,UCLA,1
+6R,2,1351040,UCLA,1
+6R,3,1351090,UCLA,1
+6R,2,1339040,UCLA,1
+6R,3,133090,UCLA,1
+6R,7,1476080,UCLA,1
+6R,1,1478020,UCLA,1
+6R,2,1478040,UCLA,1
+6R,7,1478080,UCLA,1
+6R,3,1502090,UCLA,1
+6R,1,873020,UCLA,1
+6R,7,873080,UCLA,1
+6R,3,873090,UCLA,1
+6R,1,864020,UCLA,1
+6R,3,864090,UCLA,1
+6R,3,754090,UCLA,1
+6R,3,828090,UCLA,1
+6R,7,828080,UCLA,1
+6R,3,807090,UCLA,1
+6R,1,985020,UCLA,1
+6R,2,985040,UCLA,1
+6R,1,799020,UCLA,1
+6R,7,799080,UCLA,1
+6R,2,955040,UCLA,1
+6R,1,961020,UCLA,1
+6R,3,961090,UCLA,1
+6R,2,930040,UCLA,1
+6R,1,937020,UCLA,1
+6R,2,937040,UCLA,1
+6R,1,930020,UCLA,1
+6R,3,930090,UCLA,1
+6R,1,754020,UCLA,1
+6R,2,754040,UCLA,1
+6R,7,754080,UCLA,1
+6R,1,694020,UCLA,1
+6R,2,694040,UCLA,1
+6R,7,694080,UCLA,1
+6R,3,694090,UCLA,1
+6R,1,784020,UCLA,1
+6R,2,784040,UCLA,1
+6R,7,784080,UCLA,1
+6R,7,807080,UCLA,1
+6R,3,784090,UCLA,1
+6R,3,799090,UCLA,1
+6R,2,961040,UCLA,1
+6R,3,985090,UCLA,1
+6R,3,955090,UCLA,1
+6R,3,937090,UCLA,1
+6R,2,864040,UCLA,1
+6R,7,864080,UCLA,1
+6R,2,873040,UCLA,1
+6R,1,828020,UCLA,1
+6R,2,828040,UCLA,1
+6R,1,807020,UCLA,1
+6R,2,807040,UCLA,1
+6R,2,799040,UCLA,1
+6R,1,39020,UCLA,1
+6R,2,39040,UCLA,1
+6R,1,412020,UCLA,1
+6R,1,37020,UCLA,1
+6R,3,37090,UCLA,1
+6R,2,275040,UCLA,1
+6R,7,275080,UCLA,1
+6R,1,6020,UCLA,1
+6R,7,6080,UCLA,1
+6R,2,6040,UCLA,1
+6R,7,489080,UCLA,1
+6R,2,490040,UCLA,1
+6R,1,490020,UCLA,1
+6R,3,490090,UCLA,1
+6R,3,6090,UCLA,1
+6R,1,624020,UCLA,1
+6R,2,624040,UCLA,1
+6R,7,624080,UCLA,1
+6R,3,624090,UCLA,1
+6R,3,489090,UCLA,1
+6R,7,490080,UCLA,1
+6R,1,405020,UCLA,1
+6R,2,405040,UCLA,1
+6R,2,489040,UCLA,1
+6R,3,405090,UCLA,1
+6R,2,412040,UCLA,1
+6R,3,412090,UCLA,1
+6R,7,435080,UCLA,1
+6R,3,435090,UCLA,1
+6R,7,39080,UCLA,1
+6R,3,39090,UCLA,1
+6R,7,412080,UCLA,1
+6R,1,489020,UCLA,1
+6R,2,37040,UCLA,1
+6R,7,37080,UCLA,1
+6R,2,24040,UCLA,1
+6R,1,24020,UCLA,1
+6R,2,181040,UCLA,1
+6R,3,181090,UCLA,1
+6R,7,405080,UCLA,1
+6R,1,435020,UCLA,1
+6R,2,435040,UCLA,1
+6R,1,178020,UCLA,1
+6R,7,178080,UCLA,1
+6R,3,178090,UCLA,1
+6R,2,205040,UCLA,1
+6R,7,205080,UCLA,1
+6R,1,1537020,UCLA,1
+6R,1,205020,UCLA,1
+6R,3,205090,UCLA,1
+6R,1,275020,UCLA,1
+6R,3,275090,UCLA,1
+6R,7,24080,UCLA,1
+6R,3,24090,UCLA,1
+6R,1,1633020,UCLA,1
+6R,7,1633080,UCLA,1
+6R,3,1633090,UCLA,1
+6R,1,181020,UCLA,1
+6R,7,181080,UCLA,1
+6R,2,1524040,UCLA,1
+6R,7,1524080,UCLA,1
+6R,2,1183040,UCLA,1
+6R,7,1183080,UCLA,1
+6R,3,1179090,UCLA,1
+6R,3,1283090,UCLA,1
+6R,1,122020,UCLA,1
+6R,3,122090,UCLA,1
+6R,1,1219020,UCLA,1
+6R,2,1219040,UCLA,1
+6R,2,117040,UCLA,1
+6R,7,117080,UCLA,1
+6R,7,1153080,UCLA,1
+6R,3,1153090,UCLA,1
+6R,7,1150080,UCLA,1
+6R,1,117020,UCLA,1
+6R,1,1179020,UCLA,1
+6R,7,1182080,UCLA,1
+6R,3,1182090,UCLA,1
+6R,1,1112020,UCLA,1
+6R,2,1112040,UCLA,1
+6R,3,1112090,UCLA,1
+6R,1,1153020,UCLA,1
+6R,1,1150020,UCLA,1
+6R,3,1150090,UCLA,1
+6R,2,1022040,UCLA,1
+6R,1,1016020,UCLA,1
+6R,1,1034020,UCLA,1
+6R,7,1034080,UCLA,1
+6R,2,1016040,UCLA,1
+6R,7,1016080,UCLA,1
+6R,1,1022020,UCLA,1
+6R,7,1022080,UCLA,1
+6R,3,1022090,UCLA,1
+6R,3,1034090,UCLA,1
+6R,3,1016090,UCLA,1
+6R,2,1034040,UCLA,1
+6R,7,1112080,UCLA,1
+6R,7,1351080,UCLA,1
+6R,1,1370020,UCLA,1
+6R,3,1370090,UCLA,1
+6R,2,1370040,UCLA,1
+6R,2,1319040,UCLA,1
+6R,3,1319090,UCLA,1
+6R,1,1304020,UCLA,1
+6R,2,133040,UCLA,1
+6R,7,133080,UCLA,1
+6R,1,1351020,UCLA,1
+6R,1,1339020,UCLA,1
+6R,1,133020,UCLA,1
+6R,1,1283020,UCLA,1
+6R,7,1304080,UCLA,1
+6R,7,1319080,UCLA,1
+6R,1,1319020,UCLA,1
+6R,7,1339080,UCLA,1
+6R,3,1339090,UCLA,1
+6R,7,122080,UCLA,1
+6R,7,1219080,UCLA,1
+6R,1,1476020,UCLA,1
+6R,2,1476040,UCLA,1
+6R,3,1476090,UCLA,1
+6R,1,1498020,UCLA,1
+6R,2,1502040,UCLA,1
+6R,7,1502080,UCLA,1
+6R,3,1478090,UCLA,1
+6R,2,1498040,UCLA,1
+6R,7,1498080,UCLA,1
+6R,3,1498090,UCLA,1
+6R,7,1537080,UCLA,1
+6R,3,1537090,UCLA,1
+6R,1,1524020,UCLA,1
+6R,3,1524090,UCLA,1
+6R,1,1502020,UCLA,1
+6R,2,1537040,UCLA,1
+7,1,1437020,Marina del Rey,0
+7,2,1437040,Marina del Rey,0
+7,7,1437080,Marina del Rey,0
+7,3,1232090,Marina del Rey,0
+7,7,1357080,Marina del Rey,0
+7,3,1357090,Marina del Rey,0
+7,1,130020,Marina del Rey,0
+7,7,130080,Marina del Rey,0
+7,3,130090,Marina del Rey,0
+7,1,1357020,Marina del Rey,0
+7,2,1357040,Marina del Rey,0
+7,1,1062020,Marina del Rey,0
+7,7,1062080,Marina del Rey,0
+7,2,1062040,Marina del Rey,0
+7,3,1005090,Marina del Rey,0
+7,3,1062090,Marina del Rey,0
+7,2,1005040,Marina del Rey,0
+7,7,1005080,Marina del Rey,0
+7,1,1015020,Marina del Rey,0
+7,1,1005020,Marina del Rey,0
+7,2,1015040,Marina del Rey,0
+7,7,1015080,Marina del Rey,0
+7,3,1015090,Marina del Rey,0
+7,1,1232020,Marina del Rey,0
+7,3,1295090,Marina del Rey,0
+7,2,130040,Marina del Rey,0
+7,2,411040,Marina del Rey,0
+7,7,411080,Marina del Rey,0
+7,1,403020,Marina del Rey,0
+7,2,318040,Marina del Rey,0
+7,1,325020,Marina del Rey,0
+7,3,325090,Marina del Rey,0
+7,7,318080,Marina del Rey,0
+7,2,325040,Marina del Rey,0
+7,1,411020,Marina del Rey,0
+7,2,403040,Marina del Rey,0
+7,3,411090,Marina del Rey,0
+7,7,403080,Marina del Rey,0
+7,3,610090,Marina del Rey,0
+7,2,610040,Marina del Rey,0
+7,2,597040,Marina del Rey,0
+7,1,597020,Marina del Rey,0
+7,3,597090,Marina del Rey,0
+7,1,318020,Marina del Rey,0
+7,3,318090,Marina del Rey,0
+7,7,325080,Marina del Rey,0
+7,3,403090,Marina del Rey,0
+7,7,906080,Marina del Rey,0
+7,7,887080,Marina del Rey,0
+7,7,597080,Marina del Rey,0
+7,1,610020,Marina del Rey,0
+7,7,610080,Marina del Rey,0
+7,1,906020,Marina del Rey,0
+7,3,906090,Marina del Rey,0
+7,2,906040,Marina del Rey,0
+7,2,989040,Marina del Rey,0
+7,7,989080,Marina del Rey,0
+7,1,887020,Marina del Rey,0
+7,2,887040,Marina del Rey,0
+7,3,887090,Marina del Rey,0
+7,3,1437090,Marina del Rey,0
+7,1,1295020,Marina del Rey,0
+7,2,1295040,Marina del Rey,0
+7,7,1295080,Marina del Rey,0
+7,2,1232040,Marina del Rey,0
+7,7,1232080,Marina del Rey,0
+7,1,989020,Marina del Rey,0
+7,3,989090,Marina del Rey,0
+7,3,1480090,Culver City Station,1
+7,1,1490020,Culver City Station,1
+7,1,1331020,Culver City Station,1
+7,2,1331040,Culver City Station,1
+7,7,1331080,Culver City Station,1
+7,3,240090,Culver City Station,1
+7,1,1547020,Culver City Station,1
+7,2,1547040,Culver City Station,1
+7,3,829090,Culver City Station,1
+7,1,818020,Culver City Station,1
+7,2,818040,Culver City Station,1
+7,7,818080,Culver City Station,1
+7,1,829020,Culver City Station,1
+7,2,829040,Culver City Station,1
+7,7,829080,Culver City Station,1
+7,7,787080,Culver City Station,1
+7,1,655020,Culver City Station,1
+7,7,655080,Culver City Station,1
+7,2,728040,Culver City Station,1
+7,1,7020,Culver City Station,1
+7,7,669080,Culver City Station,1
+7,1,787020,Culver City Station,1
+7,3,787090,Culver City Station,1
+7,1,669020,Culver City Station,1
+7,2,669040,Culver City Station,1
+7,7,7080,Culver City Station,1
+7,2,7040,Culver City Station,1
+7,2,787040,Culver City Station,1
+7,3,818090,Culver City Station,1
+7,3,7090,Culver City Station,1
+7,1,728020,Culver City Station,1
+7,7,728080,Culver City Station,1
+7,3,728090,Culver City Station,1
+7,3,33090,Culver City Station,1
+7,3,346090,Culver City Station,1
+7,1,357020,Culver City Station,1
+7,2,357040,Culver City Station,1
+7,3,655090,Culver City Station,1
+7,7,487080,Culver City Station,1
+7,3,669090,Culver City Station,1
+7,2,655040,Culver City Station,1
+7,2,487040,Culver City Station,1
+7,1,487020,Culver City Station,1
+7,7,357080,Culver City Station,1
+7,3,487090,Culver City Station,1
+7,1,33020,Culver City Station,1
+7,7,33080,Culver City Station,1
+7,2,240040,Culver City Station,1
+7,3,357090,Culver City Station,1
+7,2,346040,Culver City Station,1
+7,2,33040,Culver City Station,1
+7,1,346020,Culver City Station,1
+7,7,346080,Culver City Station,1
+7,1,240020,Culver City Station,1
+7,7,240080,Culver City Station,1
+7,7,1547080,Culver City Station,1
+7,2,1252040,Culver City Station,1
+7,2,1068040,Culver City Station,1
+7,1,1068020,Culver City Station,1
+7,7,1068080,Culver City Station,1
+7,3,1068090,Culver City Station,1
+7,3,1331090,Culver City Station,1
+7,7,1252080,Culver City Station,1
+7,1,1252020,Culver City Station,1
+7,3,1252090,Culver City Station,1
+7,3,1547090,Culver City Station,1
+7,2,1490040,Culver City Station,1
+7,7,1480080,Culver City Station,1
+7,2,1480040,Culver City Station,1
+7,7,1490080,Culver City Station,1
+7,3,1490090,Culver City Station,1
+7,1,1480020,Culver City Station,1

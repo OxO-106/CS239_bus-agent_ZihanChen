@@ -1,0 +1,666 @@
+stop_id,stop_name,stop_lat,stop_lon
+55,Adams / Fairfax,  34.032361,-118.370491
+57,California Yacht Club,  33.983634,-118.445893
+59,Admiralty / Marina City,  33.985213,-118.452716
+60,Admiralty / Bali,  33.981822,-118.441618
+62,Admiralty / Palawan,  33.983291,-118.457410
+496,Buckingham / Hannum,  33.987356,-118.382336
+497,Buckingham / Slauson,  33.988749,-118.380481
+498,Buckingham / Sumner,  33.984199,-118.383967
+533,Burton / Foothill,  34.071962,-118.396244
+535,Burton / Doheny,  34.071977,-118.389898
+537,Burton / La Peer,  34.071992,-118.386896
+538,Burton / Palm,  34.071972,-118.392398
+539,Burton / Rexford,  34.071938,-118.398552
+553,Santa Monica / Crescent,  34.072897,-118.401651
+614,Centinela / Acacia,  33.976684,-118.364252
+615,Centinela / Sherbourne,  33.976327,-118.381830
+616,Centinela / Braddock,  33.989352,-118.419015
+618,Centinela / Green Valley,  33.976912,-118.386348
+620,Centinela / Lucille,  33.983058,-118.411400
+621,Centinela / Marina Fwy,  33.985111,-118.413795
+622,Centinela / Beach,  33.976920,-118.367020
+623,Centinela / Inglewood,  33.976453,-118.361490
+705,Church / Farlin,  34.068141,-118.463081
+706,Church / Homedale,  34.069308,-118.464094
+707,Church / Joffre,  34.070529,-118.465234
+967,Obama / Hauser,  34.021449,-118.366059
+1285,Wilshire / Westwood,  34.058801,-118.443378
+1296,Santa Monica / Canon,  34.072617,-118.402531
+1297,Santa Monica / Wilshire,  34.066771,-118.411082
+1298,Nebraska / Sepulveda,  34.045729,-118.443320
+1427,San Vicente / Beverly,  34.076047,-118.379419
+1428,San Vicente / Gracie Allen,  34.074900,-118.378767
+1438,Fairfax / Venice,  34.040041,-118.369938
+1629,La Cienega Station Terminal,  34.026183,-118.370916
+1728,Beverly / Whitworth,  34.056730,-118.396248
+1780,Fairfax / 3rd,  34.071224,-118.361616
+1858,Fairfax / Adams,  34.032632,-118.370832
+1859,Fairfax / Willoughby,  34.087509,-118.361293
+1918,Washington / Exposition Sta Dwy,  34.027782,-118.387510
+1959,Robertson / Venice,  34.027547,-118.389833
+2123,Venice / Culver City Station,  34.028593,-118.389224
+2160,Wilshire / La Jolla,  34.063588,-118.367971
+2161,Wilshire / Crescent Heights,  34.063245,-118.364962
+2189,Gayley / Landfair,  34.065811,-118.447800
+2190,Gayley / Landfair,  34.070368,-118.453299
+2191,Gayley / Strathmore,  34.068274,-118.448910
+2192,San Vicente / Melrose,  34.082049,-118.383647
+2264,Wilshire / La Jolla,  34.063921,-118.368584
+2441,Hilgard / Charing Cross,  34.077648,-118.438891
+2442,Hilgard / Le Conte,  34.064259,-118.440904
+2443,Hilgard / Manning,  34.066476,-118.439579
+2452,Hilgard / Wyton,  34.074390,-118.437923
+2500,Admiralty / Palawan,  33.983193,-118.457950
+2702,Jefferson / McConnell,  33.977052,-118.419217
+2703,Jefferson / Westlawn,  33.979171,-118.413670
+2704,Jefferson / Campus Center,  33.981331,-118.408779
+2705,Jefferson / Mesmer,  33.986181,-118.401304
+2706,Jefferson / Slauson,  33.988717,-118.397358
+2709,Slauson / La Tijera,  33.987725,-118.365025
+2752,Sepulveda / Pico,  34.036557,-118.434949
+2753,Sepulveda / Pico,  34.037380,-118.435257
+2755,Fairfax / Adams,  34.032121,-118.371068
+2783,La Tijera / Centinela,  33.977710,-118.371133
+2785,La Tijera / 59th,  33.985784,-118.364657
+2786,La Tijera / 62nd,  33.984054,-118.365926
+2936,Le Conte / Gayley,  34.063582,-118.447907
+2937,Le Conte / Hilgard,  34.064136,-118.441422
+2938,Le Conte / Tiverton,  34.063664,-118.442602
+2939,Le Conte / Westwood,  34.063623,-118.445005
+2953,Expo / Sepulveda Station,  34.034975,-118.436030
+3105,Main / Brooks,  33.992157,-118.474115
+3116,Main / Ocean Park,  34.002091,-118.483828
+3119,Main / Sunset,  33.994287,-118.476264
+3123,Main / Venice,  33.987463,-118.470849
+3206,Melrose / Huntley,  34.081861,-118.380525
+3209,Melrose / Crescent Heights,  34.083634,-118.366042
+3211,Melrose / Harper,  34.083583,-118.369225
+3216,Melrose / La Cienega,  34.081832,-118.376678
+3224,Melrose / Orlando,  34.083279,-118.373421
+3239,Century Park West / Santa Monica,  34.059077,-118.421112
+3247,Mindanao / Marina,  33.983086,-118.437864
+3248,Mindanao / Lincoln,  33.980670,-118.438742
+3249,Mindanao / Admiralty,  33.979903,-118.439715
+3250,Mindanao / Alla,  33.987878,-118.433364
+3251,Mindanao / Glencoe,  33.985372,-118.437220
+3275,Montana / Veteran,  34.070268,-118.455178
+3277,Montana / Bentley,  34.068997,-118.459747
+3278,Montana / Sepulveda,  34.067435,-118.460914
+3287,Centinela / La Tijera,  33.977189,-118.372115
+3404,Century City Terminal,  34.062083,-118.417161
+3491,Fairfax / Beverly,  34.076350,-118.361298
+3494,Fairfax / Melrose,  34.083640,-118.361289
+3495,Fairfax / Oakwood,  34.078493,-118.361277
+3496,Fairfax / Rosewood,  34.080458,-118.361289
+3498,Fairfax / 1st,  34.074176,-118.361262
+3565,Wilshire / Veteran,  34.057777,-118.448300
+3653,La Cienega / Beverly,  34.076345,-118.376448
+3654,La Cienega / Colgate,  34.070582,-118.376528
+3655,La Cienega / Melrose,  34.081808,-118.376371
+3656,La Cienega / Rosewood,  34.080063,-118.376396
+3657,La Cienega / Santa Monica,  34.089203,-118.376192
+3658,La Cienega / Waring,  34.085196,-118.376323
+3843,Robertson / Clifton,  34.069543,-118.383583
+3902,San Vicente / Santa Monica,  34.085273,-118.384174
+4006,National / Venice,  34.029728,-118.388401
+4123,Olympic / Century Park East,  34.058520,-118.411658
+4127,Olympic / Doheny,  34.059266,-118.389571
+4128,Olympic / La Peer,  34.059265,-118.386481
+4130,Olympic / Rexford,  34.059270,-118.393629
+4131,Olympic / Roxbury,  34.059636,-118.405787
+4132,Olympic / Spalding,  34.059592,-118.408412
+4424,Beverly / Dayton,  34.068832,-118.400620
+4459,Beverly / Brighton,  34.070073,-118.402247
+4514,Robertson / Pico,  34.055051,-118.383546
+4518,Obama / Cloverdale,  34.021679,-118.360636
+4523,Obama / Hauser,  34.021707,-118.366188
+4526,Obama / La Cienega,  34.021827,-118.372102
+4613,Century Park West / Solar,  34.055544,-118.418064
+4726,Beverly / Charleville,  34.064869,-118.398932
+4727,Beverly / Gregory,  34.062096,-118.398951
+4728,Beverly / Olympic,  34.059946,-118.398647
+4729,Beverly / Pico,  34.055551,-118.395450
+4731,Pico / Beverwil,  34.054900,-118.398792
+4840,Centinela / Culver,  33.990971,-118.420603
+4962,Fairfax / Airdrome,  34.045468,-118.368007
+4966,Fairfax / Drexel,  34.068109,-118.361236
+4969,Fairfax / San Vicente,  34.059052,-118.363217
+4970,Fairfax / Saturn,  34.049514,-118.366863
+4972,Fairfax / 18th,  34.042948,-118.369095
+4973,Fairfax / 3rd,  34.071824,-118.361255
+4974,Fairfax / 6th,  34.064760,-118.361214
+4975,Fairfax / 8th,  34.061253,-118.362111
+4976,Fairfax / Adams,  34.032801,-118.370437
+4977,Fairfax / Pico,  34.051664,-118.366499
+4978,Fairfax / Whitworth,  34.055612,-118.364840
+4979,Fairfax / Wilshire,  34.063592,-118.361206
+5175,Westwood / Santa Monica,  34.050273,-118.437611
+5208,Westwood / Wilshire,  34.058410,-118.443780
+5210,La Cienega / Airdrome,  34.046936,-118.376026
+5211,La Cienega / Cashio,  34.050552,-118.375992
+5212,La Cienega / Clemson,  34.024050,-118.372055
+5213,La Cienega / Gregory,  34.062478,-118.375970
+5214,La Cienega / Guthrie,  34.040198,-118.376857
+5216,La Cienega / 4th,  34.071897,-118.376270
+5217,La Cienega / Sawyer,  34.042393,-118.376276
+5218,La Cienega / 18th,  34.044348,-118.376661
+5220,La Cienega / San Vicente,  34.070314,-118.376210
+5221,La Cienega / Jefferson,  34.026993,-118.371900
+5222,Jefferson / La Cienega,  34.026414,-118.371577
+5223,La Cienega / Olympic,  34.059744,-118.376001
+5224,La Cienega / Pico,  34.053621,-118.375999
+5225,La Cienega / Whitworth,  34.056864,-118.375997
+5228,La Tijera / Fairview,  33.980024,-118.369283
+5427,Robertson / Airdrome,  34.048695,-118.385396
+5428,Robertson / Beverlywood,  34.038128,-118.388278
+5429,Robertson / Burton,  34.071859,-118.383904
+5430,Robertson / Cadillac,  34.040980,-118.387506
+5431,Robertson / Cashio,  34.052074,-118.383942
+5432,Robertson / Cattaraugus,  34.034696,-118.389193
+5434,Robertson / Gregory,  34.062812,-118.383374
+5435,Robertson / Kincardine,  34.033448,-118.389494
+5437,Robertson / Sawyer,  34.044732,-118.386486
+5438,Robertson / 18th,  34.046616,-118.385967
+5439,Robertson / 24th,  34.039525,-118.387902
+5441,Robertson / Olympic,  34.059660,-118.383449
+5442,Robertson / Whitworth,  34.057376,-118.383498
+5472,National / Venice,  34.029513,-118.388542
+5509,Jefferson / Beethoven,  33.975923,-118.421153
+5511,La Cienega / Wilshire,  34.065422,-118.376360
+5628,Venice / Abbot Kinney,  33.988796,-118.462338
+5629,Venice / Lincoln,  33.994038,-118.452263
+5630,Venice / Washington,  33.987526,-118.464525
+5771,Wilshire / 23rd,  34.033341,-118.480987
+5772,Wilshire / 23rd,  34.033441,-118.480415
+5886,San Vicente / Cynthia,  34.086964,-118.385509
+5895,Sepulveda / Exposition,  34.035730,-118.434430
+5898,San Vicente / Gracie Allen,  34.074827,-118.378390
+5909,San Vicente / Carrillo Layover,  34.061077,-118.367703
+5917,Santa Monica / Avenue Of The Stars,  34.061540,-118.417966
+5918,Santa Monica / Century Park East,  34.063159,-118.415600
+5936,Wilshire / Whittier,  34.066968,-118.414471
+5977,Santa Monica / 20th,  34.028798,-118.479672
+5979,Santa Monica / 26th,  34.033139,-118.474330
+5985,Santa Monica / Crescent,  34.073160,-118.401266
+5991,Santa Monica / Corinth,  34.046019,-118.449668
+5996,Kinross / Gayley,  34.060133,-118.446807
+6004,Santa Monica / Beverly,  34.076987,-118.395700
+6006,Santa Monica / Camden,  34.070097,-118.405742
+6012,Santa Monica / Doheny,  34.080956,-118.389398
+6024,Santa Monica / La Peer,  34.082797,-118.386722
+6037,Santa Monica / Overland,  34.051273,-118.432985
+6039,Santa Monica / Barrington,  34.043754,-118.455783
+6040,Santa Monica / Beverly Glen,  34.057689,-118.423718
+6041,Santa Monica / Bundy,  34.040566,-118.463037
+6042,Sepulveda / Santa Monica,  34.047254,-118.444179
+6045,Santa Monica / San Vicente,  34.084954,-118.384397
+6048,Santa Monica / Thayer,  34.055820,-118.426429
+6049,Santa Monica / Veteran,  34.048733,-118.440212
+6050,Santa Monica / Wilshire,  34.066822,-118.410488
+6053,Santa Monica / Century Park West,  34.059147,-118.420913
+6055,Santa Monica / Westbourne,  34.087544,-118.379455
+6057,Santa Monica / Westholme,  34.053986,-118.429091
+6058,Santa Monica / Westwood,  34.049866,-118.436223
+6063,Wilshire / Santa Monica,  34.066966,-118.411211
+6144,Sepulveda / Getty Center,  34.088963,-118.474713
+6149,Wilshire / Bonsall,  34.054560,-118.455505
+6200,Sepulveda / Federal Building Roadway,  34.052370,-118.448077
+6243,Short / Centinela,  33.992739,-118.423455
+6244,Short / Mascagni,  33.990624,-118.427733
+6319,Wilshire / La Cienega,  34.065290,-118.375998
+6400,Sunset / Bel Air,  34.081239,-118.435300
+6402,Sunset / Rodeo,  34.079881,-118.414247
+6403,Sunset / Charing Cross,  34.079375,-118.430126
+6404,Sunset / Copley,  34.077629,-118.422036
+6413,Sunset / Alpine,  34.085066,-118.407971
+6414,Sunset / Alta,  34.088407,-118.395573
+6415,Sunset / Bedford,  34.078311,-118.417119
+6420,Sunset / Foothill,  34.086515,-118.406109
+6422,Sunset / Hillcrest,  34.087332,-118.398398
+6423,Sunset / Maple,  34.086417,-118.402565
+6425,Sunset / Rexford,  34.082943,-118.410131
+6430,Sunset / Beverly Glen,  34.080565,-118.435482
+6431,Sunset / Carolwood,  34.080699,-118.426361
+6434,Sunset / Whittier,  34.077034,-118.420045
+6901,Venice / Cattaraugus,  34.032672,-118.382018
+6902,Venice / Culver,  34.026592,-118.392815
+6907,Venice High School,  33.998080,-118.444231
+6909,Venice / Grand View,  33.992336,-118.455618
+6914,Venice / Bagley,  34.025407,-118.394770
+6915,Venice / Beethoven,  33.999735,-118.440980
+6918,Venice / Cadillac,  34.037529,-118.373452
+6923,Venice / Girard,  34.016445,-118.410557
+6925,Venice / Grand View,  34.004866,-118.430980
+6927,Venice / Helms,  34.030909,-118.385112
+6928,Venice / Hughes,  34.023115,-118.398775
+6930,Venice / Inglewood,  34.005983,-118.428930
+6931,Venice / Jasmine,  34.021595,-118.401445
+6933,Venice / McLaughlin,  34.008428,-118.424617
+6935,Venice / Motor,  34.020349,-118.403643
+6939,Venice / Overland,  34.018632,-118.406664
+6942,Venice / Centinela,  34.003466,-118.433579
+6946,Venice / Fairfax,  34.039878,-118.369310
+6951,Venice / La Cienega,  34.035103,-118.377702
+6964,Venice / Sawtelle,  34.011386,-118.419468
+6965,Venice / Sepulveda,  34.012901,-118.416793
+6966,Venice / Thurman,  34.042588,-118.364390
+6969,Venice / Wade,  34.001379,-118.437732
+6970,Venice / Walgrove,  33.997144,-118.446100
+7268,3rd / La Cienega,  34.073299,-118.376702
+7277,3rd / Crescent Heights,  34.072035,-118.366011
+7278,3rd / Fairfax,  34.071380,-118.361108
+7293,3rd / Orlando,  34.072861,-118.372833
+7296,3rd / Robertson,  34.073484,-118.383419
+7299,3rd / Sweetzer,  34.072516,-118.369705
+7461,Adams / Hauser,  34.032399,-118.362781
+7481,Adams / Thurman,  34.032377,-118.368098
+7541,Centinela / Alvern,  33.976946,-118.376476
+7686,Green Valley / Bristol,  33.983568,-118.391165
+7687,Green Valley / Doverwood,  33.982425,-118.386901
+7745,Jefferson / Clyde,  34.026203,-118.368751
+7750,Jefferson / Hauser,  34.025876,-118.365383
+7755,Jefferson / Cochran,  34.025445,-118.361348
+7862,Olympic / Crescent Heights,  34.058692,-118.369373
+7864,Fairfax / Olympic,  34.057923,-118.363744
+7876,Olympic / La Cienega,  34.059356,-118.375929
+7883,Olympic / Robertson,  34.059261,-118.383391
+7885,Olympic / Spaulding,  34.057445,-118.360050
+7946,Santa Monica / La Cienega,  34.089330,-118.376081
+7970,Slauson / Fairfax,  33.987463,-118.362801
+7974,Slauson / Corning,  33.987834,-118.373365
+7979,Slauson / Kings,  33.987531,-118.367324
+7983,Slauson / La Cienega,  33.987638,-118.370151
+7990,Slauson / Shenandoah,  33.988572,-118.377281
+7994,Sunset / Anita,  34.057482,-118.482781
+7996,Sunset / Bellagio,  34.076383,-118.454696
+8004,Sunset / Church,  34.072172,-118.468076
+8005,Sunset / Church,  34.072185,-118.467508
+8039,Fairfax / San Vicente,  34.058985,-118.363593
+8067,Sunset / Barrington,  34.065003,-118.470106
+8068,Sunset / Bundy,  34.060075,-118.476028
+8069,Sunset / Carmelina,  34.057698,-118.480822
+8072,Sunset / Kenter,  34.058365,-118.478349
+8074,Sunset / Saltair,  34.061121,-118.474727
+8076,Sunset / Westgate,  34.062668,-118.472853
+8077,Sunset / Woodburn,  34.069647,-118.469492
+8176,Washington / Curson,  34.037083,-118.363996
+8195,Washington / Thurman,  34.035792,-118.366549
+8245,Washington / Palawan,  33.983899,-118.458752
+8263,Westwood / Kinross,  34.060919,-118.445552
+8266,Westwood / Lindbrook,  34.059542,-118.444369
+8366,Wilshire / LA Country Club,  34.067675,-118.422323
+8370,Wilshire / San Vicente,  34.064111,-118.372180
+8380,Wilshire / 20th,  34.031177,-118.483224
+8383,Wilshire / 26th,  34.036032,-118.477218
+8388,Wilshire / Berkeley,  34.039572,-118.472881
+8390,Wilshire / Brockton,  34.045743,-118.465228
+8392,Wilshire / Comstock,  34.067848,-118.425533
+8395,Wilshire / Federal,  34.050780,-118.459436
+8404,Wilshire / McClellan,  34.042140,-118.469674
+8408,Wilshire / Beverly Glen,  34.066722,-118.428968
+8411,Wilshire / Bundy,  34.044136,-118.467203
+8417,Wilshire / Doheny,  34.066940,-118.389855
+8431,Wilshire / La Cienega,  34.065006,-118.375925
+8432,Wilshire / La Peer,  34.066937,-118.386490
+8433,Wilshire / Linden,  34.066967,-118.407632
+8440,Wilshire / Palm,  34.066943,-118.391492
+8442,Wilshire / Peck,  34.066952,-118.403171
+8444,Wilshire / Rexford,  34.066946,-118.394068
+8447,Wilshire / Robertson,  34.066762,-118.382999
+8448,Wilshire / Roxbury,  34.066966,-118.405450
+8455,Wilshire / Westgate,  34.047118,-118.463539
+8457,Wilshire / Willaman,  34.066097,-118.380305
+8461,Wilshire / Selby,  34.060188,-118.438083
+8466,Wilshire / Warner,  34.064368,-118.431894
+8468,Wilshire / Westholme,  34.061372,-118.433754
+8469,Wilshire / Westwood,  34.058756,-118.443530
+8472,Wilshire / Yale,  34.038318,-118.474422
+8662,Admiralty / Bali,  33.982045,-118.441497
+8700,Washington Fairfax Hub,  34.035767,-118.369417
+8998,Beverly / Crescent Heights,  34.075970,-118.366002
+8999,Beverly / Fairfax,  34.075982,-118.361091
+9014,Beverly / Orlando,  34.075948,-118.373306
+9019,Beverly / Sweetzer,  34.075960,-118.370172
+9028,Beverly / La Cienega,  34.075940,-118.375974
+9030,Beverwil / Olympic,  34.059498,-118.399259
+9056,Bristol / Centinela,  33.980160,-118.392211
+9082,Buckingham / Hannum,  33.987264,-118.382520
+9083,Buckingham / Slauson,  33.988655,-118.380669
+9084,Buckingham / Sumner,  33.984476,-118.384094
+9120,Burton / Foothill,  34.072496,-118.395920
+9122,Burton / Rexford,  34.072313,-118.398987
+9123,Burton / Palm,  34.072495,-118.392070
+9124,Burton / Doheny,  34.072495,-118.389501
+9125,Burton / La Peer,  34.072493,-118.386608
+9130,Cadillac / La Cienega,  34.038299,-118.376951
+9131,Venice / Cadillac,  34.037637,-118.374132
+9178,Centinela / Acacia,  33.976916,-118.363893
+9180,Centinela / Braddock,  33.989595,-118.418871
+9182,Centinela / Sherbourne,  33.976591,-118.381973
+9185,Centinela / La Tijera,  33.977443,-118.372135
+9186,Centinela / Lucille,  33.983295,-118.411249
+9187,Centinela / Marina Fwy,  33.985359,-118.413651
+9188,Centinela / Beach,  33.977146,-118.366658
+9189,Centinela / Inglewood,  33.976722,-118.361620
+9208,Century Park West / Santa Monica,  34.058619,-118.421045
+9210,Olympic / Beverwil,  34.059581,-118.399359
+9211,Olympic / Fairfax,  34.057980,-118.363331
+9269,Church / 405 Fwy Off-Ramp,  34.073338,-118.468538
+10409,Fairfax / Willoughby,  34.086959,-118.361594
+10726,Gayley / Landfair,  34.065495,-118.447660
+10727,Gayley / Landfair,  34.070676,-118.453159
+10728,Gayley / Strathmore,  34.068823,-118.449038
+10729,Gayley / Veteran,  34.070478,-118.454809
+10816,Green Valley / Bristol,  33.983733,-118.391192
+10817,Green Valley / Buckingham,  33.982327,-118.386489
+10820,Bristol Pkwy / Doverwood,  33.981246,-118.392019
+10977,Hilgard / Sunset,  34.078001,-118.439296
+10979,Hilgard / Manning,  34.066924,-118.439535
+10984,Hilgard / Westholme,  34.069443,-118.438855
+10985,Hilgard / Westholme,  34.069373,-118.439112
+10988,Hilgard / Wyton,  34.074189,-118.438080
+11192,Jefferson / Beethoven,  33.976119,-118.421369
+11193,Jefferson / Centinela,  33.981486,-118.409050
+11194,Jefferson / McConnell,  33.977035,-118.418560
+11195,Jefferson / Mesmer,  33.986312,-118.401592
+11197,Jefferson / Westlawn,  33.979420,-118.413750
+11262,La Cienega SB On-Ramp / Slauson,  33.987542,-118.370880
+11275,La Tijera / Alvern,  33.975249,-118.374345
+11276,La Tijera / Centinela,  33.976978,-118.372446
+11278,La Tijera / 59th,  33.985736,-118.364901
+11279,La Tijera / 62nd,  33.983761,-118.366443
+11280,La Tijera / 64th,  33.981876,-118.367286
+11283,Slauson / La Tijera,  33.987452,-118.364378
+11426,Le Conte / Broxton,  34.063594,-118.446732
+11427,Le Conte / Gayley,  34.063718,-118.448046
+11429,Le Conte / Tiverton,  34.063793,-118.442754
+11433,Le Conte / Westwood,  34.063765,-118.445105
+11590,Main / Brooks,  33.992279,-118.473930
+11599,Main / Grand,  33.987950,-118.470752
+11602,Main / Ocean Park,  34.002492,-118.483916
+11604,Main / Sunset,  33.994622,-118.476289
+11694,Melrose / Huntley,  34.082114,-118.380540
+11697,Melrose / Crescent Heights,  34.083893,-118.365719
+11699,Melrose / Fairfax,  34.083955,-118.361773
+11701,Melrose / Harper,  34.083842,-118.368903
+11706,Melrose / La Cienega,  34.082081,-118.376851
+11714,Melrose / Orlando,  34.083714,-118.373067
+11716,San Vicente / Melrose,  34.081682,-118.383173
+11730,Mesmer / Major,  33.984960,-118.399837
+11737,Mindanao / Marina,  33.982511,-118.438221
+11740,Mindanao / Alla,  33.987979,-118.433628
+11741,Mindanao / Glencoe,  33.985300,-118.437493
+11742,Mindanao / Lincoln,  33.980727,-118.438993
+11768,Montana / Bentley,  34.069155,-118.459421
+11769,Montana / Sepulveda,  34.067461,-118.461122
+11981,Fairfax / Beverly,  34.076245,-118.361575
+11984,Fairfax / Melrose,  34.083557,-118.361593
+11985,Fairfax / Oakwood,  34.077943,-118.361579
+11986,Fairfax / Rosewood,  34.079908,-118.361590
+11991,Fairfax / 1st,  34.074107,-118.361565
+12124,Jefferson / Inglewood,  33.984039,-118.405081
+12125,Jefferson / Margaret,  33.985050,-118.403539
+12126,Mindanao / Admiralty,  33.980012,-118.439936
+12146,La Cienega / Beverly,  34.075654,-118.376729
+12148,La Cienega / Melrose,  34.081702,-118.376677
+12149,La Cienega / Rosewood,  34.080342,-118.376694
+12150,La Cienega / Santa Monica,  34.088933,-118.376548
+12151,La Cienega / Waring,  34.085476,-118.376622
+12321,Robertson / Clifton,  34.068987,-118.383871
+12379,San Vicente / Santa Monica,  34.084430,-118.383909
+12427,Venice / Abbot Kinney,  33.989211,-118.462974
+12428,Venice / Meade,  33.992800,-118.455792
+12429,Venice / Shell,  33.991008,-118.459401
+12430,Venice Bl / Venice Wy,  33.987749,-118.465938
+12485,National / Robertson,  34.031292,-118.390682
+12595,Olympic / Carrillo,  34.058892,-118.368892
+12605,Olympic / Beverwil,  34.059840,-118.399756
+12608,Olympic / Doheny,  34.059519,-118.389622
+12609,Olympic / La Peer,  34.059520,-118.387241
+12611,Olympic / Rexford,  34.059521,-118.394059
+12612,Olympic / Roxbury,  34.059853,-118.405848
+12613,Olympic / Spalding,  34.059845,-118.409113
+12686,Pacific / Driftwood,  33.977907,-118.464076
+12687,Pacific / Fleet,  33.976442,-118.462927
+12689,Pacific / Hurricane,  33.975732,-118.462375
+12968,Robertson / Wilshire,  34.066785,-118.383494
+12969,Robertson / Cadillac,  34.041304,-118.387732
+12970,Robertson / Monte Mar,  34.046606,-118.386284
+12971,Robertson / Pico,  34.054522,-118.383900
+12972,Robertson / Wilshire,  34.066773,-118.383808
+12975,Obama / Cloverdale,  34.021425,-118.360963
+12984,Obama / La Cienega,  34.021564,-118.372024
+13184,Beverly / Charleville,  34.065143,-118.399233
+13185,Beverly / Gregory,  34.062027,-118.399255
+13300,Centinela / Culver,  33.990729,-118.420744
+13405,Fairfax / Airdrome,  34.045800,-118.368210
+13406,Washington Fairfax Hub,  34.035671,-118.369126
+13408,Fairfax / Del Valle,  34.061225,-118.362451
+13409,Fairfax / Drexel,  34.068383,-118.361541
+13413,Fairfax / Saturn,  34.049843,-118.367089
+13414,Fairfax / Venice,  34.039525,-118.369671
+13415,Fairfax / 18th,  34.043294,-118.369269
+13416,Fairfax / 3rd,  34.071768,-118.361562
+13417,Fairfax / 6th,  34.065033,-118.361519
+13419,Fairfax / Pico,  34.051385,-118.366799
+13420,Fairfax / Whitworth,  34.055705,-118.365124
+13421,Fairfax / Wilshire,  34.062579,-118.361803
+13659,La Cienega / Airdrome,  34.047248,-118.376304
+13660,La Cienega / Cashio,  34.050853,-118.376297
+13661,La Cienega / Clemson,  34.024362,-118.372343
+13662,La Cienega / Gregory,  34.062394,-118.376273
+13663,La Cienega / Guthrie,  34.040521,-118.377083
+13665,La Cienega / San Vicente,  34.071824,-118.376567
+13666,La Cienega / Sawyer,  34.042320,-118.376592
+13667,La Cienega / 18th,  34.044688,-118.376953
+13668,3rd / La Cienega,  34.073566,-118.376792
+13670,La Cienega / Jefferson,  34.026129,-118.372249
+13671,La Cienega / Olympic,  34.059196,-118.376305
+13672,La Cienega / Pico,  34.053098,-118.376307
+13673,La Cienega / Whitworth,  34.057193,-118.376303
+13675,La Tijera / Fairview,  33.980042,-118.369537
+13830,Robertson / Airdrome,  34.049046,-118.385546
+13831,Robertson / Beverlywood,  34.038452,-118.388504
+13832,Robertson / Burton,  34.071997,-118.383598
+13833,Robertson / Cashio,  34.052381,-118.384208
+13834,Robertson / Cattaraugus,  34.034615,-118.389526
+13836,Robertson / Gregory,  34.062679,-118.383680
+13837,Robertson / Kincardine,  34.033108,-118.389991
+13839,Robertson / Sawyer,  34.044648,-118.386819
+13840,Robertson / 24th,  34.039901,-118.388111
+13841,Robertson / 3rd,  34.073340,-118.383901
+13842,Robertson / Olympic,  34.059115,-118.383763
+13843,Robertson / Whitworth,  34.056831,-118.383812
+13931,Sepulveda / Homedale,  34.069709,-118.463298
+14012,Venice / Lincoln,  33.994093,-118.453220
+14261,San Vicente / Cynthia,  34.087097,-118.385318
+14273,San Vicente / Carrillo,  34.060875,-118.367411
+14279,Fairfax / Olympic,  34.057735,-118.364220
+14280,San Vicente / Orange Grove,  34.058709,-118.363251
+14357,Santa Monica / 20th,  34.028594,-118.480357
+14359,Santa Monica / 26th,  34.033512,-118.474299
+14363,Santa Monica / Avenue Of The Stars,  34.061214,-118.419200
+14367,Santa Monica / Century Park East,  34.063032,-118.416475
+14369,Santa Monica / Corinth,  34.046349,-118.449459
+14373,S Santa Monica / Canon,  34.071990,-118.401964
+14377,Santa Monica / Hancock,  34.086646,-118.381055
+14378,Santa Monica / San Vicente,  34.084912,-118.383630
+14384,Santa Monica / Camden,  34.070466,-118.405678
+14389,Santa Monica / Doheny,  34.081431,-118.389579
+14403,Santa Monica / La Peer,  34.083377,-118.386711
+14408,Santa Monica / Palm,  34.077430,-118.395534
+14417,Santa Monica / Overland,  34.051351,-118.433603
+14418,Santa Monica / Hancock,  34.086709,-118.381859
+14421,Santa Monica / Barrington,  34.043710,-118.456528
+14422,Santa Monica / Beverly Glen,  34.057411,-118.424648
+14423,Santa Monica / Bundy,  34.040841,-118.463088
+14424,Santa Monica / Sepulveda,  34.047800,-118.443508
+14429,Santa Monica / Thayer,  34.055801,-118.426931
+14430,Santa Monica / Veteran,  34.049047,-118.440788
+14431,Santa Monica / Sepulveda,  34.047614,-118.444893
+14433,Santa Monica / Century Park West,  34.059248,-118.421937
+14435,Santa Monica / Westbourne,  34.087732,-118.380047
+14437,Santa Monica / Westholme,  34.053815,-118.429945
+14438,Santa Monica / Westwood,  34.049871,-118.437834
+14439,Westwood / Santa Monica,  34.050436,-118.437369
+14526,Sepulveda / Getty Center,  34.088388,-118.474937
+14626,Short / Centinela,  33.992840,-118.423717
+14627,Short / Kenyon,  33.990742,-118.427965
+14660,Slauson / Sepulveda,  33.988785,-118.395686
+14757,Sunset / Ladera,  34.079841,-118.422721
+14762,Sunset / Beverly,  34.081237,-118.412226
+14776,Sunset / Charing Cross,  34.079650,-118.430018
+14777,Sunset / Copley,  34.077844,-118.421812
+14784,Sunset / Alpine,  34.085459,-118.407947
+14785,Sunset / Alta,  34.088768,-118.395449
+14786,Sunset / Bedford,  34.078699,-118.416939
+14788,Sunset / Beverly,  34.081932,-118.411754
+14789,Sunset / Beverly Glen,  34.082759,-118.434522
+14790,Sunset / Foothill,  34.086113,-118.406431
+14792,Sunset / Hillcrest,  34.087726,-118.398020
+14793,Sunset / Maple,  34.086757,-118.402048
+14794,Sunset / Rexford,  34.083316,-118.410133
+14795,Sunset / Canon,  34.080319,-118.414068
+14796,Sepulveda / Sepulveda Way,  34.073402,-118.466277
+14804,Sunset / Carolwood,  34.080996,-118.425550
+14808,Sunset / Whittier,  34.077375,-118.419872
+15262,Venice / Bagley,  34.025741,-118.395055
+15263,Venice / Beethoven,  33.999931,-118.441516
+15268,Venice / Cattaraugus,  34.032821,-118.382616
+15273,Venice / Sepulveda,  34.013448,-118.416700
+15275,Venice / Culver,  34.027001,-118.392909
+15278,Venice / Grand View,  34.005029,-118.431496
+15280,Venice / Helms,  34.031221,-118.385401
+15281,Venice / Hughes,  34.023602,-118.398774
+15282,Venice / Inglewood,  34.006434,-118.428939
+15283,Venice / Jasmine,  34.021673,-118.402161
+15285,Venice / Maplewood,  33.998503,-118.444355
+15286,Venice / McLaughlin,  34.008746,-118.424879
+15287,Venice / Midvale,  34.016567,-118.411201
+15289,Venice / Motor,  34.020523,-118.404175
+15290,Venice / National,  34.029408,-118.388610
+15292,Venice / Overland,  34.018814,-118.407206
+15296,Venice / Centinela,  34.003778,-118.433908
+15299,Venice / Fairfax,  34.039875,-118.370155
+15303,Venice / La Cienega,  34.035756,-118.377437
+15304,Venice / Ogden,  34.041420,-118.367405
+15307,Venice / Robertson,  34.028471,-118.390309
+15308,Venice / Spaulding,  34.042740,-118.365001
+15317,Venice / Sawtelle,  34.011555,-118.420000
+15319,Venice / Wade,  34.001716,-118.437975
+15320,Venice / Walgrove,  33.997501,-118.446366
+15445,Via Marina / Admiralty,  33.981130,-118.459938
+15448,Via Marina / Marquesas,  33.976571,-118.459220
+15451,Via Marina / Panay,  33.978781,-118.459219
+15633,3rd / Crescent Heights,  34.072240,-118.365639
+15634,3rd / Fairfax,  34.071640,-118.361152
+15650,3rd / Orlando,  34.073189,-118.373446
+15654,3rd / Sherbourne,  34.073718,-118.379861
+15656,3rd / Sweetzer,  34.072785,-118.369825
+15812,Adams / Hauser,  34.032597,-118.362452
+15818,Adams / Fairfax,  34.032559,-118.370485
+15834,Adams / Thurman,  34.032565,-118.367680
+16131,Olympic / Century Park East,  34.058689,-118.411894
+16161,Olympic / La Cienega,  34.059583,-118.376379
+16172,Olympic / Robertson,  34.059513,-118.383818
+16240,Santa Monica / La Cienega,  34.089882,-118.376044
+16266,La Tijera / Slauson,  33.987215,-118.364832
+16270,Slauson / Corning,  33.988064,-118.372980
+16271,Slauson / Fairfax,  33.987758,-118.362479
+16275,Slauson / Goldleaf,  33.987774,-118.366982
+16278,Slauson / La Cienega,  33.987896,-118.370265
+16285,Slauson / Shenandoah,  33.988980,-118.377814
+16290,Sunset / Anita,  34.057701,-118.482961
+16292,Sunset / Bellagio,  34.076757,-118.454648
+16293,Sunset / Barrington,  34.064579,-118.470956
+16347,Sunset / Westgate,  34.063497,-118.472257
+16354,Sunset / Bundy,  34.060557,-118.475843
+16355,Sunset / Carmelina,  34.058040,-118.480606
+16358,Sunset / Kenter,  34.058706,-118.478199
+16360,Sunset / Saltair,  34.061592,-118.474600
+16361,Sunset / Woodburn,  34.069976,-118.469705
+16446,Washington / Hauser,  34.039337,-118.360174
+16454,Washington / Curson,  34.037280,-118.364182
+16473,Washington / Thurman,  34.035870,-118.367005
+16524,Washington / Pacific,  33.979807,-118.465267
+16527,Washington / Via Dolce,  33.980850,-118.463581
+16528,Washington / Via Marina,  33.982398,-118.461165
+16530,Washington / Fairfax,  34.034824,-118.369291
+16532,Division 7 Layover,  34.084996,-118.381842
+16534,Cadillac / La Cienega,  34.038063,-118.376867
+16535,Washington Fairfax Terminal,  34.035276,-118.369075
+16536,Washington Fairfax Hub,  34.035653,-118.368743
+16555,Westwood / Weyburn,  34.062714,-118.445519
+16662,Wilshire / Brighton,  34.067221,-118.405718
+16663,Wilshire / Camden,  34.067213,-118.402958
+16664,Wilshire / Crescent Heights,  34.063501,-118.364924
+16665,Wilshire / LA Country Club,  34.067882,-118.421977
+16671,Wilshire / San Vicente,  34.064224,-118.371207
+16672,Wilshire / Bonsall,  34.054401,-118.455164
+16679,Wilshire / 20th,  34.031587,-118.483173
+16682,Wilshire / 26th,  34.036207,-118.477437
+16687,Wilshire / Berkeley,  34.040017,-118.472752
+16689,Wilshire / Brockton,  34.046166,-118.465145
+16690,Wilshire / Comstock,  34.068140,-118.425254
+16692,Wilshire / Fairfax,  34.063089,-118.361141
+16702,Wilshire / Barrington,  34.049352,-118.461277
+16704,Wilshire / Beverly Glen,  34.067136,-118.428689
+16709,Wilshire / Carmelina,  34.042005,-118.470281
+16715,Wilshire / Doheny,  34.067193,-118.389856
+16732,Wilshire / La Peer,  34.067189,-118.386821
+16733,Wilshire / Linden,  34.067220,-118.407633
+16740,Wilshire / Palm,  34.067199,-118.392388
+16743,Wilshire / Rexford,  34.067201,-118.394317
+16746,Wilshire / Robertson,  34.067186,-118.384269
+16747,Wilshire / Rodeo,  34.067217,-118.401820
+16757,Wilshire / Westgate,  34.047566,-118.463456
+16759,Wilshire / Willaman,  34.066347,-118.380267
+16762,Wilshire / Santa Monica,  34.067220,-118.408981
+16765,Wilshire / Selby,  34.060502,-118.437847
+16773,Wilshire / Warner,  34.064196,-118.432392
+16775,Wilshire / Westholme,  34.061782,-118.433601
+16778,Wilshire / Whittier,  34.067223,-118.414802
+16780,Wilshire / Yale,  34.038504,-118.474628
+16922,3rd / Willaman,  34.073468,-118.380728
+16943,Jefferson / Slauson,  33.988588,-118.398077
+16949,San Vicente / Melrose,  34.081791,-118.383507
+17013,Melrose / Fairfax,  34.083698,-118.361111
+17051,San Vicente / Gracie Allen,  34.074893,-118.378430
+17052,National / Robertson,  34.030960,-118.390624
+17283,Jefferson / Cochran,  34.025717,-118.361478
+17284,Jefferson / Hauser,  34.026147,-118.365510
+17285,Jefferson / Clyde,  34.026491,-118.369046
+20004,Wilshire / Veteran,  34.057616,-118.447888
+20501,Jefferson / Centinela,  33.981279,-118.409501
+30012,Culver City Transit Center,  33.987962,-118.394653
+36557,Green Valley / Sepulveda,  33.983856,-118.393895
+36561,Centinela / Alvern,  33.977195,-118.376662
+36562,Centinela / Green Valley,  33.977206,-118.386350
+36563,Green Valley / Sepulveda,  33.983999,-118.393951
+36587,La Cienega / Wilshire,  34.065621,-118.376058
+104702,Wilshire / Bundy,  34.044076,-118.467711
+104707,Wilshire / Barrington,  34.049274,-118.460943
+104708,Wilshire / Federal,  34.050594,-118.459230
+104713,Westwood / Le Conte,  34.063556,-118.445186
+104716,Fairfax / Venice,  34.039754,-118.369461
+104717,Fairfax / Venice,  34.040256,-118.369721
+140878,Jefferson / Centinela,  33.983974,-118.404688
+140880,California Yacht Club,  33.983939,-118.445921
+140881,Admiralty / Marina City,  33.985352,-118.452315
+140907,Beverly / Fairfax,  34.076235,-118.361208
+140908,Beverly / Crescent Heights,  34.076224,-118.365673
+140909,Beverly / Sweetzer,  34.076214,-118.369843
+140910,Beverly / Orlando,  34.076202,-118.372977
+140916,Beverly / Wilshire,  34.066888,-118.399255
+140921,Slauson / Sepulveda,  33.988519,-118.395648
+142051,Olympic / Fairfax,  34.058284,-118.363620
+142063,Church / 405 Fwy Off-Ramp,  34.073745,-118.468527
+142073,La Tijera / 64th,  33.981505,-118.367360
+176155,Bristol / Hannum,  33.986929,-118.386929
+176156,Bristol / Green Valley,  33.983725,-118.390955
+65300024,Main / Marine,  33.998031,-118.479410
+65300025,Main / Pier,  33.998385,-118.480108
+70500001,La Cienega / 3rd,  34.073614,-118.376340
+70500002,La Cienega / 3rd,  34.073195,-118.376636
+72000002,Wilshire / Barrington,  34.049454,-118.461158

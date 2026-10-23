@@ -1,0 +1,11 @@
+stop_id,stop_name,stop_lat,stop_lon
+80131,La Cienega / Jefferson Station,34.026355,-118.37212
+80132,Culver City Station,34.027896,-118.388986
+80133,Palms Station,34.029323,-118.404255
+80134,Westwood / Rancho Park Station,34.036816,-118.424576
+80135,Expo / Sepulveda Station,34.035408,-118.434234
+80136,Expo / Bundy Station,34.031705,-118.452896
+80137,26th Street / Bergamot Station,34.027995,-118.46912
+80138,17th Street / SMC Station,34.023155,-118.480372
+80230,Wilshire / Fairfax Station,34.06296708,-118.3611657
+80231,Wilshire / La Cienega Station,34.06483444,-118.3747009

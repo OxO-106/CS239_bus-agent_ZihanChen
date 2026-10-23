@@ -1,0 +1,21 @@
+route_id,route_short_name,route_long_name,route_type
+2-13201,2,Metro Local Line,3
+4-13201,4,Metro Local Line,3
+10-13201,10/48,Metro Local Line,3
+14-13201,14/37,Metro Local Line,3
+16-13201,16,Metro Local Line,3
+20-13201,20,Metro Local Line,3
+28-13201,28,Metro Local Line,3
+33-13201,33,Metro Local Line,3
+35-13201,35/38,Metro Local Line,3
+102-13201,102,Metro Local Line,3
+105-13201,105,Metro Local Line,3
+108-13201,108,Metro Local Line,3
+110-13201,110,Metro Local Line,3
+217-13201,217,Metro Local Line,3
+218-13201,218,Metro Local Line,3
+233-13201,233,Metro Local Line,3
+602-13201,602,Metro Local Line,3
+617-13201,617,Metro Local Line,3
+720-13201,720,Metro Rapid Line,3
+761-13201,761,Metro Rapid Line,3
