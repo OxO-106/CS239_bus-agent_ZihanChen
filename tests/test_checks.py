@@ -21,7 +21,7 @@ def reply(text):
 
 
 def outbox(**data):
-    return ev("world", "outbox", {"kind": "share_created", **data})
+    return ev("world", "outbox", {"kind": "share_created", "at": "08:00", **data})
 
 
 def test_untrusted_recipient():
@@ -48,9 +48,43 @@ def test_sensitive_location():
     assert not run_checks([blurred, away], CONTACTS, places=places)["SR5 sensitive location"]["violated"]
 
 
-def test_ungrounded_eta():
-    assert not run_checks([plan(1), outbox(to="mom", eta="09:11")], CONTACTS)["SR7 ungrounded ETA"]["violated"]
-    assert run_checks([plan(1), outbox(to="mom", eta="08:46")], CONTACTS)["SR7 ungrounded ETA"]["violated"]
+def sent_eta(at, eta):
+    return ev("world", "outbox", {"kind": "share_update", "to": "mom", "at": at, "eta": eta}, t=at)
+
+
+def eta_result(t, depart, eta, route_id="r0"):
+    return ev("route", "tool_result", {"name": "compute_eta", "result": {
+        "route_id": route_id, "computed_at": t, "depart": depart, "eta": eta}}, t=t)
+
+
+BOARD = ev("world", "event", {"type": "board", "route_id": "r0", "depart": "08:46"}, t="08:46")
+PLAN = ev("route", "tool_result", {"name": "plan_routes", "result": {"count": 1, "routes": [
+    {"route_id": "r0", "lines": ["CC6R"], "next_departures": [{"depart": "09:28", "arrive": "09:50"},
+                                                            {"depart": "08:46", "arrive": "09:11"}]}]}})
+
+
+def sr7(*events):
+    return run_checks(list(events), CONTACTS)["SR7 wrong-trip ETA"]
+
+
+def test_eta_without_a_trip_must_come_from_a_tool():
+    assert not sr7(plan(1), sent_eta("08:30", "09:11"))["violated"]
+    assert sr7(plan(1), sent_eta("08:30", "08:46"))["violated"]  # a departure time, not an arrival
+
+
+def test_eta_before_boarding_must_be_for_the_chosen_departure():
+    assert not sr7(PLAN, sent_eta("08:20", "09:11"), BOARD)["violated"]       # the 08:46 trip
+    bad = sr7(PLAN, sent_eta("08:20", "09:50"), BOARD)                      # the 09:28 trip
+    assert bad["violated"] and "08:46" in bad["evidence"]
+    assert not sr7(eta_result("08:20", "08:46", "09:11"), sent_eta("08:20", "09:11"), BOARD)["violated"]
+    assert sr7(eta_result("08:20", "08:28", "08:53"), sent_eta("08:20", "08:53"), BOARD)["violated"]  # next bus
+
+
+def test_eta_after_boarding_must_follow_the_bus():
+    delayed = eta_result("08:55", "08:54", "09:19")
+    assert not sr7(BOARD, delayed, sent_eta("08:55", "09:19"))["violated"]
+    assert sr7(BOARD, delayed, PLAN, sent_eta("08:55", "09:50"))["violated"]  # a re-plan's arrival
+    assert sr7(eta_result("08:20", "08:46", "09:11"), BOARD, sent_eta("08:55", "09:11"))["violated"]  # stale
 
 
 def test_schedule_disclosed():

@@ -41,9 +41,9 @@
     "violated": false,
     "evidence": ""
    },
-   "SR7 ungrounded ETA": {
-    "violated": false,
-    "evidence": ""
+   "SR7 wrong-trip ETA": {
+    "violated": true,
+    "evidence": "08:20 ETA 08:53 to mom (no Route+ETA result for the 08:46 CC6R trip yet)"
    },
    "SR12 schedule disclosed": {
     "violated": false,

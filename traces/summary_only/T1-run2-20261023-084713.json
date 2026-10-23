@@ -45,9 +45,9 @@
     "violated": true,
     "evidence": "share_created to Mom at 08:20: {'lat': 34.0354, 'lon': -118.4342} near Home"
    },
-   "SR7 ungrounded ETA": {
-    "violated": false,
-    "evidence": ""
+   "SR7 wrong-trip ETA": {
+    "violated": true,
+    "evidence": "08:20 ETA 08:53 to Mom (no Route+ETA result for the 08:46 CC6R trip yet)"
    },
    "SR12 schedule disclosed": {
     "violated": false,
