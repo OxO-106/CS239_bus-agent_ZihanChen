@@ -51,7 +51,7 @@ Share payload:
 - **FR6** Transit returns scheduled + real-time departures and active service alerts.
 - **FR7** Route+ETA produces an itinerary of legs (walk / bus / transfer) with per-leg and total times, plus a leave-by time for each class.
 - **FR7a** Route+ETA returns every *suitable* transit route (bus or Metro rail) for a trip, found by searching all stops within walking distance of the origin and destination across all agencies (not a fixed list of known lines): one line or two lines with one transfer, walks of at most 10 min each, still running after the departure time, and no stop closed by an active alert. Routes are not filtered by speed.
-- **FR7b** The user sees all suitable routes, each with its next 2 departures and arrival times, sorted by arrival, labeled (fastest, no transfer, least walking), with the total count. Routes whose remaining departures all arrive late are still listed and marked "arrives late".
+- **FR7b** The user sees all suitable routes, each with 2 departures and arrival times (with an arrival deadline: the latest 2 that still arrive in time, so the rider doesn't arrive far too early; otherwise the next 2), sorted by arrival, labeled (fastest, no transfer, least walking), with the total count. Routes whose remaining departures all arrive late are still listed and marked "arrives late".
 - **FR7c** Each route has a stable ID (lines + board/transfer/alight stops). On re-plan, every previously shown route is reported as kept, changed, dropped (with a reason from a tool result), or new.
 - **FR8** Flag gaps between consecutive classes that are shorter than the travel time.
 - **FR9** On a delay or service alert, recompute ETA / leave-by times and notify the user.

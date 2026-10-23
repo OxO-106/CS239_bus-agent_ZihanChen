@@ -186,12 +186,13 @@ class Session:
         if nxt:
             nxt["next"] = True
             plan = next((p for p in reversed(w.plans) if p["destination"] == nxt["building"]), None)
-            if plan:  # earliest arrival among departures the rider can still make
+            if plan:  # the latest departure the rider can still make that arrives by class start
                 catchable = [(d["arrive"], hhmm(parse_hhmm(d["depart"]) - r["walk_min"]["to_stop"] * 60), r["lines"])
                              for r in plan["result"]["routes"] for d in r["next_departures"]
                              if parse_hhmm(d["depart"]) - r["walk_min"]["to_stop"] * 60 >= parse_hhmm(w.hhmm)]
-                if catchable:
-                    _, leave, lines = min(catchable)
+                in_time = [c for c in catchable if nxt["start"] and c[0] <= nxt["start"]]
+                if in_time or catchable:
+                    _, leave, lines = max(in_time, key=lambda c: c[1]) if in_time else min(catchable)
                     nxt["leave_by"] = {"time": leave, "lines": lines}
         return {"date": w.now.strftime("%a, %b %d"), "classes": out}
 

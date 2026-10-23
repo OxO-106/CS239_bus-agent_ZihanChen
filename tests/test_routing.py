@@ -125,6 +125,15 @@ def test_compare_kept_changed_new(router):
     assert all("reason" in d for d in compare_options(before, after) if d["status"] == "dropped")
 
 
+def test_arrive_by_picks_latest_departures_in_time(router):
+    x = by_line(plan_routes(router, ORIGIN, DEST, TUESDAY, "07:30", arrive_by="08:45"))["X"]
+    # x1 (08:20) and x2 (08:40) arrive by 08:45, x3 (09:00) does not: latest first, leave as late as possible
+    assert [d["depart"] for d in x["next_departures"]] == ["08:20", "08:00"]
+    assert x["leave_by"] == "08:19" and "arrives late" not in x["labels"]
+    no_deadline = by_line(plan_routes(router, ORIGIN, DEST, TUESDAY, "07:30"))["X"]
+    assert [d["depart"] for d in no_deadline["next_departures"]] == ["08:00", "08:20"]
+
+
 def test_arrives_late_still_listed(router):
     lines = by_line(plan_routes(router, ORIGIN, DEST, TUESDAY, "07:30", arrive_by="08:10"))
     assert "arrives late" in lines["X"]["labels"]

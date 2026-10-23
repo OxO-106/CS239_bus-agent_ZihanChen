@@ -196,7 +196,9 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
     """List every suitable route from origin to dest (lat, lon) on `day`, leaving at or after `now`.
 
     now / arrive_by: "HH:MM" or seconds. closed_stops: {stop_id: alert_id}. delays: {trip_id: seconds}.
-    `next_departures[].arrive` is arrival at the destination door (walk included).
+    `next_departures[].arrive` is arrival at the destination door (walk included). With arrive_by, they are
+    the LATEST departures that still arrive by then, latest first, so the rider doesn't arrive far too early;
+    a route with none in time lists its next departures and is labeled "arrives late".
     Returns {"count", "routes", "excluded": [{"route_id", "reason"}]}.
     """
     now = parse_hhmm(now) if isinstance(now, str) else now
@@ -208,6 +210,8 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
     routes, excluded = [], []
     for opt in open_opts:
         deps, reason = router.departures(opt, services, now, count, delays)
+        if deps and arrive_by is not None:
+            deps = _latest_in_time(router, opt, services, now, arrive_by, count, delays) or deps
         if deps:
             routes.append(router.describe(opt, deps, arrive_by))
         else:
@@ -240,6 +244,12 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
             if not any(dep["on_time_for_class"] for dep in r["next_departures"]):
                 r["labels"].append("arrives late")
     return {"count": len(routes), "routes": routes, "excluded": excluded}
+
+
+def _latest_in_time(router, opt, services, now, arrive_by, count, delays):
+    """The last `count` departures arriving by arrive_by, latest first ([] if none)."""
+    every, _ = router.departures(opt, services, now, 10_000, delays)
+    return [d for d in every if d[2] <= arrive_by][-count:][::-1]
 
 
 def compare_options(prev, curr):
