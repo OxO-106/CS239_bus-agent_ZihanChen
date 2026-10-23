@@ -27,7 +27,7 @@ python -m bus_agent.web
 ```
 
 Open http://localhost:8239. It looks like a regular map app:
-- **Map:** full screen (OpenStreetMap). It shows Home (the public placeholder), UCLA buildings, your position, the routes the assistant suggested (drawn along the real GTFS shapes), and your bus once you board.
+- **Map:** full screen (OpenStreetMap). It shows Home (the public placeholder), UCLA buildings, your position, the routes (drawn along the real GTFS shapes), and your bus once you board. Routes are drawn transit-map style: one color per line, each ride segment once, and lines on a shared road side by side. Hover a route (in the card or on the map) to lift it with its walks and stops; click it to focus it (the rest turn grey) and see it step by step.
 - **Left column:** search, saved places, and **Today's classes** from the uploaded schedule. The next class shows its leave-by time and bus, and each class has a directions button that asks the assistant. Below that is a **Routes** card listing the suggested routes and, when routes were left out, "N of M routes shown in chat" with a **Show all** link that lists and draws the rest. Routes that arrive on time come first, then late ones; each group is ranked by door-to-door trip time (walk to the stop, ride, walk to the door) of the next departure (tagged "Not in chat"). The SR17 check still flags the assistant's reply, because the chat itself left them out.
 - **Top right:** a chip for each live share (red if the recipient isn't a trusted contact) with a **Stop** button, plus the **Inspector** button.
 - **Assistant:** the round button at the bottom right opens and closes a floating chat window (a bottom sheet on a phone). The paperclip uploads a schedule as an image or `.txt`.

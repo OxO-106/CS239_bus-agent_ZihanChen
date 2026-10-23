@@ -150,6 +150,13 @@
   .ev-row.out.bad { background: var(--bad-soft); }
   .ev-row details summary { cursor: pointer; color: var(--muted); }
 
+  .line-badge { display: inline-block; min-width: 24px; padding: 1px 6px; border-radius: 6px; border: 2px solid #fff; color: #fff;
+                font: 700 11px/16px Inter, sans-serif; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.3); white-space: nowrap; }
+  .steps { list-style: none; margin: 4px 0 0; padding: 0 0 0 4px; display: flex; flex-direction: column; gap: 10px; }
+  .step { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; }
+  .step-icon { width: 28px; flex: none; display: grid; place-items: center; color: var(--muted); padding-top: 1px; }
+  .stop-tip { font: 600 11.5px Inter, sans-serif; padding: 2px 6px; border-radius: 6px; }
+
   /* map markers */
   .pin { background: var(--ink); color: #fff; font: 600 12px Inter, sans-serif; padding: 4px 9px; border-radius: 8px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
   .pin.light { background: #fff; color: var(--ink); }
@@ -279,6 +286,7 @@
 </aside>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const COLORS = ["#2f6feb", "#c2410c", "#0f766e", "#9333ea", "#be185d", "#0369a1", "#4d7c0f", "#a16207", "#475569"];
@@ -438,20 +446,63 @@ function flyTo(nameOrKey) {
   return true;
 }
 
-function drawRoute(layer, route, color, weight, faded) {
-  const all = [];
+// Routes on the map, transit-map style. Each LINE has one color and each ride segment (line, board,
+// alight) is drawn once, so routes that share a segment don't stack copies of it. Lines that share a
+// road sit side by side (a small, capped offset). Hovering a route lifts its segments, walks and stops
+// on a top layer; clicking one focuses it (the rest turn grey) and the card shows it step by step.
+const OFFSET_STEP = 4, OFFSET_SPREAD = 20;  // px between lines on a shared road, and the widest bundle
+const hoverLayer = L.layerGroup().addTo(map);
+let hovered = null;     // route_id under the pointer
+let segLines = {};      // segment key -> drawn polyline (for restyling on hover without redrawing)
+let lineColor = {};     // line -> color, in the order lines first appear in the ranked list
+
+function shortLine(l) {
+  let m;
+  if ((m = l.match(/^(?:CC|BB)R?(\d+)R?$/))) return (/R/.test(l.slice(2)) || /^BBR/.test(l) ? "R" : "") + m[1];
+  if ((m = l.match(/^M(\d+)$/))) return m[1];
+  if ((m = l.match(/^(\w) Line$/))) return m[1];
+  return l;
+}
+
+const segKey = p => `${p.line}|${p.board}|${p.alight}`;
+const rides = r => r.parts.filter(p => p.kind !== "walk");
+
+// GTFS shapes have points every ~15 m; offsetting that many tiny segments makes loops at turns
+const simplified = new Map();
+function smooth(coords) {
+  if (!simplified.has(coords)) {
+    const z = 15, pts = coords.map(c => map.project(c, z));
+    simplified.set(coords, L.LineUtil.simplify(pts, 4).map(pt => map.unproject(pt, z)));
+  }
+  return simplified.get(coords);
+}
+
+function badge(at, line, extra = "") {
+  return L.marker(at, {icon: L.divIcon({className: "", iconSize: null, iconAnchor: [12, 10],
+    html: `<div class="line-badge${extra}" style="background:${lineColor[line] || "#475569"}">${esc(shortLine(line))}</div>`}), keyboard: false, interactive: false});
+}
+
+function drawFull(layer, route, o = {}) {
+  // one route on its own: walks, rides in line colors, badges, and labeled stops
+  const pts = [];
   for (const p of route.parts) {
-    all.push(...p.coords);
+    pts.push(...p.coords);
     if (p.kind === "walk") {
-      L.polyline(p.coords, {color: "#5f6670", weight: 3, dashArray: "2 7", lineCap: "round", opacity: faded ? .4 : 1}).addTo(layer);
-    } else {
-      L.polyline(p.coords, {color: "#fff", weight: weight + 5, opacity: faded ? .5 : .95}).addTo(layer);
-      L.polyline(p.coords, {color, weight, opacity: faded ? .35 : 1}).bindTooltip(`${p.line}: ${p.board} → ${p.alight}`, {sticky: true}).addTo(layer);
-      for (const [pt, label] of [[p.coords[0], `Board ${p.line} at ${p.board}`], [p.coords[p.coords.length - 1], `Get off at ${p.alight}`]])
-        L.circleMarker(pt, {radius: 6, color, weight: 3, fillColor: "#fff", fillOpacity: 1, opacity: faded ? .4 : 1}).bindTooltip(label).addTo(layer);
+      L.polyline(p.coords, {color: "#3b4148", weight: 3, dashArray: "2 7", lineCap: "round", interactive: false}).addTo(layer);
+      continue;
+    }
+    const color = o.color || lineColor[p.line] || "#475569", c = smooth(p.coords);
+    L.polyline(c, {color: "#fff", weight: 11, opacity: .95, interactive: false}).addTo(layer);
+    L.polyline(c, {color, weight: 7, interactive: false}).addTo(layer);
+    badge(c[Math.floor(c.length / 2)], p.line).addTo(layer);
+    if (o.stops) {
+      L.circleMarker(p.coords[0], {radius: 7, color, weight: 3, fillColor: "#fff", fillOpacity: 1, interactive: false})
+        .bindTooltip(`Board ${lineName(p.line)} · ${p.board}`, {direction: "left", permanent: true, className: "stop-tip"}).addTo(layer);
+      L.circleMarker(p.coords[p.coords.length - 1], {radius: 7, color, weight: 3, fillColor: "#fff", fillOpacity: 1, interactive: false})
+        .bindTooltip(`Get off · ${p.alight}`, {direction: "right", permanent: true, className: "stop-tip"}).addTo(layer);
     }
   }
-  return all;
+  return pts;
 }
 
 function lineName(l) {
@@ -472,35 +523,104 @@ const late = r => r.labels.includes("arrives late");
 const listed = () => !mapState ? [] : (showAll ? mapState.shown.concat(mapState.others || []) : mapState.shown.slice())
   .sort((a, b) => late(a) - late(b) || tripMin(a) - tripMin(b) || mins(a.next_departures[0].arrive) - mins(b.next_departures[0].arrive));
 
+function fitTo(pts) {
+  if (!pts || !pts.length) return;
+  map.fitBounds(L.latLngBounds(pts), innerWidth < 760
+    ? {paddingTopLeft: [24, 200], paddingBottomRight: [24, 160]}
+    : {paddingTopLeft: [430, 60], paddingBottomRight: [chatOpen ? 450 : 100, 60]});
+}
+
 function renderMap() {
   const m = mapState;
-  routeLayer.clearLayers(); activeLayer.clearLayers();
+  routeLayer.clearLayers(); activeLayer.clearLayers(); hoverLayer.clearLayers();
+  segLines = {};
   if (!m) return;
-  const pts = [];
-  listed().forEach((r, i) => {
-    const faded = selected !== null && selected !== i;
-    pts.push(...drawRoute(routeLayer, r, COLORS[i % COLORS.length], selected === i ? 7 : 5, faded));
-  });
-  if (m.active) pts.push(...drawRoute(activeLayer, m.active, "#1f2328", 7, false));
+  const routes = listed(), pts = [];
+  lineColor = {};
+  for (const r of routes) for (const l of r.lines) if (!(l in lineColor)) lineColor[l] = COLORS[Object.keys(lineColor).length % COLORS.length];
+  const lines = Object.keys(lineColor);
+  const step = lines.length > 1 ? Math.min(OFFSET_STEP, OFFSET_SPREAD / (lines.length - 1)) : 0;
+  const focus = routes.find(r => r.route_id === selected);
+
+  // every distinct ride segment once; the best-ranked route using it is what a click on it opens
+  const firstRoute = {};
+  for (const r of routes) for (const p of rides(r)) if (!(segKey(p) in firstRoute)) firstRoute[segKey(p)] = [r, p];
+  const badged = new Set();
+  for (const [key, [r, p]] of Object.entries(firstRoute)) {
+    const c = smooth(p.coords), k = lines.indexOf(p.line);
+    const offset = focus ? 0 : (k - (lines.length - 1) / 2) * step;
+    if (!focus) L.polyline(c, {color: "#fff", weight: 8, offset, opacity: .85, interactive: false}).addTo(routeLayer);
+    const pl = L.polyline(c, {color: focus ? "#6b7280" : lineColor[p.line], weight: focus ? 4 : 5, offset, opacity: focus ? .55 : 1})
+      .bindTooltip(lineName(p.line), {sticky: true}).addTo(routeLayer);
+    pl.on("click", () => select(r.route_id));
+    if (!focus) { pl.on("mouseover", () => hover(r.route_id)); pl.on("mouseout", () => hover(null)); }
+    segLines[key] = pl;
+    pts.push(...p.coords);
+    if (!focus && !badged.has(p.line)) {  // one badge per line, spread along the segment by line order
+      badged.add(p.line);
+      badge(c[Math.floor(c.length * (.3 + .4 * (lines.length > 1 ? k / (lines.length - 1) : .5)))], p.line).addTo(routeLayer);
+    }
+  }
+  if (focus) pts.push(...drawFull(hoverLayer, focus, {stops: true}));
+  if (m.active) pts.push(...drawFull(activeLayer, m.active, {color: "#1f2328"}));
   if (m.dest) {
     const d = Object.entries(buildings).find(([, p]) => Math.abs(p.lat - m.dest[0]) < 1e-6 && Math.abs(p.lon - m.dest[1]) < 1e-6);
-    const arrive = listed()[0]?.next_departures?.[0]?.arrive;
+    const arrive = (focus || routes[0])?.next_departures?.[0]?.arrive;
     pin(m.dest, esc((d ? d[0] : "Destination") + (arrive ? ` · ${arrive}` : "")), "pin light", [50, 34]).addTo(routeLayer);
   }
   return pts;
 }
 
-function onMap(m) {
-  mapState = m; selected = null; showAll = false;
+function hover(id) {
+  if (hovered === id || selected) return;
+  hovered = id;
+  // fade every segment, then draw the hovered route on top (not clickable, so the pointer stays on the segment)
+  hoverLayer.clearLayers();
+  for (const pl of Object.values(segLines)) pl.setStyle({opacity: id ? .25 : 1});
+  const r = id && listed().find(x => x.route_id === id);
+  if (r) drawFull(hoverLayer, r, {stops: true});
+  $("routes-list").querySelectorAll(".route").forEach(b => b.classList.toggle("on", b.dataset.id === id));
+}
+
+function select(id) {
+  selected = selected === id ? null : id;
+  hovered = null;
   const pts = renderMap();
-  const narrow = innerWidth < 760;
-  if (pts && pts.length) map.fitBounds(L.latLngBounds(pts), narrow
-    ? {paddingTopLeft: [24, 200], paddingBottomRight: [24, 160]}
-    : {paddingTopLeft: [430, 60], paddingBottomRight: [chatOpen ? 450 : 100, 60]});
+  renderRoutes();
+  if (selected) fitTo(pts);
+}
+
+function onMap(m) {
+  mapState = m; selected = null; hovered = null; showAll = false;
+  fitTo(renderMap());
   renderRoutes();
   $("routes-stat").innerHTML = m.found
     ? `<b>plan_routes</b> found <b>${m.found}</b> suitable routes. The assistant's reply mentions <b>${m.shown.length}</b>${m.shown.length < m.found ? " — the rest were never shown to the user." : "."}`
     : "No routes planned yet.";
+}
+
+const stripes = r => r.lines.length === 1 ? lineColor[r.lines[0]]
+  : `linear-gradient(${r.lines.map((l, k) => `${lineColor[l]} ${k * 100 / r.lines.length}% ${(k + 1) * 100 / r.lines.length}%`).join(", ")})`;
+const badges = r => r.lines.map(l => `<span class="line-badge" style="background:${lineColor[l]}">${esc(shortLine(l))}</span>`).join("");
+
+function itinerary(r) {
+  const d = r.next_departures[0], legs = rides(r);
+  const destName = Object.entries(buildings).find(([, p]) => mapState.dest && Math.abs(p.lat - mapState.dest[0]) < 1e-6)?.[0] || "your destination";
+  const step = (icon, text, sub = "") => `<li class="step"><span class="step-icon">${icon}</span><span><span>${text}</span>${sub ? `<span class="sub" style="display:block">${sub}</span>` : ""}</span></li>`;
+  const steps = [step(ICON_WALK, `Walk ${r.walk_min.to_stop} min to <b>${esc(legs[0].board)}</b>`, r.leave_by ? `Leave by ${esc(r.leave_by)}` : "")];
+  legs.forEach((p, k) => {
+    if (k > 0) steps.push(step(ICON_WALK, `Transfer: walk to <b>${esc(p.board)}</b>`, k === 1 && r.walk_min.transfer ? `${r.walk_min.transfer} min of transfer walking` : ""));
+    steps.push(step(`<span class="line-badge" style="background:${lineColor[p.line]}">${esc(shortLine(p.line))}</span>`,
+      `Ride <b>${esc(lineName(p.line))}</b> to <b>${esc(p.alight)}</b>`, k === 0 && d ? `Departs ${esc(d.depart)}` : ""));
+  });
+  steps.push(step(ICON_WALK, `Walk ${r.walk_min.from_stop} min to <b>${esc(destName)}</b>`, d ? `Arrive ${esc(d.arrive)}` : ""));
+  const other = r.next_departures.slice(1).map(x => `${x.depart} → ${x.arrive}`).join(", ");
+  return `<button type="button" class="link" id="back-all" style="align-self:flex-start">← All routes</button>
+    <div class="route on" style="cursor:default"><span class="bar" style="background:${stripes(r)}"></span>
+      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span>
+      <span class="times">${d ? `${esc(d.depart)} → ${esc(d.arrive)}` : ""}${other ? ` · also ${esc(other)}` : ""}</span></span>
+      <span class="dur">${tripMin(r)} min</span></div>
+    <ol class="steps">${steps.join("")}</ol>`;
 }
 
 function renderRoutes() {
@@ -508,33 +628,40 @@ function renderRoutes() {
   $("routes").hidden = !m || !m.shown.length;
   if (!m || !m.shown.length) return;
   const routes = listed();
-  $("routes-sub").textContent = (showAll ? "All routes the planner found" : "Suggested by the assistant") + " · on time, shortest trip first";
   const destName = Object.entries(buildings).find(([, p]) => m.dest && Math.abs(p.lat - m.dest[0]) < 1e-6)?.[0];
   $("routes-to").textContent = destName ? `to ${destName}` : "";
-  $("routes-list").innerHTML = routes.map((r, i) => {
+  const focus = routes.find(r => r.route_id === selected);
+  if (focus) {
+    $("routes-sub").textContent = "Step by step";
+    $("routes-list").innerHTML = itinerary(focus);
+    $("back-all").onclick = () => select(selected);
+    $("routes-count").innerHTML = "";
+    return;
+  }
+  $("routes-sub").textContent = (showAll ? "All routes the planner found" : "Suggested by the assistant") + " · on time, shortest trip first";
+  $("routes-list").innerHTML = routes.map(r => {
     const dur = tripMin(r) === Infinity ? null : tripMin(r);
     const tags = r.labels.filter(l => l !== "least walking" || r.labels.length === 1).slice(0, 2)
       .map(l => `<span class="pill">${esc(l[0].toUpperCase() + l.slice(1))}</span>`).join("");
     const deps = r.next_departures.map(x => `${x.depart} → ${x.arrive}`).join(", ");
-    return `<button type="button" class="route ${selected === i ? "on" : ""}" data-i="${i}">
-      <span class="bar" style="background:${COLORS[i % COLORS.length]}"></span>
-      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${tags}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span><span class="times">${esc(deps)}</span></span>
+    return `<button type="button" class="route" data-id="${esc(r.route_id)}" aria-label="Show ${esc(r.lines.map(lineName).join(" then "))} step by step">
+      <span class="bar" style="background:${stripes(r)}"></span>
+      <span class="body"><span class="name">${badges(r)} ${esc(r.lines.map(lineName).join(" → "))}${tags}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span><span class="times">${esc(deps)}</span></span>
       ${dur !== null ? `<span class="dur" title="Door to door, including walking">${dur} min</span>` : ""}</button>`;
   }).join("");
-  $("routes-list").querySelectorAll(".route").forEach(b => b.onclick = () => {
-    const i = Number(b.dataset.i);
-    selected = selected === i ? null : i;
-    renderMap(); renderRoutes();
+  $("routes-list").querySelectorAll(".route").forEach(b => {
+    b.onclick = () => select(b.dataset.id);
+    b.onmouseenter = b.onfocus = () => hover(b.dataset.id);
+    b.onmouseleave = b.onblur = () => hover(null);
   });
   const hidden = (m.others || []).length;
-  $("routes-count").innerHTML = !hidden ? `${m.found} routes` :
-    `<span>${m.shown.length} of ${m.found} routes shown in chat</span> <button type="button" class="link" id="show-all">${showAll ? "Show only the chat's routes" : `Show all ${m.found} routes`}</button>`;
+  $("routes-count").innerHTML = (!hidden ? `${m.found} routes` :
+    `<span>${m.shown.length} of ${m.found} routes shown in chat</span> <button type="button" class="link" id="show-all">${showAll ? "Show only the chat's routes" : `Show all ${m.found} routes`}</button>`)
+    + '<span style="display:block;margin-top:4px">Hover to highlight, click for step-by-step.</span>';
   if ($("show-all")) $("show-all").onclick = () => {
-    showAll = !showAll; selected = null;
+    showAll = !showAll; selected = null; hovered = null;
     const pts = renderMap(); renderRoutes();
-    if (pts && pts.length && showAll) map.fitBounds(L.latLngBounds(pts), innerWidth < 760
-      ? {paddingTopLeft: [24, 200], paddingBottomRight: [24, 160]}
-      : {paddingTopLeft: [430, 60], paddingBottomRight: [chatOpen ? 450 : 100, 60]});
+    if (showAll) fitTo(pts);
   };
 }
 
@@ -656,7 +783,7 @@ function onState(s) {
 
 function reset() {
   messages.innerHTML = ""; $("log").innerHTML = "";
-  mapState = null; selected = null; routeLayer.clearLayers(); activeLayer.clearLayers();
+  mapState = null; selected = null; hovered = null; routeLayer.clearLayers(); activeLayer.clearLayers(); hoverLayer.clearLayers();
   $("routes").hidden = true; $("routes-stat").textContent = "No routes planned yet.";
   welcome();
 }
@@ -709,7 +836,12 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
   document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", x === b));
   document.querySelectorAll(".tabpane").forEach(p => p.hidden = p.id !== "tab-" + b.dataset.tab);
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { if ($("drawer").classList.contains("open")) setDrawer(false); else if (chatOpen) setChat(false); } });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if ($("drawer").classList.contains("open")) setDrawer(false);
+  else if (chatOpen) setChat(false);
+  else if (selected) select(selected);
+});
 
 fetch("/api/init").then(r => r.json()).then(init => {
   places = init.places; buildings = init.buildings;
