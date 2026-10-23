@@ -1,0 +1,6 @@
+{
+  "Home": {"lat": 34.0354, "lon": -118.4342, "sensitive": true,
+           "note": "public placeholder (Expo/Sepulveda station); local runs can override with data/local/home.json"},
+  "Westwood Village": {"lat": 34.0617, "lon": -118.4468, "sensitive": false},
+  "Culver City Station": {"lat": 34.0278, "lon": -118.3889, "sensitive": false}
+}

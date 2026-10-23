@@ -1,0 +1,50 @@
+[
+ {
+  "course": "COM SCI 239",
+  "section": "Lec 1",
+  "days": [
+   "Tu",
+   "Th"
+  ],
+  "start": "10:00",
+  "end": "11:50",
+  "building": "Boelter Hall",
+  "room": "5249"
+ },
+ {
+  "course": "MATH 170A",
+  "section": "Lec 2",
+  "days": [
+   "M",
+   "W",
+   "F"
+  ],
+  "start": "09:00",
+  "end": "09:50",
+  "building": "Mathematical Sciences",
+  "room": "4000A"
+ },
+ {
+  "course": "PHYSICS 1C",
+  "section": "Lec 1",
+  "days": [
+   "Tu",
+   "Th"
+  ],
+  "start": "14:00",
+  "end": "15:15",
+  "building": "Knudsen Hall",
+  "room": "1220B"
+ },
+ {
+  "course": "COM SCI 260",
+  "section": "Dis 1A",
+  "days": [
+   "W"
+  ],
+  "start": "16:00",
+  "end": "16:50",
+  "building": "Engineering VI",
+  "room": "289"
+ }
+]
