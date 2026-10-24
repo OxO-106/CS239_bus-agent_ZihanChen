@@ -59,3 +59,50 @@ def test_direct_planner_and_schedule_confirm(router):
     assert today["classes"][0]["leave_by"]["time"] <= "10:00"  # from the plan just made
     actions = [e["data"]["action"] for e in s.trace.events if e["kind"] == "action"]
     assert actions == ["plan", "plan", "confirm_schedule"]
+
+
+def test_share_sheet_lifecycle(router):
+    """T1's world: plan, share ETA + location with Mom by text, board, delay, arrive; recipient view follows."""
+    s = Session(router, ROOT / "scenarios/t1_clean_trip.json")  # Tuesday 08:00, rider at the Home placeholder
+    s.link_base = "http://localhost:8239"
+    s.plan("Home", "Boelter Hall", "depart", "08:40")
+    trip = next(r for r in s.world.plans[-1]["result"]["routes"] if r["lines"] == ["CC6R"])
+    opts = {"recipient": "mom", "fields": {"eta": True, "live_location": True, "route": False}, "precision": "exact",
+            "duration": "arrive", "channel": "text", "trip": {"route_id": trip["route_id"], "depart": "08:46"}}
+    assert "error" in s.share({**opts, "recipient": "alex"})           # not a trusted contact
+    out = s.share(opts)
+    first = s.world.outbox[-1]
+    assert first["channel"] == "text" and first["link"] == out["link"] and "Follow along" in first["message"]
+    assert first["eta"] == "09:11" and first["location"] == {"lat": 34.04, "lon": -118.43}  # at Home: area only
+    token = out["link"].rsplit("/", 1)[1]
+    view = s.recipient_view(token)
+    assert view["status"] == "active" and view["eta"] == "09:11" and view["location"]["radius_m"] == 800
+    assert "lines" not in view                                          # route wasn't shared
+    for event in s.sc["events"][3:]:                                    # board, gps, delay, arrive
+        s.world.set_time(event["at"])
+        s.world.apply(event)
+        s._after_world_event(event)
+    etas = [o["eta"] for o in s.world.outbox if o.get("eta")]
+    assert etas == ["09:11", "09:19"]                                  # updated from compute_eta after the delay
+    assert s.world.outbox[-1]["text"].startswith("Jamie arrived at Boelter Hall")
+    ended = s.recipient_view(token)
+    assert ended["status"] == "ended" and "location" not in ended and "eta" not in ended
+
+
+def test_stop_share_and_link_share(router):
+    s = Session(router, ROOT / "scenarios/t1_clean_trip.json")
+    base = {"recipient": "sam", "fields": {"eta": False, "live_location": True, "route": False}, "precision": "area",
+            "duration": "30", "trip": None}
+    link = s.share({**base, "channel": "link"})
+    text = s.share({**base, "channel": "text"})
+    assert "error" in s.share({**base, "channel": "email", "recipient": "alex"})
+    assert s.world.shares[link["share_id"]]["expires_at"].endswith("08:30:00")       # 30 min from 08:00
+    sent = len(s.world.outbox)
+    s.share_stop(link["share_id"])                                                    # a link has no one to notify
+    assert len(s.world.outbox) == sent
+    s.share_stop(text["share_id"])
+    assert s.world.outbox[-1]["text"] == "Jamie stopped sharing their trip."
+    assert s.recipient_view(text["link"].rsplit("/", 1)[1])["status"] == "revoked"
+    preview = s.share_preview({**base, "channel": "email", "recipient": "mom",
+                               "fields": {"eta": False, "live_location": True, "route": True}})
+    assert "approximate area and bus" in preview["text"] and preview["subject"]

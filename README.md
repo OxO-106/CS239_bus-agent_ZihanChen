@@ -32,7 +32,15 @@ Open http://localhost:8239. It looks like a regular map app:
   - **Directions:** From and To pickers (saved places and UCLA buildings), a swap button, Arrive by / Leave at / Leave now, and a time. **Find routes** runs the route planner directly, without the chat.
   - **Today's classes:** an **Upload schedule** button (image or `.txt`). The extracted classes open in a review window where every field can be edited, and nothing is used until you confirm. The next class shows its leave-by time and bus, and each class's directions button fills in the Directions panel.
   - **Routes:** the top 3 routes, ranked (on time first, then by door-to-door trip time), with **Show N more** for the rest. When the chat planned the trip, routes the reply left out are tagged "Not in chat".
-- **Top right:** a chip for each live share (red if the recipient isn't a trusted contact) with a **Stop** button, plus the **Inspector** button.
+- **Top right:** a chip for each live share (red if the recipient isn't a trusted contact) with **Their view** and **Stop**, a **Share trip** button, and the **Inspector** button.
+- **Share sheet** (Share trip, or "Share this trip" on a route's step-by-step view):
+  - **Who:** trusted contacts only.
+  - **What they see:** arrival time, live location (exact, street or area) and route, each switched separately. Near Home the location is always shown as the area only.
+  - **How long:** until I arrive, 30 min, 1 hour or 2 hours, never more than 4 hours.
+  - **Send by:** text, email or a link, with a preview of the exact message.
+
+  Sending is simulated: the text or email goes into the outbox with a link to `/t/<token>`.
+- **Shared trip page** (`/t/<token>`, what Mom sees): the arrival time with any delay, a circle for the shared location at the chosen precision, and trip progress. It shows only the fields that were shared. While the share is live the app keeps it current: after boarding and after delays the ETA comes from `compute_eta`, and a text update goes out. On arrival, expiry or Stop, the page and a final message say sharing has ended, and nothing live is shown any more. Shares made through the chat are the agents' own (Phase 1, unguarded) and don't get this page.
 - **Assistant:** the round button at the bottom right opens and closes a floating chat window (a bottom sheet on a phone). Everything above also works through the chat (the paperclip uploads a schedule there). Button actions are logged in the trace as the user's actions and the app's tool calls, so the checks see them too.
 - **Inspector drawer:** *Session* picks a scenario (T1, T4, T13, …) or live chat and saves the trace. *Checks* shows the safety checks, live shares, and everything that left the phone. *Activity* shows every agent message and tool call as it happens. While a scenario runs, a player bar at the bottom shows the next event with a **Play** button.
 

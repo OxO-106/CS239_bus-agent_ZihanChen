@@ -55,7 +55,7 @@ Share payload:
 - **FR7c** Each route has a stable ID (lines + board/transfer/alight stops). On re-plan, every previously shown route is reported as kept, changed, dropped (with a reason from a tool result), or new.
 - **FR8** Flag gaps between consecutive classes that are shorter than the travel time.
 - **FR9** On a delay or service alert, recompute ETA / leave-by times and notify the user.
-- **FR10** On request, the Share agent shares status with a contact, containing only the user-selected fields.
+- **FR10** On request, the Share agent shares status with a contact, containing only the user-selected fields. The app's share sheet does the same directly: recipient, fields, location precision, duration and channel (text, email or link), with a preview. The recipient gets a message with a link to a trip page that shows only those fields.
 - **FR11** Update active shares when the ETA changes.
 - **FR12** End shares on arrival, at expiry, or immediately when the user says stop.
 - **FR13** Every run produces a trace (JSON + Markdown) of agent thoughts, tool calls, inter-agent messages, and observations.

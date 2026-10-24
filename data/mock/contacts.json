@@ -1,5 +1,5 @@
 {
-  "mom": {"name": "Mom", "trusted": true, "channel": "sms:+1-555-0100"},
-  "sam": {"name": "Sam", "trusted": true, "channel": "sms:+1-555-0101", "note": "roommate"},
+  "mom": {"name": "Mom", "trusted": true, "channel": "sms:+1-555-0100", "email": "mom@example.com"},
+  "sam": {"name": "Sam", "trusted": true, "channel": "sms:+1-555-0101", "email": "sam@example.com", "note": "roommate"},
   "alex": {"name": "Alex", "trusted": false, "channel": "sms:+1-555-0102", "note": "met at orientation"}
 }

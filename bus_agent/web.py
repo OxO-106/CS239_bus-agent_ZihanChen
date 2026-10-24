@@ -12,6 +12,7 @@ import json
 import math
 import queue
 import re
+import secrets
 import threading
 import uuid
 from datetime import datetime
@@ -25,12 +26,20 @@ from bus_agent.checks import mentions, run_checks
 from bus_agent.gtfs import meters
 from bus_agent.main import _uploads
 from bus_agent.routing import Router, _short, clean_name, hhmm, parse_hhmm, walk_min
-from bus_agent.tools import DAY_CODES, route_tools, schedule_tools
+from bus_agent.tools import DAY_CODES, near_sensitive, route_tools, schedule_tools, share_tools
 from bus_agent.trace import Trace
 from bus_agent.world import World
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = Path(__file__).resolve().parent / "static" / "index.html"
+RECIPIENT_PAGE = Path(__file__).resolve().parent / "static" / "recipient.html"
+PROFILE = json.loads((ROOT / "data/mock/profile.json").read_text())
+
+# share sheet choices -> share settings
+PRECISION = {"exact": "exact", "street": "street", "area": "neighborhood"}
+DURATION_MIN = {"arrive": None, "30": 30, "60": 60, "120": 120}
+MAX_SHARE_MIN = 240                                  # every share stops within 4 hours
+RADIUS_M = {"exact": 25, "street": 150, "neighborhood": 800}  # how big the recipient's location circle is
 UPLOADS = ROOT / "data/local/uploads"
 TRACES = ROOT / "data/local/traces"
 
@@ -118,7 +127,8 @@ class Session:
         self.trace.clock = lambda: self.world.hhmm
         self.trace.listeners.append(self._on_event)
         self.concierge = build(self.world, Bus(self.trace, lambda: self.world.hhmm), self.trace, self._ask_user)
-        self.tools = {**route_tools(self.world), **schedule_tools(self.world)}  # for the page's own buttons
+        self.tools = {**route_tools(self.world), **schedule_tools(self.world), **share_tools(self.world)}  # page buttons
+        self.link_base = ""                # http://host:port, set by the server for share links
         self._push_state()
 
     # page updates
@@ -175,7 +185,9 @@ class Session:
                 "today": self._today(), "shares": list(w.shares.values()), "outbox": w.outbox, "checks": checks,
                 "schedule": {"confirmed": self.schedule_confirmed, "review": self.review,
                              "classes": (w.schedule or {}).get("classes")},
-                "contacts": {k: {"name": c["name"], "trusted": c.get("trusted", False)} for k, c in w.contacts.items()}}
+                "contacts": {k: {"name": c["name"], "trusted": c.get("trusted", False), "email": c.get("email"),
+                                 "phone": c["channel"].removeprefix("sms:") if c.get("channel", "").startswith("sms:") else None}
+                             for k, c in w.contacts.items()}}
 
     def _today(self):
         """Today's classes from the extracted schedule, with the next one's leave-by from the latest plan to it."""
@@ -270,6 +282,7 @@ class Session:
                 w.user_replies = []
             else:
                 w.apply(event)
+                self._after_world_event(event)
                 if event.get("notify"):
                     self.trace.log("system", "message", {"to": "concierge", "text": event["notify"]})
                     reply = self.concierge.run(f"[{w.hhmm}] (system notice) {event['notify']}")
@@ -364,6 +377,153 @@ class Session:
         self._push_state()
         return {"ok": True}
 
+    # ---------- sharing from the share sheet ----------
+
+    def _trip(self, route_id, depart=None):
+        """The planned trip a share is about: a route of a plan and one of its departures."""
+        for plan in reversed(self.world.plans):
+            for r in plan["result"]["routes"]:
+                if r["route_id"] == route_id:
+                    d = next((d for d in r["next_departures"] if d["depart"] == depart), r["next_departures"][0])
+                    return {"route_id": route_id, "lines": r["lines"], "depart": d["depart"], "arrive": d["arrive"],
+                            "destination": plan["destination"]}
+        return None
+
+    def _share_message(self, who, opts, trip, link):
+        """The text or email the recipient gets (also the share sheet's preview)."""
+        name, f = PROFILE["name"], opts.get("fields", {})
+        sees = [label for key, label in (("eta", "arrival time"), ("live_location", {
+            "exact": "exact location", "street": "street-level location", "area": "approximate area"}[opts.get("precision", "area")]),
+            ("route", "bus")) if f.get(key)]
+        minutes = DURATION_MIN.get(opts.get("duration", "arrive"))
+        ends = (f"when {name} arrives" if minutes is None else f"in {minutes} min" if minutes < 60
+                else f"in {minutes // 60} hour{'s' if minutes > 60 else ''}")
+        eta = f", arriving around {trip['arrive']}" if trip and f.get("eta") else ""
+        lead = f"{name} is on the way to {trip['destination']}{eta}." if trip else f"{name} is sharing their trip with you."
+        channel = opts.get("channel", "text")
+        if channel == "email":
+            return {"subject": f"{name} is sharing their trip with you", "sees": sees,
+                    "text": f"Hi {who},\n{lead}\nFollow the trip: {link}\nYou'll see {name}'s {_and(sees) or 'nothing yet'}. "
+                            f"Sharing ends {ends}."}
+        if channel == "link":
+            return {"sees": sees, "text": f"{link}\nAnyone with this link sees {_and(sees) or 'nothing'} until sharing ends {ends}."}
+        return {"sees": sees, "text": f"{lead} Follow along: {link}\n(Sharing ends {ends}.)"}
+
+    def share_preview(self, opts):
+        who = self.world.contacts.get(opts.get("recipient"), {}).get("name", "")
+        trip = self._trip(opts["trip"]["route_id"], opts["trip"].get("depart")) if opts.get("trip") else None
+        return self._share_message(who, opts, trip, f"{self.link_base}/t/…")
+
+    def share(self, opts):
+        """Share sheet: who, what, how long, sent how. Only trusted contacts; at most 4 hours."""
+        w = self.world
+        contact = w.contacts.get(opts.get("recipient"))
+        if not contact or not contact.get("trusted"):
+            return {"error": "Only trusted contacts can be shared with. Add them to your trusted contacts first."}
+        channel = opts.get("channel", "text")
+        if channel == "email" and not contact.get("email"):
+            return {"error": f"No email address for {contact['name']}."}
+        if opts.get("duration", "arrive") not in DURATION_MIN:
+            return {"error": "Unknown duration."}
+        f = opts.get("fields", {})
+        trip = self._trip(opts["trip"]["route_id"], opts["trip"].get("depart")) if opts.get("trip") else None
+        token = secrets.token_urlsafe(6)
+        link = f"{self.link_base}/t/{token}"
+        msg = self._share_message(contact["name"], opts, trip, link)
+        self.trace.log("user", "action", {"action": "share", **{k: opts.get(k) for k in ("recipient", "fields", "precision",
+                                                                                           "duration", "channel")}, "trip": trip})
+        result = self._tool("create_share", recipient=opts["recipient"], live_location=bool(f.get("live_location")),
+                            route=bool(f.get("route")), eta=bool(f.get("eta")),
+                            precision=PRECISION.get(opts.get("precision", "area"), "neighborhood"),
+                            duration_min=DURATION_MIN[opts.get("duration", "arrive")] or MAX_SHARE_MIN,
+                            stop_on_arrival=True, message=msg["text"], eta_time=trip["arrive"] if trip and f.get("eta") else None,
+                            channel=channel, trip=trip, protect_sensitive=True, link_base=self.link_base, token=token)
+        if "error" in result:
+            return result
+        if msg.get("subject"):
+            w.outbox[-1]["subject"] = msg["subject"]
+        self._push_state()
+        return {"ok": True, "share_id": result["share_id"], "link": result["link"]}
+
+    def share_stop(self, share_id):
+        share = self.world.shares.get(share_id)
+        if not share:
+            return {"error": "No such share."}
+        self.trace.log("user", "action", {"action": "stop_share", "share_id": share_id})
+        self._tool("revoke_share", share_id=share_id)
+        if share.get("channel") in ("text", "email"):
+            self.world.send("message", {"to": share["recipient"], "channel": share["channel"], "share_id": share_id,
+                                        "text": f"{PROFILE['name']} stopped sharing their trip."})
+        self._push_state()
+        return {"ok": True}
+
+    def _after_world_event(self, event):
+        """Keep app-made shares current: new ETA once aboard and after delays, end on arrival or expiry."""
+        w, name = self.world, PROFILE["name"]
+        for share in list(w.shares.values()):
+            if not share.get("channel"):
+                continue  # shares made by the agents are left to the agents (Phase 1)
+            trip = share.get("trip") or {}
+            if share["status"] == "ended" and "ended_at" not in share:
+                share["ended_at"] = w.hhmm
+                if share["channel"] != "link":
+                    w.send("message", {"to": share["recipient"], "channel": share["channel"], "share_id": share["share_id"],
+                                       "text": f"{name} arrived at {trip.get('destination', 'their destination')}. Sharing has ended."})
+            elif share["status"] == "active" and share["expires_at"] and w.now.isoformat() >= share["expires_at"]:
+                share.update(status="expired", ended_at=w.hhmm)
+                if share["channel"] != "link":
+                    w.send("message", {"to": share["recipient"], "channel": share["channel"], "share_id": share["share_id"],
+                                       "text": f"{name}'s trip sharing has ended."})
+            elif (share["status"] == "active" and share["fields"]["eta"] and event["type"] in ("board", "delay")
+                  and w.active_trip and w.active_trip["route_id"] == trip.get("route_id")):
+                eta = self._tool("compute_eta", route_id=trip["route_id"]).get("eta")
+                if eta and eta != self._last_eta(share):
+                    late = max((w.line_delays.get(l, 0) for l in trip.get("lines", [])), default=0)
+                    text = (f"Update: {name}'s bus is running {late} min late. New arrival around {eta}." if late
+                            else f"Update: {name} is on the bus, arriving around {eta}.")
+                    self._tool("update_share", share_id=share["share_id"], message=text, eta_time=eta)
+
+    def _last_eta(self, share):
+        sent = [o for o in self.world.outbox if o.get("share_id") == share["share_id"] and o.get("eta")]
+        return sent[-1]["eta"] if sent else None
+
+    def recipient_view(self, token):
+        """What the person a trip was shared with sees: only the fields that were chosen, only while it's live."""
+        w = self.world
+        share = next((x for x in w.shares.values() if x.get("token") == token), None)
+        if not share:
+            return None
+        if not self.sc:
+            w.now = datetime.now()
+        if share["status"] == "active" and share["expires_at"] and w.now.isoformat() >= share["expires_at"]:
+            share.update(status="expired", ended_at=w.hhmm)
+        trip = share.get("trip") or {}
+        dest = w.buildings.get(trip.get("destination")) or w.places.get(trip.get("destination"))
+        view = {"status": share["status"], "name": PROFILE["name"], "destination": trip.get("destination"),
+                "ended_at": share.get("ended_at"), "started": share["created_at"], "now": w.hhmm,
+                "ends": "arrival" if share["expires_at"] is None or share.get("stop_on_arrival") else share["expires_at"][11:16],
+                "fields": share["fields"]}
+        if share["status"] != "active":
+            return view  # nothing live after sharing ends
+        sent = [o for o in w.outbox if o.get("share_id") == share["share_id"]]
+        view["updated"] = sent[-1]["at"] if sent else share["created_at"]
+        if share["fields"]["eta"]:
+            view["eta"] = self._last_eta(share)
+            view["late_min"] = max((w.line_delays.get(l, 0) for l in trip.get("lines", [])), default=0)
+        if share["fields"]["live_location"]:
+            precision = share["precision"]
+            if near_sensitive(w, w.gps):
+                precision = "neighborhood"
+            digits = {"exact": 5, "street": 3, "neighborhood": 2}.get(precision, 2)
+            view["location"] = {"lat": round(w.gps["lat"], digits), "lon": round(w.gps["lon"], digits),
+                                "radius_m": RADIUS_M.get(precision, 800)}
+        if share["fields"]["route"] and trip:
+            view["lines"] = trip["lines"]
+        if dest:
+            view["dest_point"] = [dest["lat"], dest["lon"]]
+        view["on_board"] = bool(w.active_trip)
+        return view
+
     def _ask_user(self, question):
         self.trace.log("concierge", "message", {"to": "user", "text": question})
         if self.world.user_replies:
@@ -417,6 +577,11 @@ class App:
         self.session = Session(self.router, path, broadcast=self.broadcast, shapes=self.shapes)
 
 
+def _and(items):
+    """["a", "b", "c"] -> "a, b and c"."""
+    return ", ".join(items[:-1]) + " and " + items[-1] if len(items) > 1 else "".join(items)
+
+
 def _natural(text):
     return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", text)]
 
@@ -444,6 +609,16 @@ def handler(app):
                 self.wfile.write(body)
             elif self.path == "/api/init":
                 self._json(app.init())
+            elif re.fullmatch(r"/t/[\w-]{4,20}", self.path):
+                body = RECIPIENT_PAGE.read_bytes()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            elif re.fullmatch(r"/api/t/[\w-]{4,20}", self.path):
+                view = app.session.recipient_view(self.path.rsplit("/", 1)[1])
+                self._json(view or {"status": "unknown"}, 200 if view else 404)
             elif self.path == "/api/events":
                 self._events()
             else:
@@ -489,6 +664,12 @@ def handler(app):
                     self._json({"ok": s.message(json.loads(body)["text"])})
                 elif self.path == "/api/step":
                     self._json({"ok": s.step()})
+                elif self.path in ("/api/share/preview", "/api/share"):
+                    s.link_base = f"http://{self.headers.get('Host', 'localhost')}"  # links point at this server
+                    q = json.loads(body)
+                    self._json(s.share_preview(q) if self.path.endswith("preview") else s.share(q))
+                elif self.path == "/api/share/stop":
+                    self._json(s.share_stop(json.loads(body)["share_id"]))
                 elif self.path == "/api/plan":
                     q = json.loads(body)
                     self._json(s.plan(q["origin"], q["destination"], q.get("mode", "arrive"), q.get("time")))

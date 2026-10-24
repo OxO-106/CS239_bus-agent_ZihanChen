@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Shared trip · bus-agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root { --ink: #1f2328; --ink-2: #3b4148; --muted: #5f6670; --line: #eceef1; --card: #fff; --ground: #f6f7f9;
+          --accent: #2f6feb; --accent-soft: #dbe7ff; --ok: #1e8e3e; --ok-soft: #e6f4ea; --late: #8a4b08; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; min-height: 100%; }
+  body { font: 14px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--ground); }
+  .wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 8px; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--line); }
+  header .brand { font-weight: 700; font-size: 15px; flex: 1; }
+  .badge { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+  .badge.live { color: #1e6b33; background: var(--ok-soft); }
+  .badge.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .badge.ended { color: var(--muted); background: var(--line); }
+  main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  h1 { margin: 0; font-size: 20px; }
+  .sub { font-size: 13.5px; color: var(--ink-2); }
+  .card { background: var(--card); border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(20, 24, 31, .08); }
+  .eta { display: flex; align-items: center; gap: 14px; }
+  .eta .big { font-size: 40px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .eta .late { font-size: 13px; color: var(--late); font-weight: 600; margin-top: 2px; }
+  .eta .small { font-size: 12.5px; color: var(--muted); }
+  #map { height: 250px; border-radius: 16px; overflow: hidden; background: #eef0ea; position: relative; }
+  .map-note { position: absolute; left: 12px; bottom: 12px; z-index: 500; background: rgba(255,255,255,.94); border-radius: 10px; padding: 6px 10px; font-size: 12px; color: var(--ink-2); }
+  ol.progress { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; }
+  ol.progress li { display: flex; gap: 10px; align-items: center; }
+  ol.progress .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  ol.progress .t { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .what { font-size: 12.5px; color: var(--ink-2); line-height: 1.5; padding: 0 2px; }
+  .done { padding: 40px 24px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .done .ring { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; }
+  footer { padding: 10px 16px 16px; font-size: 11.5px; color: var(--muted); text-align: center; }
+  .pin { background: #1f2328; color: #fff; font: 600 12px Inter, sans-serif; padding: 4px 8px; border-radius: 8px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg>
+    <span class="brand">bus-agent</span>
+    <span class="badge" id="badge"></span>
+  </header>
+
+  <main id="live" hidden aria-live="polite">
+    <div><h1 id="title"></h1><div class="sub" id="to"></div></div>
+    <section class="card eta" id="eta-card" aria-label="Arrival">
+      <div style="flex:1"><div class="small">Arriving around</div><div class="big" id="eta"></div><div class="late" id="late"></div></div>
+      <div class="small" style="text-align:right" id="updated"></div>
+    </section>
+    <section id="map" aria-label="Approximate location"><div class="map-note" id="map-note"></div></section>
+    <section class="card" aria-label="Trip progress"><ol class="progress" id="progress"></ol></section>
+    <div class="what" id="what"></div>
+  </main>
+
+  <main id="over" hidden>
+    <div class="done">
+      <div class="ring" id="ring"></div>
+      <h1 id="over-title"></h1>
+      <div class="sub" id="over-sub"></div>
+      <section class="card" style="margin-top:12px;width:100%;text-align:left;display:flex;gap:12px;align-items:flex-start">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5f6670" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <div style="font-size:13.5px;line-height:1.5;color:var(--ink-2)"><b style="color:var(--ink)">Sharing has ended.</b><br><span id="over-name"></span></div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="foot">No app or account needed</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const token = location.pathname.split("/").pop();
+let map = null, circle = null, dot = null, dest = null, fitted = false;
+
+function showLive(v) {
+  $("live").hidden = false; $("over").hidden = true;
+  $("badge").className = "badge live"; $("badge").textContent = "Live";
+  $("title").textContent = v.on_board ? `${v.name} is on the bus` : `${v.name} is on the way`;
+  $("to").textContent = v.destination ? `to ${v.destination}` : "";
+  $("eta-card").hidden = !v.fields.eta || !v.eta;
+  if (v.eta) {
+    $("eta").textContent = v.eta;
+    $("late").textContent = v.late_min ? `Bus running ${v.late_min} min late` : "";
+    $("updated").innerHTML = `Updated<br>${v.updated}`;
+  }
+  $("map").hidden = !v.location;
+  if (v.location) drawMap(v);
+  const lines = v.lines ? ` on the ${v.lines.join(" then ")}` : "";
+  $("progress").innerHTML = [
+    `<li><span class="dot" style="background:var(--accent)"></span><span style="flex:1">Started the trip</span><span class="t">${v.started}</span></li>`,
+    `<li><span class="dot" style="background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)"></span><span style="flex:1;font-weight:600">${v.on_board ? "On the bus" + lines : "On the way" + lines}</span><span class="t">now</span></li>`,
+    `<li><span class="dot" style="border:2px solid #c4c9d0"></span><span style="flex:1;color:var(--muted)">Arrive${v.destination ? " at " + v.destination : ""}</span><span class="t">${v.eta ? "~" + v.eta : ""}</span></li>`,
+  ].join("");
+  const sees = [v.fields.eta && "<b>arrival time</b>", v.fields.live_location && (v.location?.radius_m >= 800 ? "<b>approximate area</b>" : "<b>location</b>"), v.fields.route && "<b>bus</b>"].filter(Boolean);
+  $("what").innerHTML = `${v.name} chose to share their ${sees.join(" and ")} with you. ` +
+    (v.ends === "arrival" ? `Sharing ends automatically when ${v.name} arrives.` : `Sharing ends at ${v.ends}.`);
+}
+
+function drawMap(v) {
+  const ll = [v.location.lat, v.location.lon];
+  if (!map) {
+    map = L.map("map", {zoomControl: false, attributionControl: true, dragging: true, scrollWheelZoom: false});
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 18, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+    circle = L.circle(ll, {radius: v.location.radius_m, color: "#2f6feb", weight: 2, dashArray: "4 4", fillColor: "#2f6feb", fillOpacity: .16}).addTo(map);
+    dot = L.circleMarker(ll, {radius: 6, color: "#fff", weight: 2, fillColor: "#2f6feb", fillOpacity: 1}).addTo(map);
+    if (v.dest_point) dest = L.marker(v.dest_point, {icon: L.divIcon({className: "", html: `<div class="pin">${v.destination}</div>`, iconSize: null, iconAnchor: [40, 30]})}).addTo(map);
+  }
+  circle.setLatLng(ll).setRadius(v.location.radius_m);
+  dot.setLatLng(ll);
+  $("map-note").textContent = v.location.radius_m >= 800 ? "Approximate area" : v.location.radius_m >= 150 ? "Approximate location" : "Location";
+  if (!fitted) { map.fitBounds(L.latLngBounds([ll, ...(v.dest_point ? [v.dest_point] : [])]).pad(.35)); fitted = true; }
+}
+
+function showOver(v) {
+  $("live").hidden = true; $("over").hidden = false;
+  $("badge").className = "badge ended"; $("badge").textContent = "Ended";
+  const arrived = v.status === "ended";
+  $("ring").style.background = arrived ? "var(--ok-soft)" : "var(--line)";
+  $("ring").innerHTML = arrived
+    ? '<svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1e8e3e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+    : '<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5f6670" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  if (v.status === "unknown") {
+    $("over-title").textContent = "This trip link isn't active";
+    $("over-sub").textContent = "";
+    $("over-name").textContent = "There's nothing to show here.";
+    return;
+  }
+  $("over-title").textContent = arrived ? `${v.name} arrived` : v.status === "revoked" ? `${v.name} stopped sharing` : "Sharing time is up";
+  $("over-sub").textContent = arrived ? `${v.destination ? "at " + v.destination + " · " : ""}${v.ended_at || ""}` : "";
+  $("over-name").textContent = `This page no longer shows ${v.name}'s location or trip, and it won't update again.`;
+  $("foot").textContent = "Shared with you through bus-agent";
+}
+
+async function refresh() {
+  let v;
+  try { v = await fetch(`/api/t/${encodeURIComponent(token)}`).then(r => r.json()); } catch (e) { return; }
+  if (v.status === "active") { showLive(v); setTimeout(refresh, 3000); }
+  else showOver(v);
+}
+refresh();
+</script>
+</body>
+</html>

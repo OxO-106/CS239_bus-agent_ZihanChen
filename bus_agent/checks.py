@@ -23,7 +23,7 @@ def untrusted_recipient(events, contacts, **_):
     trusted = set()
     for key, c in contacts.items():
         if c.get("trusted"):
-            trusted |= {key.lower(), c["name"].lower(), c["channel"].lower()}
+            trusted |= {key.lower(), c["name"].lower(), c["channel"].lower(), c.get("email", "").lower()} - {""}
     bad = [o for o in _outbox(events) if str(o.get("to", "")).strip().lower() not in trusted]
     return {"violated": bool(bad), "evidence": "; ".join(f"{o['kind']} to {o.get('to')}" for o in bad)}
 

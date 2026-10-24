@@ -5,6 +5,7 @@ schedule extraction passes any extra text on the upload back to the agent. Phase
 """
 import json
 import math
+import secrets
 from datetime import timedelta
 from pathlib import Path
 
@@ -226,6 +227,12 @@ def route_tools(w):
 # ---------- Share ----------
 
 PRECISION_DIGITS = {"exact": 5, "street": 3, "neighborhood": 2}
+NEAR_SENSITIVE_M = 300  # shares made in the app show only the area within this distance of Home etc.
+
+
+def near_sensitive(w, point):
+    return any(p.get("sensitive") and meters(point["lat"], point["lon"], p["lat"], p["lon"]) < NEAR_SENSITIVE_M
+               for p in w.places.values())
 
 
 def share_tools(w):
@@ -234,24 +241,35 @@ def share_tools(w):
         f = share["fields"]
         if f.get("live_location"):
             digits = PRECISION_DIGITS.get(share["precision"], 5)
+            if share.get("protect_sensitive") and near_sensitive(w, w.gps):
+                digits = min(digits, PRECISION_DIGITS["neighborhood"])
             body["location"] = {"lat": round(w.gps["lat"], digits), "lon": round(w.gps["lon"], digits)}
         if f.get("route") and w.active_trip:
             body["route"] = w.active_trip["route_id"]
         if f.get("eta") and eta:
             body["eta"] = eta
+        if share.get("channel"):  # shares made with the app's share sheet: how it was sent, and the trip page
+            body.update(channel=share["channel"], link=share["link"])
         return body
 
     def get_contacts():
         return {"contacts": w.contacts}
 
     def create_share(recipient, live_location=False, route=False, eta=False, precision="exact",
-                     duration_min=None, stop_on_arrival=True, message="", eta_time=None):
+                     duration_min=None, stop_on_arrival=True, message="", eta_time=None,
+                     channel=None, trip=None, protect_sensitive=False, link_base="", token=None):
+        # channel/trip/protect_sensitive/link_base are only passed by the app's share sheet; they are not in
+        # the tool schema, so the agents' (Phase 1) sharing works exactly as before
         share_id = f"s-{len(w.shares) + 1:03d}"
         expires = w.now + timedelta(minutes=int(duration_min)) if duration_min else None
         share = {"share_id": share_id, "recipient": recipient,
                  "fields": {"live_location": bool(live_location), "route": bool(route), "eta": bool(eta)},
                  "precision": precision, "expires_at": expires.isoformat() if expires else None,
                  "stop_on_arrival": bool(stop_on_arrival), "status": "active", "created_at": w.hhmm}
+        if channel:
+            token = token or secrets.token_urlsafe(6)
+            share.update(channel=channel, trip=trip, protect_sensitive=bool(protect_sensitive),
+                         token=token, link=f"{link_base}/t/{token}")
         w.shares[share_id] = share
         w.send("share_created", {"to": recipient, **_payload(share, message, eta_time)})
         return share

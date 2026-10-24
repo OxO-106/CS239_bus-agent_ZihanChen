@@ -172,6 +172,31 @@
   .rev td { padding: 4px; }
   .rev input, .rev select { width: 100%; height: 36px; border: 1px solid var(--line-2); border-radius: 8px; padding: 0 8px; font-size: 13px; background: var(--card); }
   .rev tr.check input, .rev tr.check select { border-color: #e8a33d; background: #fff8eb; }
+  .sheet-back { position: fixed; inset: 0; z-index: 900; background: rgba(20, 24, 31, .28); }
+  .sheet { position: fixed; left: 24px; top: 24px; bottom: 24px; width: 460px; max-width: calc(100% - 24px); z-index: 901; background: var(--card);
+           border-radius: 18px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; }
+  .sheet-head { padding: 18px 14px 14px 22px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: flex-start; }
+  .sheet-head h2 { margin: 0; font-size: 18px; }
+  .sheet-body { flex: 1; overflow-y: auto; padding: 16px 22px; display: flex; flex-direction: column; gap: 18px; }
+  .sheet fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .sheet legend { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .person { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 8px 12px; border-radius: 12px; text-align: left;
+            border: 1px solid var(--line-2); background: var(--card); }
+  .person[aria-checked="true"] { border: 2px solid var(--accent); background: var(--accent-wash); }
+  .person:disabled { opacity: .65; cursor: not-allowed; }
+  .person .av { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; flex: none; }
+  .person:disabled .av { background: var(--soft); color: var(--muted); }
+  .toggle { display: flex; align-items: center; gap: 12px; border: 0; background: transparent; padding: 2px 0; text-align: left; min-height: 44px; width: 100%; }
+  .toggle .track { width: 42px; height: 24px; border-radius: 999px; background: #c4c9d0; position: relative; flex: none; transition: background .15s; }
+  .toggle .track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: left .15s; }
+  .toggle[aria-checked="true"] .track { background: var(--accent); }
+  .toggle[aria-checked="true"] .track::after { left: 21px; }
+  .seg.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .preview { background: #f6f7f9; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .preview .txt { font-size: 13.5px; line-height: 1.45; white-space: pre-line; word-break: break-word; }
+  .sheet-foot { padding: 14px 22px; border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; }
+  .sheet-foot .btn { height: 44px; padding: 0 18px; font-size: 14px; }
+  @media (max-width: 760px) { .sheet { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-width: none; height: 88%; border-radius: 20px 20px 0 0; } }
   .line-badge { display: inline-block; min-width: 24px; padding: 1px 6px; border-radius: 6px; border: 2px solid #fff; color: #fff;
                 font: 700 11px/16px Inter, sans-serif; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.3); white-space: nowrap; }
   .steps { list-style: none; margin: 4px 0 0; padding: 0 0 0 4px; display: flex; flex-direction: column; gap: 10px; }
@@ -293,6 +318,32 @@
   <svg id="fab-close" aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" hidden><path d="M6 9l6 6 6-6"/></svg>
   <span class="badge" id="fab-badge" hidden></span>
 </button>
+
+<div class="sheet-back" id="share-back" hidden></div>
+<section class="sheet" id="share-sheet" role="dialog" aria-modal="true" aria-labelledby="share-h" hidden>
+  <div class="sheet-head">
+    <div style="flex:1;min-width:0"><h2 id="share-h">Share your trip</h2><div class="sub" id="share-trip" style="margin-top:6px"></div></div>
+    <button type="button" class="round" id="share-close" aria-label="Close">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body">
+    <fieldset><legend>Who</legend><div id="share-who" role="radiogroup" aria-label="Who" style="display:flex;flex-direction:column;gap:8px"></div></fieldset>
+    <fieldset><legend>What they see</legend><div id="share-what"></div>
+      <div id="share-precision-box" style="display:flex;flex-direction:column;gap:6px">
+        <div class="seg" role="radiogroup" aria-label="Location precision" id="share-precision"></div>
+        <div class="sub">Near Home, your location is always shown as the area only.</div>
+      </div>
+    </fieldset>
+    <fieldset><legend>How long</legend>
+      <div class="seg four" role="radiogroup" aria-label="How long" id="share-duration"></div>
+      <div class="sub">Sharing always stops within 4 hours. You can stop it anytime.</div>
+    </fieldset>
+    <fieldset><legend>Send by</legend><div class="seg" role="radiogroup" aria-label="Send by" id="share-channel"></div></fieldset>
+    <div class="preview"><div class="sub" style="font-weight:600" id="share-preview-head"></div><div class="txt" id="share-preview"></div></div>
+  </div>
+  <div class="sheet-foot"><button type="button" class="btn" id="share-cancel">Cancel</button><button type="button" class="btn primary" id="share-go">Share</button></div>
+</section>
 
 <input type="file" id="sched-file" accept=".png,.jpg,.jpeg,.txt" hidden>
 <div class="modal-back" id="review" hidden>
@@ -676,7 +727,8 @@ function itinerary(r) {
   });
   steps.push(step(ICON_WALK, `Walk ${r.walk_min.from_stop} min to <b>${esc(destName)}</b>`, d ? `Arrive ${esc(d.arrive)}` : ""));
   const other = r.next_departures.slice(1).map(x => `${x.depart} → ${x.arrive}`).join(", ");
-  return `<button type="button" class="link" id="back-all" style="align-self:flex-start">← All routes</button>
+  return `<div style="display:flex;justify-content:space-between;align-items:center"><button type="button" class="link" id="back-all">← All routes</button>
+    <button type="button" class="btn primary" id="share-this" style="height:36px">Share this trip</button></div>
     <div class="route on" style="cursor:default"><span class="bar" style="background:${stripes(r)}"></span>
       <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${notInChat(r) ? '<span class="pill muted">Not in chat</span>' : ""}</span>
       <span class="times">${d ? `${esc(d.depart)} → ${esc(d.arrive)}` : ""}${other ? ` · also ${esc(other)}` : ""}</span></span>
@@ -696,6 +748,7 @@ function renderRoutes() {
     $("routes-sub").textContent = "Step by step";
     $("routes-list").innerHTML = itinerary(focus);
     $("back-all").onclick = () => select(selected);
+    $("share-this").onclick = () => openShare(focus);
     $("routes-count").innerHTML = "";
     return;
   }
@@ -755,6 +808,80 @@ function directionsTo(place, arriveBy) {
   $("to").value = place;
   if (arriveBy) { setMode("arrive"); $("when").value = arriveBy; }
   findRoutes();
+}
+
+// ---------- share sheet (shares directly, no chat) ----------
+let shareOpts = null;
+const SHARE_FIELDS = [["eta", "Arrival time (ETA)", "Updates if your bus is late"], ["live_location", "Live location", "Where you are on the way"],
+                      ["route", "Route", "Which bus or train you are on"]];
+const SHARE_PRECISION = [["exact", "Exact"], ["street", "Street"], ["area", "Area"]];
+const SHARE_DURATION = [["arrive", "Until I arrive"], ["30", "30 min"], ["60", "1 hour"], ["120", "2 hours"]];
+const SHARE_CHANNEL = [["text", "Text"], ["email", "Email"], ["link", "Copy link"]];
+
+function openShare(route) {
+  const first = Object.entries(contacts).find(([, c]) => c.trusted)?.[0] || null;
+  const d = route?.next_departures?.[0];
+  shareOpts = {recipient: first, fields: {eta: !!route, live_location: true, route: false}, precision: "area",
+               duration: "arrive", channel: "text", trip: route ? {route_id: route.route_id, depart: d?.depart} : null};
+  $("share-trip").innerHTML = route
+    ? `${badges(route)} ${esc(mapState?.query?.origin || "")} → ${esc(mapState?.query?.destination || "")} · ${esc(d.depart)} → ${esc(d.arrive)}`
+    : "No route picked: they'll see your location only. Pick a route first to share your arrival time.";
+  $("share-back").hidden = $("share-sheet").hidden = false;
+  renderShare();
+  $("share-close").focus();
+}
+function closeShare() { $("share-back").hidden = $("share-sheet").hidden = true; shareOpts = null; }
+
+function segButtons(el, options, key) {
+  el.innerHTML = options.map(([id, label]) => `<button type="button" role="radio" aria-checked="${shareOpts[key] === id}" data-v="${id}">${label}</button>`).join("");
+  el.querySelectorAll("button").forEach(b => b.onclick = () => { shareOpts[key] = b.dataset.v; renderShare(); });
+}
+
+let previewTimer = null;
+function renderShare() {
+  const o = shareOpts;
+  $("share-who").innerHTML = Object.entries(contacts).map(([k, c]) => {
+    const how = [c.phone && `Text ${c.phone}`, c.email && `Email ${c.email}`].filter(Boolean).join(" · ");
+    return `<button type="button" class="person" role="radio" aria-checked="${o.recipient === k}" data-k="${k}" ${c.trusted ? "" : "disabled"}>
+      <span class="av">${esc(c.name[0])}</span><span style="flex:1;display:flex;flex-direction:column">
+      <span style="font-weight:600">${esc(c.name)}</span><span class="sub">${c.trusted ? esc(how) : "Not in your trusted contacts"}</span></span>
+      <span class="sub" style="font-weight:600;color:${c.trusted ? "var(--accent-ink)" : "var(--muted)"}">${c.trusted ? (o.recipient === k ? "Selected" : "") : "Add to trusted first"}</span></button>`;
+  }).join("");
+  $("share-who").querySelectorAll(".person:not(:disabled)").forEach(b => b.onclick = () => { o.recipient = b.dataset.k; renderShare(); });
+  $("share-what").innerHTML = SHARE_FIELDS.map(([k, label, help]) => {
+    const off = k === "eta" && !o.trip;
+    return `<button type="button" class="toggle" role="switch" aria-checked="${!!o.fields[k]}" data-k="${k}" ${off ? "disabled" : ""}>
+      <span style="flex:1;display:flex;flex-direction:column"><span style="font-weight:600">${label}</span><span class="sub">${off ? "Pick a route first" : help}</span></span>
+      <span class="track"></span></button>`;
+  }).join("");
+  $("share-what").querySelectorAll(".toggle:not(:disabled)").forEach(b => b.onclick = () => { o.fields[b.dataset.k] = !o.fields[b.dataset.k]; renderShare(); });
+  $("share-precision-box").hidden = !o.fields.live_location;
+  segButtons($("share-precision"), SHARE_PRECISION, "precision");
+  segButtons($("share-duration"), SHARE_DURATION, "duration");
+  segButtons($("share-channel"), SHARE_CHANNEL, "channel");
+  const c = contacts[o.recipient];
+  const noEmail = o.channel === "email" && c && !c.email;
+  const nothing = !Object.values(o.fields).some(Boolean);
+  $("share-go").disabled = !c || noEmail || nothing;
+  $("share-go").textContent = o.channel === "link" ? "Create link" : `Share with ${c ? c.name : "…"}`;
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(async () => {
+    if (!shareOpts) return;
+    const r = await fetch("/api/share/preview", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(shareOpts)}).then(x => x.json());
+    $("share-preview-head").textContent = noEmail ? `No email address for ${c.name}` : nothing ? "Choose at least one thing to share"
+      : o.channel === "link" ? "Link" : `Preview · ${c?.name || ""} sees ${r.sees?.join(", ") || "nothing"}`;
+    $("share-preview").textContent = (r.subject ? `Subject: ${r.subject}\n` : "") + (r.text || "");
+  }, 120);
+}
+
+async function doShare() {
+  $("share-go").disabled = true;
+  const out = await post("/api/share", shareOpts);
+  if (out.ok) {
+    if (shareOpts.channel === "link") { try { await navigator.clipboard.writeText(out.link); } catch (e) {} note(`Link copied: ${out.link}`); }
+    else note(`Shared with ${contacts[shareOpts.recipient].name} by ${shareOpts.channel}. Their page: ${out.link}`);
+    closeShare();
+  } else $("share-go").disabled = false;
 }
 
 // ---------- schedule upload and review ----------
@@ -833,10 +960,13 @@ function renderShares(s) {
     const bad = !trusted(sh.recipient), f = fields(sh.fields);
     const what = f.length === 1 ? `Sharing ${f[0] === "eta" ? "ETA" : f[0]}` : "Sharing trip";
     return `<div class="share-chip ${bad ? "bad" : ""}"><span class="dot live"></span>
-      <span><b style="font-weight:600">${esc(what)}</b> with ${esc(name(sh.recipient))}${bad ? " (not a trusted contact)" : ""}${sh.stop_on_arrival ? " · ends on arrival" : ""}</span>
-      <button type="button" class="stop" data-who="${esc(name(sh.recipient))}">Stop</button></div>`;
-  }).join("") : '<div class="share-chip" style="padding-right:14px"><span class="dot"></span>Not sharing</div>';
-  $("share-chips").querySelectorAll(".stop").forEach(b => b.onclick = () => ask(`Stop sharing with ${b.dataset.who} now.`));
+      <span><b style="font-weight:600">${esc(what)}</b> with ${esc(name(sh.recipient))}${bad ? " (not a trusted contact)" : ""}${sh.channel ? ` · by ${esc(sh.channel)}` : ""}${sh.stop_on_arrival ? " · ends on arrival" : ""}</span>
+      ${sh.link ? `<a class="stop" style="color:var(--accent-ink);display:grid;place-items:center;text-decoration:none" href="${esc(sh.link)}" target="_blank" rel="noopener">Their view</a>` : ""}
+      <button type="button" class="stop" data-id="${esc(sh.share_id)}">Stop</button></div>`;
+  }).join("") + '<button type="button" class="pill-btn" id="share-open">Share trip</button>'
+    : '<div class="share-chip" style="padding-right:6px"><span class="dot"></span>Not sharing<button type="button" class="stop" id="share-open" style="color:var(--accent-ink)">Share trip</button></div>';
+  $("share-chips").querySelectorAll(".stop[data-id]").forEach(b => b.onclick = () => post("/api/share/stop", {share_id: b.dataset.id}));
+  $("share-open").onclick = () => openShare(listed().find(r => r.route_id === selected) || listed()[0] || null);
 
   $("shares").innerHTML = s.shares.length ? s.shares.map(sh => {
     const bad = !trusted(sh.recipient);
@@ -850,6 +980,8 @@ function renderShares(s) {
     if (o.location) parts.push(`location ${o.location.lat}, ${o.location.lon}`);
     if (o.route) parts.push(`route ${o.route.split(":")[0]}`);
     if (o.eta) parts.push(`ETA ${o.eta}`);
+    if (o.channel) parts.push(`by ${o.channel}`);
+    if (o.subject) parts.push(`subject “${o.subject}”`);
     if (o.text || o.message) parts.push(`“${o.text || o.message}”`);
     return `<div class="box ${bad ? "bad" : ""}"><div class="top"><span>${esc(o.at)} · ${esc(o.kind.replace("_", " "))} → ${esc(name(o.to))}</span>${bad ? '<span class="tag bad">not trusted</span>' : ""}</div>
       <div class="sub">${esc(parts.join(" · ") || "—")}</div></div>`;
@@ -965,6 +1097,8 @@ $("sched-file").onchange = async () => {
   await post("/api/schedule", f, {"X-Filename": f.name});
   $("sched-file").value = "";
 };
+$("share-close").onclick = $("share-cancel").onclick = $("share-back").onclick = closeShare;
+$("share-go").onclick = doShare;
 $("review-ok").onclick = () => post("/api/schedule/confirm", {classes: readReview()});
 $("review-cancel").onclick = () => post("/api/schedule/cancel");
 $("inspector-btn").onclick = () => setDrawer(!$("drawer").classList.contains("open"));
@@ -978,7 +1112,8 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
 });
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
-  if (!$("review").hidden) post("/api/schedule/cancel");
+  if (!$("share-sheet").hidden) closeShare();
+  else if (!$("review").hidden) post("/api/schedule/cancel");
   else if ($("drawer").classList.contains("open")) setDrawer(false);
   else if (chatOpen) setChat(false);
   else if (selected) select(selected);
