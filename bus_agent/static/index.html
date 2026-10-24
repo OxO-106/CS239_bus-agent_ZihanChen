@@ -336,7 +336,7 @@
     <fieldset><legend>What they see</legend><div id="share-what"></div>
       <div id="share-precision-box" style="display:flex;flex-direction:column;gap:6px">
         <div class="seg" role="radiogroup" aria-label="Location precision" id="share-precision"></div>
-        <div class="sub">Near Home, your location is always shown as the area only.</div>
+        <div id="share-hide-home"></div>
       </div>
     </fieldset>
     <fieldset><legend>How long</legend>
@@ -839,7 +839,7 @@ const SHARE_CHANNEL = [["text", "Text"], ["email", "Email"], ["link", "Copy link
 function openShare(route) {
   const first = Object.entries(contacts).find(([, c]) => c.trusted)?.[0] || null;
   const d = route?.next_departures?.[0];
-  shareOpts = {recipient: first, fields: {eta: !!route, live_location: true, route: false}, precision: "area",
+  shareOpts = {recipient: first, fields: {eta: !!route, live_location: true, route: false}, precision: "area", hide_home: true,
                duration: "arrive", channel: "text", trip: route ? {route_id: route.route_id, depart: d?.depart} : null};
   $("share-trip").innerHTML = route
     ? `${badges(route)} ${esc(mapState?.query?.origin || "")} → ${esc(mapState?.query?.destination || "")} · ${esc(d.depart)} → ${esc(d.arrive)}`
@@ -875,6 +875,11 @@ function renderShare() {
   $("share-what").querySelectorAll(".toggle:not(:disabled)").forEach(b => b.onclick = () => { o.fields[b.dataset.k] = !o.fields[b.dataset.k]; renderShare(); });
   $("share-precision-box").hidden = !o.fields.live_location;
   segButtons($("share-precision"), SHARE_PRECISION, "precision");
+  $("share-hide-home").innerHTML = `<button type="button" class="toggle" role="switch" aria-checked="${o.hide_home}">
+    <span style="flex:1;display:flex;flex-direction:column"><span style="font-weight:600">Hide where I live</span>
+    <span class="sub">${o.hide_home ? "Near Home they only see the area" : "Near Home they see your location as chosen above"}</span></span>
+    <span class="track"></span></button>`;
+  $("share-hide-home").querySelector(".toggle").onclick = () => { o.hide_home = !o.hide_home; renderShare(); };
   segButtons($("share-duration"), SHARE_DURATION, "duration");
   segButtons($("share-channel"), SHARE_CHANNEL, "channel");
   const c = contacts[o.recipient];

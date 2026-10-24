@@ -33,7 +33,7 @@ def test_geometry_transfer_and_unknown(router):
 def test_scenario_session_steps(router, monkeypatch):
     monkeypatch.setattr(agent, "chat", lambda *a, **k: {"message": {"role": "assistant", "content": "On it."}})
     items = []
-    s = Session(router, ROOT / "scenarios/t4_reply_add_alex.json", broadcast=items.append)
+    s = Session(router, ROOT / "scenarios/t3_share_with_mom.json", broadcast=items.append)
     assert s.state()["next"]["n"] == 1
     for _ in range(len(s.sc["events"])):
         assert s.step()
@@ -41,13 +41,13 @@ def test_scenario_session_steps(router, monkeypatch):
             time.sleep(0.01)
     replies = [i["event"]["data"]["text"] for i in items if i["type"] == "trace"
                and i["event"]["agent"] == "concierge" and i["event"]["data"]["to"] == "user"]
-    assert replies == ["On it."] * 3  # the user message and two notices; boarding has no notice
+    assert replies == ["On it."] * 3  # the user message and two notices; boarding and GPS have none
     assert s.state()["next"] is None and s.state()["time"] == "09:20"
     assert not s.step()
 
 
 def test_direct_planner_and_schedule_confirm(router):
-    s = Session(router, ROOT / "scenarios/t13_hidden_routes.json")  # simulated Tuesday 08:15
+    s = Session(router, ROOT / "scenarios/t3_share_with_mom.json")  # simulated Tuesday 08:20
     out = s.plan("Home", "Boelter Hall", "arrive", "10:00")
     assert out["ok"] and s.map["source"] == "planner" and s.map["found"] == out["count"] and not s.map["others"]
     assert s.map["query"] == {"origin": "Home", "destination": "Boelter Hall", "arrive_by": "10:00", "depart_after": None}
@@ -62,8 +62,8 @@ def test_direct_planner_and_schedule_confirm(router):
 
 
 def test_share_sheet_lifecycle(router):
-    """T1's world: plan, share ETA + location with Mom by text, board, delay, arrive; recipient view follows."""
-    s = Session(router, ROOT / "scenarios/t1_clean_trip.json")  # Tuesday 08:00, rider at the Home placeholder
+    """T3's world: plan, share ETA + location with Mom by text, board, delay, arrive; recipient view follows."""
+    s = Session(router, ROOT / "scenarios/t3_share_with_mom.json")  # Tuesday 08:20, rider at the Home placeholder
     s.link_base = "http://localhost:8239"
     s.plan("Home", "Boelter Hall", "depart", "08:40")
     trip = next(r for r in s.world.plans[-1]["result"]["routes"] if r["lines"] == ["CC6R"])
@@ -78,7 +78,7 @@ def test_share_sheet_lifecycle(router):
     view = s.recipient_view(token)
     assert view["status"] == "active" and view["eta"] == "09:11" and view["location"]["radius_m"] == 800
     assert "lines" not in view                                          # route wasn't shared
-    for event in s.sc["events"][3:]:                                    # board, gps, delay, arrive
+    for event in s.sc["events"][1:]:                                    # board, gps, delay, arrive
         s.world.set_time(event["at"])
         s.world.apply(event)
         s._after_world_event(event)
@@ -90,7 +90,7 @@ def test_share_sheet_lifecycle(router):
 
 
 def test_stop_share_and_link_share(router):
-    s = Session(router, ROOT / "scenarios/t1_clean_trip.json")
+    s = Session(router, ROOT / "scenarios/t1_plan_my_day.json")  # Tuesday 08:00
     base = {"recipient": "sam", "fields": {"eta": False, "live_location": True, "route": False}, "precision": "area",
             "duration": "30", "trip": None}
     link = s.share({**base, "channel": "link"})
@@ -106,3 +106,14 @@ def test_stop_share_and_link_share(router):
     preview = s.share_preview({**base, "channel": "email", "recipient": "mom",
                                "fields": {"eta": False, "live_location": True, "route": True}})
     assert "approximate area and bus" in preview["text"] and preview["subject"]
+
+
+def test_hide_home_is_a_choice(router):
+    s = Session(router, ROOT / "scenarios/t3_share_with_mom.json")  # rider at the Home placeholder
+    opts = {"recipient": "mom", "fields": {"eta": False, "live_location": True, "route": False}, "precision": "exact",
+            "duration": "arrive", "channel": "link", "trip": None}
+    hidden = s.share(opts)
+    shown = s.share({**opts, "hide_home": False})
+    assert s.recipient_view(hidden["link"].rsplit("/", 1)[1])["location"]["radius_m"] == 800
+    assert s.recipient_view(shown["link"].rsplit("/", 1)[1])["location"] == {"lat": 34.0354, "lon": -118.4342, "radius_m": 25}
+    assert s.world.outbox[-1]["location"] == {"lat": 34.0354, "lon": -118.4342}

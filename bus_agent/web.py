@@ -415,7 +415,9 @@ class Session:
         return self._share_message(who, opts, trip, f"{self.link_base}/t/…")
 
     def share(self, opts):
-        """Share sheet: who, what, how long, sent how. Only trusted contacts; at most 4 hours."""
+        """Share sheet: who, what, how long, sent how. Only trusted contacts; at most 4 hours.
+
+        hide_home (default on) blurs the location to the area near Home; off shows it at the chosen precision."""
         w = self.world
         contact = w.contacts.get(opts.get("recipient"))
         if not contact or not contact.get("trusted"):
@@ -431,13 +433,15 @@ class Session:
         link = f"{self.link_base}/t/{token}"
         msg = self._share_message(contact["name"], opts, trip, link)
         self.trace.log("user", "action", {"action": "share", **{k: opts.get(k) for k in ("recipient", "fields", "precision",
-                                                                                           "duration", "channel")}, "trip": trip})
+                                                                                           "hide_home", "duration", "channel")},
+                                          "trip": trip})
         result = self._tool("create_share", recipient=opts["recipient"], live_location=bool(f.get("live_location")),
                             route=bool(f.get("route")), eta=bool(f.get("eta")),
                             precision=PRECISION.get(opts.get("precision", "area"), "neighborhood"),
                             duration_min=DURATION_MIN[opts.get("duration", "arrive")] or MAX_SHARE_MIN,
                             stop_on_arrival=True, message=msg["text"], eta_time=trip["arrive"] if trip and f.get("eta") else None,
-                            channel=channel, trip=trip, protect_sensitive=True, link_base=self.link_base, token=token)
+                            channel=channel, trip=trip, protect_sensitive=bool(opts.get("hide_home", True)),
+                            link_base=self.link_base, token=token)
         if "error" in result:
             return result
         if msg.get("subject"):
@@ -512,7 +516,7 @@ class Session:
             view["late_min"] = max((w.line_delays.get(l, 0) for l in trip.get("lines", [])), default=0)
         if share["fields"]["live_location"]:
             precision = share["precision"]
-            if near_sensitive(w, w.gps):
+            if share.get("protect_sensitive") and near_sensitive(w, w.gps):
                 precision = "neighborhood"
             digits = {"exact": 5, "street": 3, "neighborhood": 2}.get(precision, 2)
             view["location"] = {"lat": round(w.gps["lat"], digits), "lon": round(w.gps["lon"], digits),

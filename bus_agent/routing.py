@@ -23,6 +23,7 @@ MAX_TRANSFER_WALK = 3
 MIN_TRANSFER_BUFFER = 60  # seconds on top of the transfer walk
 MIN_OPTIONS = 3         # fewer in-time routes than this at the fewest transfers -> also list one more transfer
 MAX_TRANSFERS = 2
+SERVICE_WINDOW = 2 * 3600  # a route with no departure within this of `now` isn't running now (e.g. owl-only lines)
 
 
 def walk_min(m):
@@ -219,19 +220,26 @@ class Router:
                 out.append((t.stops[p[board]][2] + late, t.stops[p[alight]][1] + late, t.id))
         return sorted(out)
 
-    def departures(self, opt, services, now, count=2, delays=None):
-        """(next departures, reason if none). Each departure: (leave, board, arrive_door)."""
+    def departures(self, opt, services, now, count=2, delays=None, until=None):
+        """(next departures, reason if none). Each departure: (leave, board, arrive_door).
+
+        Only departures leaving by `until` (default: now + SERVICE_WINDOW) count, so a line that only
+        runs tonight isn't offered for a morning trip."""
         delays = delays or {}
         to_stop, tw, from_stop = opt["walk"]
         transfer_walks = opt.get("transfer_walks") or [tw] * (len(opt["legs"]) - 1)
         legs = [self._leg_trips(*leg, services, delays) for leg in opt["legs"]]
         if any(not leg for leg in legs):
             return [], "not_running_today"
-        found = []
+        until = now + SERVICE_WINDOW if until is None else until
+        found, later = [], False
         for dep, arr, _ in legs[0]:
             leave = dep - math.ceil(to_stop) * 60
             if leave < now:
                 continue
+            if leave > until:
+                later = True
+                break
             missed = False
             for leg, walk in zip(legs[1:], transfer_walks):
                 ready = arr + math.ceil(walk) * 60 + MIN_TRANSFER_BUFFER
@@ -245,7 +253,7 @@ class Router:
             found.append((leave, dep, arr + math.ceil(from_stop) * 60))
             if len(found) == count:
                 break
-        return found, None if found else "last_trip_passed"
+        return found, None if found else "not_running_now" if later else "last_trip_passed"
 
     def describe(self, opt, deps, arrive_by):
         to_stop, tw, from_stop = opt["walk"]
@@ -285,6 +293,7 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
     arrive_by = parse_hhmm(arrive_by) if isinstance(arrive_by, str) else arrive_by
     closed = closed_stops or {}
     services = router.net.services_on(day)
+    until = now + SERVICE_WINDOW if arrive_by is None else max(arrive_by, now + SERVICE_WINDOW)
 
     open_opts = router.search(origin, dest, max_walk, closed)
     excluded = []
@@ -297,7 +306,7 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
                 by_transfers[2] = router.search2(origin, dest, max_walk, closed)
             working[k] = []
             for opt in by_transfers[k]:
-                deps, reason = router.departures(opt, services, now, count, delays)
+                deps, reason = router.departures(opt, services, now, count, delays, until=until)
                 if deps and arrive_by is not None:
                     deps = _latest_in_time(router, opt, services, now, arrive_by, count, delays) or deps
                 if deps:
@@ -351,7 +360,7 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
 
 def _latest_in_time(router, opt, services, now, arrive_by, count, delays):
     """The last `count` departures arriving by arrive_by, latest first ([] if none)."""
-    every, _ = router.departures(opt, services, now, 10_000, delays)
+    every, _ = router.departures(opt, services, now, 10_000, delays, until=max(arrive_by, now + SERVICE_WINDOW))
     return [d for d in every if d[2] <= arrive_by][-count:][::-1]
 
 

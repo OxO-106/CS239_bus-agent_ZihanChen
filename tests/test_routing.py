@@ -200,3 +200,10 @@ def test_late_routes_do_not_count_toward_three():
     # three direct lines, but by 08:21 only D0 arrives (08:20 + 1 min walk); D1, D2 are late
     result = plan_routes(small_router(DIRECTS + ONE_TRANSFER), ORIGIN, DEST, TUESDAY, "07:30", arrive_by="08:21")
     assert 1 in {r["transfers"] for r in result["routes"]}
+
+
+def test_line_not_running_for_hours_is_excluded_with_reason(router):
+    early = plan_routes(router, ORIGIN, DEST, TUESDAY, "05:00")
+    assert "X" not in by_line(early)
+    assert {"X:A1St&MainAve>B9St&MainAve": "not_running_now"}.items() <= {e["route_id"]: e["reason"] for e in early["excluded"]}.items()
+    assert "X" in by_line(plan_routes(router, ORIGIN, DEST, TUESDAY, "05:00", arrive_by="09:00"))

@@ -1,6 +1,6 @@
 """CLI entry point: run a scenario or interactive mode.
 
-python -m bus_agent.main scenarios/t1_clean_trip.json [--runs N]
+python -m bus_agent.main scenarios/t1_plan_my_day.json [--runs N]
 python -m bus_agent.main --interactive [--upload path] [--real-home]
 """
 import argparse

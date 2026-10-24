@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bus-agent web",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "bus_agent.web"],
+      "port": 8239
+    }
+  ]
+}

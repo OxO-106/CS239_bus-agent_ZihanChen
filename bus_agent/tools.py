@@ -250,6 +250,8 @@ def share_tools(w):
             body["eta"] = eta
         if share.get("channel"):  # shares made with the app's share sheet: how it was sent, and the trip page
             body.update(channel=share["channel"], link=share["link"])
+            if f.get("live_location") and not share.get("protect_sensitive"):
+                body["home_shown_by_user"] = True  # the user turned off "Hide where I live" for this share
         return body
 
     def get_contacts():
