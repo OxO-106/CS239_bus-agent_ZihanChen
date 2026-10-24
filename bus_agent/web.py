@@ -25,7 +25,7 @@ from bus_agent.checks import mentions, run_checks
 from bus_agent.gtfs import meters
 from bus_agent.main import _uploads
 from bus_agent.routing import Router, _short, clean_name, hhmm, parse_hhmm, walk_min
-from bus_agent.tools import DAY_CODES
+from bus_agent.tools import DAY_CODES, route_tools, schedule_tools
 from bus_agent.trace import Trace
 from bus_agent.world import World
 
@@ -100,7 +100,10 @@ class Session:
         self.busy = False
         self.question = None               # an ask_user question waiting for the page
         self.answers = queue.Queue()
-        self.map = {"shown": [], "others": [], "found": 0, "active": None, "origin": None, "dest": None}
+        self.map = {"shown": [], "others": [], "found": 0, "active": None, "origin": None, "dest": None,
+                    "source": None, "query": None}
+        self.review = None                 # extracted classes waiting for the user to confirm
+        self.schedule_confirmed = False
         self.sc = json.loads(Path(scenario_path).read_text()) if scenario_path else None
         self.file = Path(scenario_path).name if scenario_path else None
         self.step_i = 0
@@ -115,6 +118,7 @@ class Session:
         self.trace.clock = lambda: self.world.hhmm
         self.trace.listeners.append(self._on_event)
         self.concierge = build(self.world, Bus(self.trace, lambda: self.world.hhmm), self.trace, self._ask_user)
+        self.tools = {**route_tools(self.world), **schedule_tools(self.world)}  # for the page's own buttons
         self._push_state()
 
     # page updates
@@ -138,21 +142,26 @@ class Session:
             self._push_state()
 
     def _update_shown(self, reply):
-        """Draw the routes of the latest plan that the Concierge's reply mentions (what the user is shown)."""
+        """After a chat reply: send the latest plan, marking the routes the Concierge's reply mentions."""
         if not self.world.plans:
             return
+        routes = self.world.plans[-1]["result"]["routes"]
+        shown = [r for r in routes if all(mentions(reply, line) for line in r["lines"])]
+        if shown:
+            self._publish_plan("chat", shown)
+
+    def _publish_plan(self, source, shown=None):
+        """Send the latest plan to the page. source "chat": `shown` are the routes the reply mentions (the rest
+        are tagged "Not in chat"); source "planner": the user asked with the Directions panel, so all are shown."""
         plan = self.world.plans[-1]
         routes = plan["result"]["routes"]
-        shown = [r for r in routes if all(mentions(reply, line) for line in r["lines"])]
-        if not shown:
-            return
         origin, dest = plan["points"]
         geo = [(r, route_geometry(self.router, r["route_id"], origin, dest, self.shapes)) for r in routes]
-        drawn = [{**g, "labels": r["labels"], "next_departures": r["next_departures"], "walk_min": r["walk_min"], "leave_by": r["leave_by"],
-                  "in_chat": r in shown}
+        drawn = [{**g, "labels": r["labels"], "next_departures": r["next_departures"], "walk_min": r["walk_min"],
+                  "leave_by": r["leave_by"], "in_chat": shown is None or r in shown}
                  for r, g in geo if g]
-        # shown = what the assistant's reply mentions; others = the rest of plan_routes, for "Show all routes"
-        self.map.update(origin=list(origin), dest=list(dest), found=len(routes),
+        self.map.update(origin=list(origin), dest=list(dest), found=len(routes), source=source,
+                        query={k: plan.get(k) for k in ("origin", "destination", "arrive_by", "depart_after")},
                         shown=[d for d in drawn if d["in_chat"]], others=[d for d in drawn if not d["in_chat"]])
         self._emit({"type": "map", **self.map})
 
@@ -164,13 +173,15 @@ class Session:
                 "busy": self.busy, "question": self.question, "next": self._next_label(),
                 "scenario": {**{k: self.sc[k] for k in ("id", "title", "expected")}, "file": self.file} if self.sc else None,
                 "today": self._today(), "shares": list(w.shares.values()), "outbox": w.outbox, "checks": checks,
+                "schedule": {"confirmed": self.schedule_confirmed, "review": self.review,
+                             "classes": (w.schedule or {}).get("classes")},
                 "contacts": {k: {"name": c["name"], "trusted": c.get("trusted", False)} for k, c in w.contacts.items()}}
 
     def _today(self):
         """Today's classes from the extracted schedule, with the next one's leave-by from the latest plan to it."""
         w = self.world
         if not w.schedule:
-            return {"date": w.now.strftime("%a, %b %d"), "classes": None}
+            return {"date": w.now.strftime("%a, %b %d"), "classes": None, "confirmed": False}
         code = DAY_CODES[w.now.weekday()]
         classes = sorted((c for c in w.schedule.get("classes", []) if code in (c.get("days") or [])),
                          key=lambda c: c.get("start") or "")
@@ -194,7 +205,7 @@ class Session:
                 if in_time or catchable:
                     _, leave, lines = max(in_time, key=lambda c: c[1]) if in_time else min(catchable)
                     nxt["leave_by"] = {"time": leave, "lines": lines}
-        return {"date": w.now.strftime("%a, %b %d"), "classes": out}
+        return {"date": w.now.strftime("%a, %b %d"), "classes": out, "confirmed": self.schedule_confirmed}
 
     def _push_state(self):
         self._emit(self.state())
@@ -278,6 +289,80 @@ class Session:
             self.world.uploads[uid] = {"text": data.decode("utf-8", errors="replace")}
             kind = "text file"
         return self.message(f"I uploaded my class schedule as an {kind} (upload {uid}). Can you read it?")
+
+    # the page's own buttons: they call the same tools the agents use, logged as the user's actions
+
+    def _tool(self, name, **args):
+        self.trace.log("app", "tool_call", {"name": name, "arguments": args})
+        try:
+            result = self.tools[name][1](**args)
+        except Exception as e:  # e.g. an unknown place name
+            result = {"error": f"{type(e).__name__}: {e}"}
+        self.trace.log("app", "tool_result", {"name": name, "result": result})
+        return result
+
+    def plan(self, origin, destination, mode="arrive", time=None):
+        """Directions panel: plan routes now, without the chat. mode: "arrive" (by time), "depart" (at time), "now"."""
+        if self.busy:
+            return {"error": "still working on the last request"}
+        if not self.sc:
+            self.world.now = datetime.now()
+        args = {"origin": origin, "destination": destination}
+        if mode == "arrive" and time:
+            args["arrive_by"] = time
+        elif mode == "depart" and time:
+            args["depart_after"] = time
+        self.trace.log("user", "action", {"action": "plan", **args})
+        result = self._tool("plan_routes", **args)
+        if "error" in result:
+            return result
+        self._publish_plan("planner")
+        self._push_state()
+        return {"ok": True, "count": result["count"]}
+
+    def schedule_upload(self, filename, data):
+        """Upload button: read the schedule with the extractor, then hold it for the user to review."""
+        suffix = Path(filename).suffix.lower()
+        uid = f"u{len(self.world.uploads) + 1}"
+        if suffix in (".png", ".jpg", ".jpeg"):
+            UPLOADS.mkdir(parents=True, exist_ok=True)
+            path = UPLOADS / f"{uuid.uuid4().hex}{suffix}"
+            path.write_bytes(data)
+            self.world.uploads[uid] = {"image": str(path)}
+            tool = "extract_schedule_image"
+        else:
+            self.world.uploads[uid] = {"text": data.decode("utf-8", errors="replace")}
+            tool = "extract_schedule_text"
+
+        def go():
+            self.trace.log("user", "action", {"action": "upload_schedule", "upload_id": uid, "file": Path(filename).name})
+            result = self._tool(tool, upload_id=uid)
+            if "error" in result:
+                raise ValueError(result["error"])
+            self.review = result.get("classes", [])
+            self.schedule_confirmed = False
+        return self._run(go)
+
+    def schedule_confirm(self, classes):
+        """The user checked (and maybe edited) the schedule: use it from now on."""
+        self.world.schedule = {"classes": classes}
+        self.review = None
+        self.schedule_confirmed = True
+        self.trace.log("user", "action", {"action": "confirm_schedule", "classes": classes})
+        self._push_state()
+        return {"ok": True}
+
+    def schedule_cancel(self):
+        """Close the review without changing the schedule."""
+        self.review = None
+        self._push_state()
+        return {"ok": True}
+
+    def schedule_review(self):
+        """Reopen the current schedule for review (e.g. after the chat read it)."""
+        self.review = (self.world.schedule or {}).get("classes", [])
+        self._push_state()
+        return {"ok": True}
 
     def _ask_user(self, question):
         self.trace.log("concierge", "message", {"to": "user", "text": question})
@@ -404,6 +489,17 @@ def handler(app):
                     self._json({"ok": s.message(json.loads(body)["text"])})
                 elif self.path == "/api/step":
                     self._json({"ok": s.step()})
+                elif self.path == "/api/plan":
+                    q = json.loads(body)
+                    self._json(s.plan(q["origin"], q["destination"], q.get("mode", "arrive"), q.get("time")))
+                elif self.path == "/api/schedule":
+                    self._json({"ok": s.schedule_upload(self.headers.get("X-Filename", "schedule.txt"), body)})
+                elif self.path == "/api/schedule/confirm":
+                    self._json(s.schedule_confirm(json.loads(body)["classes"]))
+                elif self.path == "/api/schedule/cancel":
+                    self._json(s.schedule_cancel())
+                elif self.path == "/api/schedule/review":
+                    self._json(s.schedule_review())
                 elif self.path == "/api/upload":
                     self._json({"ok": s.upload(self.headers.get("X-Filename", "upload.txt"), body)})
                 elif self.path == "/api/save":

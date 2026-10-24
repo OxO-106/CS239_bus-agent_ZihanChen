@@ -44,3 +44,18 @@ def test_scenario_session_steps(router, monkeypatch):
     assert replies == ["On it."] * 3  # the user message and two notices; boarding has no notice
     assert s.state()["next"] is None and s.state()["time"] == "09:20"
     assert not s.step()
+
+
+def test_direct_planner_and_schedule_confirm(router):
+    s = Session(router, ROOT / "scenarios/t13_hidden_routes.json")  # simulated Tuesday 08:15
+    out = s.plan("Home", "Boelter Hall", "arrive", "10:00")
+    assert out["ok"] and s.map["source"] == "planner" and s.map["found"] == out["count"] and not s.map["others"]
+    assert s.map["query"] == {"origin": "Home", "destination": "Boelter Hall", "arrive_by": "10:00", "depart_after": None}
+    assert "error" in s.plan("Nowhere", "Boelter Hall")
+    s.schedule_confirm([{"course": "COM SCI 239", "days": ["Tu"], "start": "10:00", "end": "11:50",
+                         "building": "Boelter Hall", "room": "5249"}])
+    today = s.state()["today"]
+    assert today["confirmed"] and today["classes"][0]["course"] == "COM SCI 239"
+    assert today["classes"][0]["leave_by"]["time"] <= "10:00"  # from the plan just made
+    actions = [e["data"]["action"] for e in s.trace.events if e["kind"] == "action"]
+    assert actions == ["plan", "plan", "confirm_schedule"]

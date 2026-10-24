@@ -178,7 +178,8 @@ def route_tools(w):
         (o_name, o), (d_name, d) = _where(origin), _where(destination)
         result = _plan_routes(w.router, o, d, w.now.date(), depart_after or w.hhmm, arrive_by=arrive_by,
                               max_walk=int(max_walk), closed_stops=w.closed_stops(), delays=w.trip_delays())
-        w.plans.append({"origin": o_name, "destination": d_name, "points": (o, d), "result": result})
+        w.plans.append({"origin": o_name, "destination": d_name, "points": (o, d), "result": result,
+                        "arrive_by": arrive_by, "depart_after": depart_after})
         return {"origin": o_name, "destination": d_name, "arrive_by": arrive_by, **result}
 
     def compare_options():

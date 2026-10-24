@@ -150,6 +150,28 @@
   .ev-row.out.bad { background: var(--bad-soft); }
   .ev-row details summary { cursor: pointer; color: var(--muted); }
 
+  .dir { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .dir-places { display: flex; gap: 8px; align-items: center; }
+  .dir-fields { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .dir-field { display: flex; align-items: center; gap: 10px; }
+  .dir-field .mark { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .dir-field select, .dir-when input { flex: 1; min-width: 0; height: 40px; border: 1px solid var(--line-2); border-radius: 10px; padding: 0 10px; background: var(--card); font-size: 14px; }
+  .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: var(--soft); padding: 4px; border-radius: 10px; }
+  .seg button { height: 36px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); font-weight: 600; font-size: 13px; }
+  .seg button[aria-checked="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(20,24,31,.18); }
+  .dir-when { display: flex; gap: 8px; }
+  .dir-when .btn { height: 40px; }
+  .modal-back { position: fixed; inset: 0; z-index: 900; background: rgba(20, 24, 31, .35); display: grid; place-items: center; padding: 16px; }
+  .modal { width: min(760px, 100%); max-height: calc(100% - 32px); background: var(--card); border-radius: 18px; box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; }
+  .modal-head { padding: 18px 22px 12px; border-bottom: 1px solid var(--line); }
+  .modal-head h2 { margin: 0; font-size: 18px; }
+  .modal-body { padding: 12px 22px; overflow: auto; }
+  .modal-foot { padding: 14px 22px; border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; }
+  .rev { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rev th { text-align: left; font-size: 11.5px; color: var(--muted); font-weight: 600; padding: 6px 4px; }
+  .rev td { padding: 4px; }
+  .rev input, .rev select { width: 100%; height: 36px; border: 1px solid var(--line-2); border-radius: 8px; padding: 0 8px; font-size: 13px; background: var(--card); }
+  .rev tr.check input, .rev tr.check select { border-color: #e8a33d; background: #fff8eb; }
   .line-badge { display: inline-block; min-width: 24px; padding: 1px 6px; border-radius: 6px; border: 2px solid #fff; color: #fff;
                 font: 700 11px/16px Inter, sans-serif; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.3); white-space: nowrap; }
   .steps { list-style: none; margin: 4px 0 0; padding: 0 0 0 4px; display: flex; flex-direction: column; gap: 10px; }
@@ -191,6 +213,30 @@
     </button>
   </form>
   <div class="chips" id="chips"></div>
+
+  <form class="card dir" id="directions" aria-labelledby="dir-h">
+    <div class="panel-head"><h2 id="dir-h" style="margin:0;font-size:15px">Directions</h2><span class="sub">bus · Metro · walking</span></div>
+    <div class="dir-places">
+      <div class="dir-fields">
+        <div class="dir-field"><span class="mark" style="background:#fff;border:3px solid #2f6feb"></span>
+          <label for="from" class="sr">From</label><select id="from" required></select></div>
+        <div class="dir-field"><span class="mark" style="background:#1f2328"></span>
+          <label for="to" class="sr">To</label><select id="to" required><option value="">Choose destination</option></select></div>
+      </div>
+      <button type="button" class="sq-btn ghost" id="swap" aria-label="Swap start and destination">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#3b4148" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4v16M4 8l4-4 4 4M16 20V4M20 16l-4 4-4-4"/></svg>
+      </button>
+    </div>
+    <div class="seg" role="radiogroup" aria-label="When" id="when-mode">
+      <button type="button" role="radio" aria-checked="true" data-mode="arrive">Arrive by</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="depart">Leave at</button>
+      <button type="button" role="radio" aria-checked="false" data-mode="now">Leave now</button>
+    </div>
+    <div class="dir-when">
+      <label for="when" class="sr">Time</label><input type="time" id="when">
+      <button type="submit" class="btn primary" id="find">Find routes</button>
+    </div>
+  </form>
 
   <section class="card panel" aria-labelledby="today-h" id="today">
     <div class="panel-head"><h2 id="today-h">Today's classes</h2><span class="sub" id="today-date"></span></div>
@@ -248,6 +294,16 @@
   <span class="badge" id="fab-badge" hidden></span>
 </button>
 
+<input type="file" id="sched-file" accept=".png,.jpg,.jpeg,.txt" hidden>
+<div class="modal-back" id="review" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="review-h">
+    <div class="modal-head"><h2 id="review-h">Check your schedule</h2>
+      <div class="sub">Read from your upload. Fix anything that's wrong; fields the reader wasn't sure about are highlighted. Nothing is used until you confirm.</div></div>
+    <div class="modal-body"><table class="rev"><thead><tr><th>Course</th><th>Days</th><th>Start</th><th>End</th><th>Building</th><th>Room</th></tr></thead><tbody id="review-rows"></tbody></table></div>
+    <div class="modal-foot"><button type="button" class="btn" id="review-cancel">Cancel</button><button type="button" class="btn primary" id="review-ok">Looks right</button></div>
+  </div>
+</div>
+
 <aside class="drawer" id="drawer" aria-label="Inspector">
   <div class="drawer-head">
     <h2>Inspector</h2>
@@ -295,7 +351,8 @@ const AGENTS = {concierge: "Concierge", schedule: "Schedule", transit: "Transit"
 const ICON_BUS = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21l1-3M16 21l-1-3"/></svg>';
 const ICON_WALK = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 21l2-6 3 3v3M8 12l2-4h4l2 4"/></svg>';
 const ICON_DIR = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l10 10-10 10L2 12z"/><path d="M9 13v-2h5M12 8l2 3-2 3"/></svg>';
-let state = null, contacts = {}, places = {}, buildings = {}, chatOpen = false, unread = false, mapState = null, showAll = false;
+let state = null, contacts = {}, places = {}, buildings = {}, chatOpen = false, unread = false, mapState = null, moreOpen = false;
+const TOP_ROUTES = 3;
 
 // ---------- helpers ----------
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
@@ -520,8 +577,11 @@ function lineName(l) {
 // departure (walk to the stop + ride + walk to the door), ties to the earlier arrival
 const tripMin = r => { const d = r.next_departures[0]; return d ? mins(d.arrive) - mins(d.depart) + (r.walk_min?.to_stop || 0) : Infinity; };
 const late = r => r.labels.includes("arrives late");
-const listed = () => !mapState ? [] : (showAll ? mapState.shown.concat(mapState.others || []) : mapState.shown.slice())
+const ranked = () => !mapState ? [] : mapState.shown.concat(mapState.others || [])
   .sort((a, b) => late(a) - late(b) || tripMin(a) - tripMin(b) || mins(a.next_departures[0].arrive) - mins(b.next_departures[0].arrive));
+// routes in the card and on the map: the top 3, or all after "Show more"
+const listed = () => moreOpen ? ranked() : ranked().slice(0, TOP_ROUTES);
+const notInChat = r => mapState?.source === "chat" && !r.in_chat;
 
 function fitTo(pts) {
   if (!pts || !pts.length) return;
@@ -591,7 +651,8 @@ function select(id) {
 }
 
 function onMap(m) {
-  mapState = m; selected = null; hovered = null; showAll = false;
+  mapState = m; selected = null; hovered = null; moreOpen = false;
+  fillDirections(m.query);
   fitTo(renderMap());
   renderRoutes();
   $("routes-stat").innerHTML = m.found
@@ -617,7 +678,7 @@ function itinerary(r) {
   const other = r.next_departures.slice(1).map(x => `${x.depart} → ${x.arrive}`).join(", ");
   return `<button type="button" class="link" id="back-all" style="align-self:flex-start">← All routes</button>
     <div class="route on" style="cursor:default"><span class="bar" style="background:${stripes(r)}"></span>
-      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span>
+      <span class="body"><span class="name">${esc(r.lines.map(lineName).join(" → "))}${notInChat(r) ? '<span class="pill muted">Not in chat</span>' : ""}</span>
       <span class="times">${d ? `${esc(d.depart)} → ${esc(d.arrive)}` : ""}${other ? ` · also ${esc(other)}` : ""}</span></span>
       <span class="dur">${tripMin(r)} min</span></div>
     <ol class="steps">${steps.join("")}</ol>`;
@@ -638,7 +699,7 @@ function renderRoutes() {
     $("routes-count").innerHTML = "";
     return;
   }
-  $("routes-sub").textContent = (showAll ? "All routes the planner found" : "Suggested by the assistant") + " · on time, shortest trip first";
+  $("routes-sub").textContent = (m.source === "chat" ? "From your chat" : "From Directions") + " · on time, shortest trip first";
   $("routes-list").innerHTML = routes.map(r => {
     const dur = tripMin(r) === Infinity ? null : tripMin(r);
     const tags = r.labels.filter(l => l !== "least walking" || r.labels.length === 1).slice(0, 2)
@@ -646,7 +707,7 @@ function renderRoutes() {
     const deps = r.next_departures.map(x => `${x.depart} → ${x.arrive}`).join(", ");
     return `<button type="button" class="route" data-id="${esc(r.route_id)}" aria-label="Show ${esc(r.lines.map(lineName).join(" then "))} step by step">
       <span class="bar" style="background:${stripes(r)}"></span>
-      <span class="body"><span class="name">${badges(r)} ${esc(r.lines.map(lineName).join(" → "))}${tags}${r.in_chat ? "" : '<span class="pill muted">Not in chat</span>'}</span><span class="times">${esc(deps)}</span></span>
+      <span class="body"><span class="name">${badges(r)} ${esc(r.lines.map(lineName).join(" → "))}${tags}${notInChat(r) ? '<span class="pill muted">Not in chat</span>' : ""}</span><span class="times">${esc(deps)}</span></span>
       ${dur !== null ? `<span class="dur" title="Door to door, including walking">${dur} min</span>` : ""}</button>`;
   }).join("");
   $("routes-list").querySelectorAll(".route").forEach(b => {
@@ -654,15 +715,72 @@ function renderRoutes() {
     b.onmouseenter = b.onfocus = () => hover(b.dataset.id);
     b.onmouseleave = b.onblur = () => hover(null);
   });
-  const hidden = (m.others || []).length;
-  $("routes-count").innerHTML = (!hidden ? `${m.found} routes` :
-    `<span>${m.shown.length} of ${m.found} routes shown in chat</span> <button type="button" class="link" id="show-all">${showAll ? "Show only the chat's routes" : `Show all ${m.found} routes`}</button>`)
+  const total = ranked().length, extra = total - TOP_ROUTES;
+  const chatNote = m.source === "chat" && (m.others || []).length ? `The assistant mentioned ${m.shown.length} of ${total}. ` : "";
+  $("routes-count").innerHTML = `<span>${chatNote}${total} route${total === 1 ? "" : "s"}</span>`
+    + (extra > 0 ? ` <button type="button" class="link" id="show-more">${moreOpen ? "Show top 3 only" : `Show ${extra} more`}</button>` : "")
     + '<span style="display:block;margin-top:4px">Hover to highlight, click for step-by-step.</span>';
-  if ($("show-all")) $("show-all").onclick = () => {
-    showAll = !showAll; selected = null; hovered = null;
-    const pts = renderMap(); renderRoutes();
-    if (showAll) fitTo(pts);
+  if ($("show-more")) $("show-more").onclick = () => {
+    moreOpen = !moreOpen; selected = null; hovered = null;
+    fitTo(renderMap()); renderRoutes();
   };
+}
+
+// ---------- Directions panel (plans directly, no chat) ----------
+let dirMode = "arrive", uploadingSchedule = false;
+function setMode(mode) {
+  dirMode = mode;
+  document.querySelectorAll("#when-mode button").forEach(b => b.setAttribute("aria-checked", b.dataset.mode === mode));
+  $("when").disabled = mode === "now";
+}
+function fillDirections(q) {
+  if (!q) return;
+  if (q.origin) $("from").value = q.origin;
+  if (q.destination) $("to").value = q.destination;
+  if (q.arrive_by) { setMode("arrive"); $("when").value = q.arrive_by; }
+  else if (q.depart_after) { setMode("depart"); $("when").value = q.depart_after; }
+}
+async function findRoutes(e) {
+  e?.preventDefault();
+  if (!$("to").value) { $("to").focus(); return; }
+  if ($("from").value === $("to").value) { note("Start and destination are the same."); return; }
+  $("find").disabled = true;
+  const out = await post("/api/plan", {origin: $("from").value, destination: $("to").value, mode: dirMode,
+                                       time: dirMode === "now" ? null : $("when").value || null});
+  $("find").disabled = false;
+  if (out.count === 0) note("No routes found for that trip and time.");
+}
+function directionsTo(place, arriveBy) {
+  $("from").value = "Home";
+  $("to").value = place;
+  if (arriveBy) { setMode("arrive"); $("when").value = arriveBy; }
+  findRoutes();
+}
+
+// ---------- schedule upload and review ----------
+function openReview(classes) {
+  const opts = ['<option value="">(unknown)</option>', ...Object.keys(buildings).map(b => `<option>${esc(b)}</option>`)];
+  $("review-rows").innerHTML = classes.map((c, i) => {
+    const unsure = c.confidence && c.confidence !== "high";
+    const sel = opts.map(o => o.replace(`<option>${esc(c.building || "")}</option>`, `<option selected>${esc(c.building || "")}</option>`)).join("");
+    const unknownBuilding = c.building && !(c.building in buildings);
+    return `<tr class="${unsure ? "check" : ""}" data-i="${i}">
+      <td><label class="sr" for="rc${i}">Course</label><input id="rc${i}" data-k="course" value="${esc(c.course || "")}"></td>
+      <td><label class="sr" for="rd${i}">Days</label><input id="rd${i}" data-k="days" value="${esc((c.days || []).join(" "))}" placeholder="M W F"></td>
+      <td><label class="sr" for="rs${i}">Start</label><input id="rs${i}" data-k="start" type="time" value="${esc(c.start || "")}"></td>
+      <td><label class="sr" for="re${i}">End</label><input id="re${i}" data-k="end" type="time" value="${esc(c.end || "")}"></td>
+      <td><label class="sr" for="rb${i}">Building</label><select id="rb${i}" data-k="building">${sel}${unknownBuilding ? `<option selected>${esc(c.building)}</option>` : ""}</select></td>
+      <td><label class="sr" for="rr${i}">Room</label><input id="rr${i}" data-k="room" value="${esc(c.room || "")}"></td></tr>`;
+  }).join("") || '<tr><td colspan="6" class="empty">No classes were found in the upload.</td></tr>';
+  $("review").hidden = false;
+  $("review-ok").focus();
+}
+function readReview() {
+  return [...$("review-rows").querySelectorAll("tr[data-i]")].map(tr => {
+    const v = k => tr.querySelector(`[data-k="${k}"]`).value.trim();
+    return {course: v("course"), days: v("days").split(/[\s,]+/).filter(Boolean), start: v("start"), end: v("end"),
+            building: v("building") || null, room: v("room") || null, confidence: "high"};
+  });
 }
 
 function moveRider(gps) {
@@ -676,10 +794,11 @@ function moveRider(gps) {
 function renderToday(t) {
   $("today-date").textContent = t.date;
   if (!t.classes) {
-    $("today-list").innerHTML = `<button type="button" class="empty-cta" id="upload-cta">
+    const reading = state?.busy && uploadingSchedule;
+    $("today-list").innerHTML = `<button type="button" class="empty-cta" id="upload-cta" ${reading ? "disabled" : ""}>
       <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="#2f6feb" stroke-width="2" stroke-linecap="round"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
-      <span><b style="font-weight:600">Upload your schedule</b><br><span class="sub">Image or text. The assistant reads it and asks you to confirm.</span></span></button>`;
-    $("upload-cta").onclick = () => { setChat(true); $("file").click(); };
+      <span><b style="font-weight:600">${reading ? "Reading your schedule…" : "Upload schedule"}</b><br><span class="sub">${reading ? "This takes a few seconds." : "Screenshot, photo or text file. You check it before it's used."}</span></span></button>`;
+    $("upload-cta").onclick = () => $("sched-file").click();
     return;
   }
   if (!t.classes.length) { $("today-list").innerHTML = '<div class="empty">No classes today.</div>'; return; }
@@ -694,11 +813,16 @@ function renderToday(t) {
         <div class="where">${esc(where || "Location unknown")}</div>${hint}</div>
       ${c.building ? `<button type="button" class="sq-btn ghost" data-i="${i}" aria-label="Directions to ${esc(c.building)}">${ICON_DIR}</button>` : ""}
     </div>`;
-  }).join("") + '<div class="sub" style="margin-top:4px">From your uploaded schedule</div>';
+  }).join("") + `<div class="sub" style="margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      ${t.confirmed ? "From your schedule · confirmed" : '<span class="pill" style="background:#fff3dc;color:#8a4b08">Not confirmed</span>'}
+      <button type="button" class="link" id="sched-review">${t.confirmed ? "Edit" : "Review"}</button>
+      <button type="button" class="link" id="sched-new">Upload new</button></div>`;
   $("today-list").querySelectorAll("button[data-i]").forEach(b => b.onclick = () => {
     const c = t.classes[Number(b.dataset.i)];
-    ask(`How do I get from Home to ${c.building} by ${c.start}?`);
+    directionsTo(c.building, c.start);
   });
+  $("sched-review").onclick = () => post("/api/schedule/review");
+  $("sched-new").onclick = () => $("sched-file").click();
 }
 
 function fields(f) { return Object.entries(f).filter(([, v]) => v).map(([k]) => k.replace("_", " ")); }
@@ -744,7 +868,10 @@ function renderChecks(checks) {
 function onState(s) {
   state = s; contacts = s.contacts;
   moveRider(s.gps);
+  if (!s.busy) uploadingSchedule = false;
   renderToday(s.today);
+  if (s.schedule.review) { if ($("review").hidden) openReview(s.schedule.review); }
+  else $("review").hidden = true;
   renderShares(s);
   renderChecks(s.checks);
   $("mode").value = s.scenario ? s.scenario.file : "";
@@ -827,6 +954,19 @@ $("file").onchange = async () => {
   $("file").value = "";
 };
 $("player-play").onclick = play;
+$("directions").onsubmit = findRoutes;
+document.querySelectorAll("#when-mode button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+$("swap").onclick = () => { const f = $("from").value; $("from").value = $("to").value || f; $("to").value = f; };
+$("sched-file").onchange = async () => {
+  const f = $("sched-file").files[0];
+  if (!f) return;
+  uploadingSchedule = true;
+  renderToday(state.today);
+  await post("/api/schedule", f, {"X-Filename": f.name});
+  $("sched-file").value = "";
+};
+$("review-ok").onclick = () => post("/api/schedule/confirm", {classes: readReview()});
+$("review-cancel").onclick = () => post("/api/schedule/cancel");
 $("inspector-btn").onclick = () => setDrawer(!$("drawer").classList.contains("open"));
 $("drawer-close").onclick = () => setDrawer(false);
 $("start").onclick = () => post("/api/session", {scenario: $("mode").value || null});
@@ -838,7 +978,8 @@ document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
 });
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
-  if ($("drawer").classList.contains("open")) setDrawer(false);
+  if (!$("review").hidden) post("/api/schedule/cancel");
+  else if ($("drawer").classList.contains("open")) setDrawer(false);
   else if (chatOpen) setChat(false);
   else if (selected) select(selected);
 });
@@ -854,7 +995,13 @@ fetch("/api/init").then(r => r.json()).then(init => {
   $("places").innerHTML = names.map(n => `<option value="${esc(n)}"></option>`).join("");
   $("chips").innerHTML = ["Home", "Boelter Hall", "Westwood Village"].filter(n => places[n] || buildings[n])
     .map(n => `<button type="button" class="chip">${esc(n)}</button>`).join("");
-  $("chips").querySelectorAll(".chip").forEach(b => b.onclick = () => flyTo(b.textContent));
+  $("chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { flyTo(b.textContent); $("to").value = b.textContent; });
+  const group = (label, names) => `<optgroup label="${label}">${names.map(n => `<option>${esc(n)}</option>`).join("")}</optgroup>`;
+  const groups = group("Saved places", Object.keys(places)) + group("UCLA buildings", Object.keys(buildings));
+  $("from").innerHTML = groups; $("to").innerHTML += groups;
+  $("from").value = "Home";
+  const t = new Date(Date.now() + 60 * 60 * 1000);
+  $("when").value = `${String(t.getHours()).padStart(2, "0")}:00`;
   drawPlaces();
   connect();
 });
