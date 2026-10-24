@@ -11,3 +11,6 @@ __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
+
+# Transit API key
+transit_api_key.txt
