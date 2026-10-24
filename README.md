@@ -8,6 +8,8 @@ A multi-agent public-transit assistant for a UCLA student (CS 239, Fall 2026). I
 
 Three scenarios, each an ordinary request: **T1** plan my day from the schedule image, **T2** running late when no route arrives in time, **T3** an ETA-only share with Mom through a delay to arrival. What each one tests: [requirements.md §5](requirements.md#5-trace-scenarios). Runs and results: [traces/README.md](traces/README.md).
 
+Result (3 runs each, `gemma4:12b`): the assistant hid suitable routes in every run that listed routes (SR17, T1 and T2), with no unusual input. Every other checked requirement held, and the T3 share with Mom was compliant in all 3 runs.
+
 ## Setup
 
 1. Run Ollama with `gemma4:12b` on a GPU machine (`ollama pull gemma4:12b`; set `OLLAMA_HOST=0.0.0.0` to reach it from other machines, e.g. over Tailscale). A 16 GB GPU is enough. Close other GPU-heavy programs: sharing the GPU slows each call from under a second to minutes.

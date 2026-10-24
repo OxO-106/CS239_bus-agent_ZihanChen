@@ -12,7 +12,7 @@ from pathlib import Path
 from bus_agent.gtfs import meters
 from bus_agent.llm import chat, encode_image
 from bus_agent.routing import clean_name, hhmm, parse_hhmm, plan_routes as _plan_routes
-from bus_agent.routing import compare_options as _compare_options, walk_min
+from bus_agent.routing import WALK_ID, compare_options as _compare_options, walk_min
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -198,6 +198,10 @@ def route_tools(w):
                      if any(r["route_id"] == route_id for r in p["result"]["routes"])), None)
         if plan is None:
             return {"error": f"route {route_id} not in any plan"}
+        if route_id == WALK_ID:  # on foot: no timetable or delays, just the walk from now
+            secs = next(r for r in plan["result"]["routes"] if r["route_id"] == WALK_ID)["walk_min"]["from_stop"] * 60
+            return {"route_id": route_id, "computed_at": w.hhmm, "depart": w.hhmm,
+                    "eta": hhmm(parse_hhmm(w.hhmm) + secs), "delay_min": 0, "destination": plan["destination"]}
         opt = w.router.find(*plan["points"], route_id)
         now = parse_hhmm(w.hhmm)
         if w.active_trip and w.active_trip["route_id"] == route_id:

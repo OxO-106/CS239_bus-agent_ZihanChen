@@ -652,8 +652,9 @@ function renderMap() {
   if (!m) return;
   const routes = listed(), pts = [];
   lineColor = {};
-  for (const r of routes) for (const l of r.lines) if (!(l in lineColor)) lineColor[l] = COLORS[Object.keys(lineColor).length % COLORS.length];
+  for (const r of routes) for (const l of r.lines) if (!(l in lineColor) && l !== "Walk") lineColor[l] = COLORS[Object.keys(lineColor).length % COLORS.length];
   const lines = Object.keys(lineColor);
+  lineColor.Walk = "#5b6470";  // the walk-only route: no ride segments, drawn as a dashed walk
   const step = lines.length > 1 ? Math.min(OFFSET_STEP, OFFSET_SPREAD / (lines.length - 1)) : 0;
   const focus = routes.find(r => r.route_id === selected);
 
@@ -717,13 +718,14 @@ function onMap(m) {
 
 const stripes = r => r.lines.length === 1 ? lineColor[r.lines[0]]
   : `linear-gradient(${r.lines.map((l, k) => `${lineColor[l]} ${k * 100 / r.lines.length}% ${(k + 1) * 100 / r.lines.length}%`).join(", ")})`;
-const badges = r => r.lines.map(l => `<span class="line-badge" style="background:${lineColor[l]}">${esc(shortLine(l))}</span>`).join("");
+const badges = r => r.lines.map(l => `<span class="line-badge" style="background:${lineColor[l]}${l === "Walk" ? ";color:#fff" : ""}">${l === "Walk" ? ICON_WALK : esc(shortLine(l))}</span>`).join("");
 
 function itinerary(r) {
   const d = r.next_departures[0], legs = rides(r);
   const destName = Object.entries(buildings).find(([, p]) => mapState.dest && Math.abs(p.lat - mapState.dest[0]) < 1e-6)?.[0] || "your destination";
   const step = (icon, text, sub = "") => `<li class="step"><span class="step-icon">${icon}</span><span><span>${text}</span>${sub ? `<span class="sub" style="display:block">${sub}</span>` : ""}</span></li>`;
-  const steps = [step(ICON_WALK, `Walk ${r.walk_min.to_stop} min to <b>${esc(legs[0].board)}</b>`, r.leave_by ? `Leave by ${esc(r.leave_by)}` : "")];
+  const steps = legs.length ? [step(ICON_WALK, `Walk ${r.walk_min.to_stop} min to <b>${esc(legs[0].board)}</b>`, r.leave_by ? `Leave by ${esc(r.leave_by)}` : "")]
+    : [step(ICON_WALK, "Walk the whole way, no bus needed", r.leave_by ? `Leave by ${esc(r.leave_by)}` : "")];
   legs.forEach((p, k) => {
     if (k > 0) steps.push(step(ICON_WALK, `Transfer: walk to <b>${esc(p.board)}</b>`, k === 1 && r.walk_min.transfer ? `${r.walk_min.transfer} min of transfer walking` : ""));
     steps.push(step(`<span class="line-badge" style="background:${lineColor[p.line]}">${esc(shortLine(p.line))}</span>`,
@@ -954,7 +956,7 @@ function renderToday(t) {
   if (!t.classes.length) { $("today-list").innerHTML = '<div class="empty">No classes today.</div>'; return; }
   $("today-list").innerHTML = t.classes.map((c, i) => {
     let hint = "";
-    if (c.next && c.leave_by) hint = `<div class="hint go">${ICON_BUS} Leave by ${esc(c.leave_by.time)} · ${esc(c.leave_by.lines.map(lineName).join(" → "))}</div>`;
+    if (c.next && c.leave_by) hint = `<div class="hint go">${c.leave_by.lines[0] === "Walk" ? ICON_WALK : ICON_BUS} Leave by ${esc(c.leave_by.time)} · ${esc(c.leave_by.lines.map(lineName).join(" → "))}</div>`;
     else if (c.walk_from_prev) hint = `<div class="hint">${ICON_WALK} ${c.walk_from_prev.min} min walk from ${esc(c.walk_from_prev.from)}</div>`;
     const where = [c.building, c.room].filter(Boolean).join(" ");
     return `<div class="klass ${c.next ? "is-next" : ""}">

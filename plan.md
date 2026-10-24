@@ -36,7 +36,7 @@ Current map apps often show only one or two lines and drop routes they suggested
 
 Which transfer counts are listed: all working routes with the fewest transfers; if fewer than 3 of them arrive in time, also those with one more transfer.
 
-Speed is **not** a filter: a slower direct line is listed next to the fastest.
+Speed is **not** a filter: a slower direct line is listed next to the fastest. When walking the whole way takes ≤ 20 min, "Walk" is a route too, and transit routes with at least as much walking are left out.
 
 **Search** (`plan_routes`, deterministic code, not the LLM) starts from stops, so it finds lines the user doesn't know about:
 1. All stops within 10 min walk of origin and of destination, across all agencies and modes.
@@ -48,7 +48,7 @@ Speed is **not** a filter: a slower direct line is listed next to the fastest.
 
 **Presentation:** every suitable route with 2 departures (with an arrival deadline, the latest 2 that still arrive in time; otherwise the next 2), sorted by arrival, labeled (fastest, no transfer, least walking), with a total count. Routes that can only arrive late are still listed, marked "arrives late".
 
-**Stability:** `route_id` = lines + stops, so it is stable all day. On re-plan, `compare_options` marks each previous route `kept`, `changed`, `new`, or `dropped` with a tool-sourced reason (`last_trip_passed`, `not_running_now`, `not_running_today`, `stop_closed:<alert>`, `more_transfers_than_needed`).
+**Stability:** `route_id` = lines + stops, so it is stable all day. On re-plan, `compare_options` marks each previous route `kept`, `changed`, `new`, or `dropped` with a tool-sourced reason (`last_trip_passed`, `not_running_now`, `not_running_today`, `stop_closed:<alert>`, `more_transfers_than_needed`, `walking_is_shorter`).
 
 ### Data formats
 

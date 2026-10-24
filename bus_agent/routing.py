@@ -4,7 +4,8 @@ A route is one to three lines (up to two transfers) plus board/alight stops (pla
 It is suitable if every walk is within the walk limit (transfer walks <= 3 min), it still runs
 today, and no active alert closes a stop it uses. Speed is not a filter. Which transfer counts
 are listed: all routes with the fewest transfers that work; if fewer than 3 of them arrive in
-time, also those with one more transfer (see plan_routes).
+time, also those with one more transfer (see plan_routes). When walking the whole way takes at most
+WALK_ONLY_MAX minutes, it is listed as route "WALK", and routes with at least as much walking are left out.
 
 Search is structural first (which lines connect stops near origin and destination), then the
 day's timetable decides departures; routes that can't run are returned in `excluded` with a reason.
@@ -24,6 +25,8 @@ MIN_TRANSFER_BUFFER = 60  # seconds on top of the transfer walk
 MIN_OPTIONS = 3         # fewer in-time routes than this at the fewest transfers -> also list one more transfer
 MAX_TRANSFERS = 2
 SERVICE_WINDOW = 2 * 3600  # a route with no departure within this of `now` isn't running now (e.g. owl-only lines)
+WALK_ID = "WALK"        # route_id of the walk-only route; its one "line" is "Walk"
+WALK_ONLY_MAX = 20      # offer walking the whole way when it takes at most this many minutes
 
 
 def walk_min(m):
@@ -336,6 +339,14 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
             if rid not in open_ids and hit:
                 excluded.append({"route_id": rid, "reason": f"stop_closed:{hit}"})
 
+    walk = math.ceil(walk_min(meters(*origin, *dest)))
+    if walk <= WALK_ONLY_MAX:
+        # walking the whole way: listed, and any route with at least as much walking is left out
+        excluded += [{"route_id": r["route_id"], "reason": "walking_is_shorter"}
+                     for r in routes if sum(r["walk_min"].values()) >= walk]
+        routes = [r for r in routes if sum(r["walk_min"].values()) < walk]
+        routes.append(_walk_route(walk * 60, now, arrive_by))
+
     routes.sort(key=lambda r: r.pop("_sort"))
     if routes:
         door = [(parse_hhmm(r["next_departures"][0]["arrive"]) - parse_hhmm(r["leave_by"])) % 86400
@@ -347,15 +358,27 @@ def plan_routes(router, origin, dest, day, now, arrive_by=None, max_walk=MAX_WAL
         for r, d, w, ok in zip(routes, door, walks, on_time):
             if d == best and (ok or not any(on_time)):
                 r["labels"].append("fastest")
-            if r["transfers"] == 0:
+            if r["route_id"] == WALK_ID:
+                r["labels"].append("walk only")
+            elif r["transfers"] == 0:
                 r["labels"].append("no transfer")
             if w == min(walks):
                 r["labels"].append("least walking")
-            if max(r["walk_min"].values()) > MAX_WALK:
+            if r["route_id"] != WALK_ID and max(r["walk_min"].values()) > MAX_WALK:
                 r["labels"].append("longer walk")
             if not any(dep["on_time_for_class"] for dep in r["next_departures"]):
                 r["labels"].append("arrives late")
     return {"count": len(routes), "routes": routes, "excluded": excluded}
+
+
+def _walk_route(secs, now, arrive_by):
+    """Walk the whole way: leave as late as still arrives by arrive_by (or now if that has passed, or no deadline)."""
+    leave = max(now, arrive_by - secs) if arrive_by is not None else now
+    return {"route_id": WALK_ID, "lines": ["Walk"], "transfers": 0, "legs": [],
+            "walk_min": {"to_stop": 0, "transfer": 0, "from_stop": secs // 60},
+            "next_departures": [{"depart": hhmm(leave), "arrive": hhmm(leave + secs),
+                                 "on_time_for_class": arrive_by is None or leave + secs <= arrive_by, "realtime": False}],
+            "leave_by": hhmm(leave), "labels": [], "_sort": (leave + secs, secs)}
 
 
 def _latest_in_time(router, opt, services, now, arrive_by, count, delays):

@@ -6,6 +6,7 @@
   "start": "2026-10-27T09:40",
   "events": [
     {"at": "09:40", "type": "user",
-     "text": "I'm at Home. Get me to my class at Boelter Hall by 10:00."}
+     "text": "I'm at Home and I need to be at Boelter Hall by 10:00. How do I get there?",
+     "replies": ["No schedule needed, just get me from Home to Boelter Hall by 10:00."]}
   ]
 }

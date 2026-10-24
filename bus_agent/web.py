@@ -25,7 +25,7 @@ from bus_agent.bus import Bus
 from bus_agent.checks import mentions, run_checks
 from bus_agent.gtfs import meters
 from bus_agent.main import _uploads
-from bus_agent.routing import Router, _short, clean_name, hhmm, parse_hhmm, walk_min
+from bus_agent.routing import WALK_ID, Router, _short, clean_name, hhmm, parse_hhmm, walk_min
 from bus_agent.tools import DAY_CODES, near_sensitive, route_tools, schedule_tools, share_tools
 from bus_agent.trace import Trace
 from bus_agent.world import World
@@ -50,6 +50,9 @@ def route_geometry(router, route_id, origin=None, dest=None, shapes=None):
     """Polylines for a route_id: [{"kind": "walk" | "bus" | "rail", "line", "coords": [[lat, lon]]}].
 
     Rides follow the trip's GTFS shape when `shapes` has it, otherwise straight lines between stops."""
+    if route_id == WALK_ID:
+        return ({"route_id": route_id, "lines": ["Walk"], "parts": [{"kind": "walk", "coords": [list(origin), list(dest)]}]}
+                if origin and dest else None)
     parts, prev = [], origin
     for leg in route_id.split("|"):
         line, stops = leg.split(":", 1)

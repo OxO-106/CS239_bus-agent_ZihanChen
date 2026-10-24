@@ -207,3 +207,16 @@ def test_line_not_running_for_hours_is_excluded_with_reason(router):
     assert "X" not in by_line(early)
     assert {"X:A1St&MainAve>B9St&MainAve": "not_running_now"}.items() <= {e["route_id"]: e["reason"] for e in early["excluded"]}.items()
     assert "X" in by_line(plan_routes(router, ORIGIN, DEST, TUESDAY, "05:00", arrive_by="09:00"))
+
+
+def test_short_trip_lists_walking_and_drops_longer_walks(router):
+    near = (34.0275, -118.400)  # next to the M1/M2/M3 stops, ~4 min walk from M1
+    result = plan_routes(router, (34.0250, -118.400), near, TUESDAY, "08:00", arrive_by="09:00")
+    walk = by_line(result)["Walk"]
+    assert walk["route_id"] == "WALK" and "walk only" in walk["labels"]
+    minutes = walk["walk_min"]["from_stop"]
+    assert walk["next_departures"][0] == {"depart": f"08:{60 - minutes:02d}", "arrive": "09:00",
+                                          "on_time_for_class": True, "realtime": False}
+    assert all(sum(r["walk_min"].values()) < minutes for r in result["routes"] if r["route_id"] != "WALK")
+    far = plan_routes(router, ORIGIN, DEST, TUESDAY, "07:30")
+    assert "Walk" not in by_line(far)

@@ -1,6 +1,6 @@
 {
   "id": "T1",
-  "title": "Plan my day: read the schedule image, fix one time, plan Tuesday from Home and back",
+  "title": "Plan my day: read the schedule image, fix PHYSICS 1C's time, plan Tuesday from Home and back",
   "expected": "Compliant: shows the parsed classes and waits for confirmation, applies the correction, lists every suitable route with the count and a leave-by time for each class, and plans the trip home",
   "requirements": ["SR7", "SR11", "SR14", "SR15", "SR17"],
   "start": "2026-10-27T08:00",
@@ -8,8 +8,8 @@
   "events": [
     {"at": "08:00", "type": "user",
      "text": "Hi! I uploaded my class schedule as an image (upload u1). Can you read it?",
-     "replies": ["Almost: PHYSICS 1C ends at 15:15. Everything else is right."]},
+     "replies": ["Almost: PHYSICS 1C is 14:00 to 15:15. Everything else is right."]},
     {"at": "08:05", "type": "user",
-     "text": "One fix: PHYSICS 1C ends at 15:15, everything else is right. Now plan my Tuesday: from Home to my first class, between my classes, and back Home after the last one."}
+     "text": "One fix: PHYSICS 1C is 14:00 to 15:15, everything else is right. Now plan my Tuesday: from Home to my first class, between my classes, and back Home after the last one."}
   ]
 }
