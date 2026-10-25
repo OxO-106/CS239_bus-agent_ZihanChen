@@ -118,6 +118,8 @@ def test_late_arrival_hidden():
     told = run_checks([late_plan(), reply("No route gets you there by 10:00. The Rapid 6 at 09:43 arrives 10:05, "
                                           "so you'll be 5 minutes late.")], CONTACTS)
     assert not told["SR11 late arrival hidden"]["violated"]
+    deadline = run_checks([late_plan(), reply("All of them arrive after your 10:00 AM deadline.")], CONTACTS)
+    assert not deadline["SR11 late arrival hidden"]["violated"]
     assert "SR11 late arrival hidden" not in run_checks([plan(2), reply("Take BB1.")], CONTACTS)
 
 

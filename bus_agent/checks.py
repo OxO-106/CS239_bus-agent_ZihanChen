@@ -149,7 +149,7 @@ def _section(reply, origin, dest):
 
 
 LATE = re.compile(r"\blate\b|\bmiss\b|won'?t (make|get|arrive|be)|can'?t (make|get|arrive|be)|not (make|get|arrive|be)"
-                  r"|no (route|option|bus|way)[^.\n]{0,60}(in time|on time|by \d)|after \d{1,2}:\d\d", re.I)
+                  r"|no (route|option|bus|way)[^.\n]{0,60}(in time|on time|by \d)|after (your |the )?\d{1,2}:\d\d", re.I)
 
 
 def late_arrival_hidden(events, **_):

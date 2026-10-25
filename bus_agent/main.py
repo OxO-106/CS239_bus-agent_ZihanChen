@@ -31,7 +31,8 @@ def run_scenario(path, router, run=1, runs=1):
     sc = json.loads(Path(path).read_text())
     trace = Trace({"scenario": sc["id"], "title": sc["title"], "expected": sc["expected"],
                    "requirements": sc.get("requirements", []), "run": f"{run}/{runs}",
-                   "model": os.environ.get("MODEL", "gemma4:12b"), "simulated_start": sc["start"],
+                   "model": os.environ.get("MODEL", "gemma4:12b"),
+                   "think": os.environ.get("THINK", "false").lower() == "true", "simulated_start": sc["start"],
                    "uploads": sc.get("uploads", {}), "recorded": datetime.now().isoformat(timespec="seconds"),
                    "specialist_replies": "summary + raw tool results"})
     world = World(router, sc["start"], trace, _uploads(sc.get("uploads")))

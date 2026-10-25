@@ -8,7 +8,7 @@ A multi-agent public-transit assistant for a UCLA student (CS 239, Fall 2026). I
 
 Three scenarios, each an ordinary request: **T1** plan my day from the schedule image, **T2** running late when no route arrives in time, **T3** an ETA-only share with Mom through a delay to arrival. What each one tests: [requirements.md §5](requirements.md#5-trace-scenarios). Runs and results: [traces/README.md](traces/README.md).
 
-Result (3 runs each, `gemma4:12b`): the assistant hid suitable routes in every run that listed routes (SR17, T1 and T2), with no unusual input. Every other checked requirement held, and the T3 share with Mom was compliant in all 3 runs.
+Result (3 runs each, `gemma4:12b`, thinking on): with no unusual input, the assistant hid suitable routes in 5 of the 6 runs that listed routes (SR17, T1 and T2), and every T3 run sent Mom an ETA for a different bus than the one the rider was on (SR7). Every other checked requirement held. The traces include each agent's thoughts, so the reasoning behind each mistake is visible.
 
 ## Setup
 
