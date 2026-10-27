@@ -85,6 +85,7 @@
   .btn { height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--card); font-weight: 600; font-size: 13px; white-space: nowrap; }
   .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
   .btn:disabled { opacity: .5; cursor: default; }
+  .btn.danger { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 
   /* assistant */
   .fab { position: fixed; right: 24px; bottom: 24px; z-index: 700; width: 64px; height: 64px; border-radius: 50%; border: 0; background: var(--accent);
@@ -385,6 +386,9 @@
     <div class="box" id="clock"></div>
     <h3>Trace</h3>
     <button class="btn" id="save" type="button">Save trace to data/local/traces</button>
+    <h3>Your data</h3>
+    <button class="btn danger" id="remove-data" type="button">Remove all data</button>
+    <div class="sub" id="remove-data-info" style="margin-top:6px">Stops live shares, deletes uploaded schedules and saved traces, and starts a new session.</div>
   </div>
   <div class="tabpane" id="tab-checks" hidden>
     <h3>Safety checks</h3><div id="checks"></div>
@@ -547,8 +551,8 @@ function pin(latlng, html, cls = "pin", anchor = [0, 0]) {
 function drawPlaces() {
   for (const [n, p] of Object.entries(buildings))
     L.circleMarker([p.lat, p.lon], {radius: 5, color: "#5f6670", weight: 2, fillColor: "#fff", fillOpacity: 1}).bindTooltip(n).addTo(map);
-  for (const [n, p] of Object.entries(places))
-    pin([p.lat, p.lon], esc(n), n === "Home" ? "pin" : "pin light", [n === "Home" ? 22 : 40, 34]).bindTooltip(n === "Home" ? "Home (public placeholder)" : n).addTo(map);
+  const home = places.Home;  // other saved places get no tag on the map
+  if (home) pin([home.lat, home.lon], "Home", "pin", [22, 34]).bindTooltip("Home (public placeholder)").addTo(map);
 }
 
 function flyTo(nameOrKey) {
@@ -1137,6 +1141,12 @@ $("review-cancel").onclick = () => post("/api/schedule/cancel");
 $("inspector-btn").onclick = () => setDrawer(!$("drawer").classList.contains("open"));
 $("drawer-close").onclick = () => setDrawer(false);
 $("start").onclick = () => post("/api/session", {scenario: $("mode").value || null});
+$("remove-data").onclick = async () => {
+  if (!confirm("Remove all data? Live shares stop, and uploaded schedules and saved traces are deleted. This can't be undone.")) return;
+  const out = await post("/api/remove-all-data");
+  if (out.ok) $("remove-data-info").textContent =
+    `Removed: ${out.shares_stopped} live share${out.shares_stopped === 1 ? "" : "s"} stopped, ${out.files_deleted} file${out.files_deleted === 1 ? "" : "s"} deleted.`;
+};
 $("save").onclick = async () => { const out = await post("/api/save"); if (out.path) note(`Trace saved to ${out.path}`); };
 $("search-form").onsubmit = e => { e.preventDefault(); if (!flyTo($("search").value)) note(`No place called “${$("search").value}”.`); };
 document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {

@@ -589,6 +589,19 @@ class App:
         self.broadcast({"type": "reset"})
         self.session = Session(self.router, path, broadcast=self.broadcast, shapes=self.shapes)
 
+    def remove_all_data(self, uploads=UPLOADS, traces=TRACES):
+        """Remove all data button: stop live shares, delete uploaded schedules and traces saved from this
+        app, and start a fresh live session. CLI traces and data/local's own files (home.json etc.) stay."""
+        s = self.session
+        stopped = [sid for sid, share in s.world.shares.items() if share["status"] == "active"]
+        for sid in stopped:
+            s.share_stop(sid)  # recipients get "stopped sharing", as with the Stop button
+        files = [p for p in uploads.glob("*") if p.is_file()] + list(traces.glob("*-web-*"))
+        for p in files:
+            p.unlink()
+        self.new_session(None)
+        return {"ok": True, "shares_stopped": len(stopped), "files_deleted": len(files)}
+
 
 def _and(items):
     """["a", "b", "c"] -> "a, b and c"."""
@@ -673,6 +686,8 @@ def handler(app):
                 if self.path == "/api/session":
                     app.new_session(json.loads(body or b"{}").get("scenario"))
                     self._json({"ok": True})
+                elif self.path == "/api/remove-all-data":
+                    self._json(app.remove_all_data())
                 elif self.path == "/api/message":
                     self._json({"ok": s.message(json.loads(body)["text"])})
                 elif self.path == "/api/step":

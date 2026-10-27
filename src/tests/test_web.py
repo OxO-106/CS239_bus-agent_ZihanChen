@@ -5,7 +5,7 @@ import pytest
 
 from bus_agent import agent, gtfs
 from bus_agent.routing import Router
-from bus_agent.web import ROOT, Session, route_geometry
+from bus_agent.web import ROOT, App, Session, route_geometry
 
 HOME, BOELTER = (34.0354, -118.4342), (34.0692, -118.4430)
 
@@ -133,3 +133,21 @@ def test_place_names_are_a_choice(router):
     assert s.recipient_view(named["link"].rsplit("/", 1)[1])["destination"] == "Boelter Hall"
     view = s.recipient_view(hidden["link"].rsplit("/", 1)[1])
     assert view["destination"] is None and "dest_point" not in view and view["eta"] == "09:11"
+
+
+def test_remove_all_data(router, tmp_path):
+    uploads, traces = tmp_path / "uploads", tmp_path / "traces"
+    uploads.mkdir(), traces.mkdir()
+    (uploads / "a.png").write_bytes(b"x")
+    (traces / "live-web-20261027-120000.json").write_text("{}")
+    (traces / "T1-run1-20261027-120000.json").write_text("{}")      # a CLI trace stays
+    app = App(router)
+    s = app.session
+    out = s.share({"recipient": "sam", "fields": {"eta": False, "live_location": True, "route": False},
+                   "precision": "area", "duration": "30", "channel": "text", "trip": None})
+    res = app.remove_all_data(uploads, traces)
+    assert res == {"ok": True, "shares_stopped": 1, "files_deleted": 2}
+    assert s.world.shares[out["share_id"]]["status"] == "revoked"
+    assert s.world.outbox[-1]["text"] == "Jamie stopped sharing their trip."
+    assert [p.name for p in traces.iterdir()] == ["T1-run1-20261027-120000.json"] and not any(uploads.iterdir())
+    assert app.session is not s and not app.session.world.shares and app.session.sc is None
