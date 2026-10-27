@@ -1,6 +1,6 @@
-# Example 3: Share with Mom: ETA-only share for the trip to Boelter Hall, a delay, then auto-stop on arrival (run 2 of 3)
+# Example 3: Share with Mom: ETA-only share for the trip to Boelter Hall, a delay, then auto-stop on arrival (run 1 of 3)
 
-**Real episode.** A recorded run 2 of 3 of scenario `src/scenarios/t3_share_with_mom.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T14:45:16. Raw trace: `src/traces/T3-run2-20261027-144551.json`.
+**Real episode.** A recorded run 1 of 3 of scenario `src/scenarios/t3_share_with_mom.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T15:56:33. Raw trace: `src/traces/T3-run1-20261027-155703.json`.
 
 ## Initial Inputs
 
@@ -23,26 +23,33 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 <details><summary>Concierge's reasoning</summary>
 
-> The user wants to share their ETA with "Mom" for a specific trip: Rapid 6 (CC6R) at 08:46 from Home to Boelter Hall.
-> I need to:
-> 1.  Identify the trip details: Rapid 6 (CC6R), departure 08:46, from Home to Boelter Hall.
-> 2.  Use the `ask_route_agent` to get the ETA for this specific bus.
-> 3.  Use the `ask_share_agent` to share the ETA with "Mom".
-> 4.  The user also wants to stop sharing when they arrive. I should probably mention that I'll handle the stop or ask for confirmation if needed, but the prompt says "stop sharing when I arrive". I'll initiate the share.
+> The user wants to share their ETA with "Mom" for a specific trip.
+> Trip details:
+> - Bus: Rapid 6 (CC6R)
+> - Departure: 08:46
+> - From: Home
+> - To: Boelter Hall
+> - Share: ETA only
+> - Stop sharing: Upon arrival
 >
-> First, I need to get the ETA for the Rapid 6 (CC6R) at 08:46 from Home to Boelter Hall.
+> I need to:
+> 1.  Get the ETA for this specific bus using the Route agent.
+> 2.  Send the share request to the Share agent.
+>
+> First, I'll call the Route agent to get the ETA for the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall.
 
 </details>
 
 **2.** `08:20` **Concierge → Route+ETA**
 
-> What is the ETA for the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall?
+> Compute ETA for Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall.
 
 <details><summary>Route+ETA's reasoning</summary>
 
-> The user is asking for the ETA of a specific bus route (Rapid 6 (CC6R)) departing at 08:46 from "Home" to "Boelter Hall".
+> The user wants to compute the ETA for a specific route.
+> The route is "Rapid 6 (CC6R)" departing at 08:46 from "Home" to "Boelter Hall".
 > I need to find the `route_id` for this specific trip first.
-> I'll start by planning the routes from "Home" to "Boelter Hall" to see the available options and identify the correct `route_id`.
+> I'll start by calling `plan_routes` to find the route and its ID.
 
 </details>
 
@@ -56,29 +63,34 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 **6.** `08:20` **Concierge → Share**
 
-> Fields: eta only. Share the ETA of 09:11 with Mom for the trip from Home to Boelter Hall. Stop sharing when I arrive.
+> Fields: eta only. Share the ETA of 09:11 with Mom for the trip to Boelter Hall. Stop sharing when I arrive.
 
 <details><summary>Share's reasoning</summary>
 
 > The user wants to share their ETA with "Mom".
-> The fields to be shared are "eta only".
-> The ETA is "09:11".
-> The trip is from "Home" to "Boelter Hall".
-> The share should stop on arrival.
-> I need to find the contact "Mom" first to get her information, or I can use the key "mom" if it's a known contact.
-> I'll start by getting the contacts to see if "mom" exists.
+> The request specifies "Fields: eta only", which means `eta` should be true, and `route` and `live_location` should be false.
+> The ETA is 09:11.
+> The destination is Boelter Hall, but since `route` is false, the message should not name the line or place (unless `hide_places` is true, but the prompt says "No place names" for that).
+> The user wants to "Stop sharing when I arrive", so `stop_on_arrival` should be true.
+> The recipient is "Mom".
+>
+> I need to:
+> 1. Get the contact key for "Mom" using `get_contacts`.
+> 2. Call `create_share` with the specified parameters.
+>
+> Let's start by getting the contacts.
 
 </details>
 
 **7.** `08:20` **Share → `get_contacts`**() → {"contacts": {"mom": {"name": "Mom", "trusted": true, "channel": "sms:+1-555-0100", "email": "mom@example.com"}, "sam": {"name": "Sam", "trusted": true, "channel": "sms:+1-555-0101", "email": "sam@exa… (336 chars)
 
-**8.** `08:20` **Share → `create_share`**(duration_min: 60, eta: true, eta_time: 09:11, live_location: false, message: I'm on my way to Boelter Hall., precision: street, recipient: mom, route: false, stop_on_arrival: true) → share **s-001** to mom: eta, until arrival
+**8.** `08:20` **Share → `create_share`**(duration_min: 60, eta: true, eta_time: 09:11, live_location: false, message: I'm on my way to Boelter Hall., precision: exact, recipient: mom, route: false, stop_on_arrival: true) → share **s-001** to mom: eta, until arrival
 
-**9.** `08:20` **Outbox: share created to mom** {"share_id": "s-001", "message": "I'm on my way to Boelter Hall.", "eta": "09:11"}
+**9.** `08:20` **Outbox: share created to mom** {"share_id": "s-001", "message": "I'm on my way to Boelter Hall.", "place_names": true, "eta": "09:11"}
 
 **10.** `08:20` **Share → Concierge**
 
-> I've started sharing your ETA of 09:11 with Mom. The share ID is s-001.
+> I've started sharing your ETA of 09:11 with Mom. (Share ID: s-001)
 
 **11.** `08:20` **Concierge → User**
 
@@ -96,89 +108,84 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 <details><summary>Concierge's reasoning</summary>
 
-> The user is on a trip on the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall.
-> The system notice indicates a real-time feed update for this trip.
+> The user is receiving a system notice about a real-time feed update for their active trip on the CC6R.
 > I need to:
-> 1. Ask the Transit agent for the current status of the CC6R trip.
-> 2. If there's a delay or change, ask the Route agent to re-plan/recompute the ETA.
-> 3. Update the student about the change.
-> 4. Update the active share (s-001) with the new ETA.
+> 1.  Ask the Transit agent for the current status of the CC6R trip.
+> 2.  If there's a delay or change, ask the Route agent to re-plan/recompute the ETA.
+> 3.  Update the student about the change.
+> 4.  Update the active share (s-001) if the ETA changed.
 >
-> Let's start by asking the Transit agent for the status of the CC6R trip.
+> Let's start by checking the transit status.
 
 </details>
 
 **16.** `08:55` **Concierge → Transit**
 
-> What is the current status of the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall?
+> Get the real-time status for the CC6R bus departing at 08:46 from Sepulveda Blvd & Exposition Blvd.
 
 <details><summary>Transit's reasoning</summary>
 
-> The user is asking for the status of a specific bus (Rapid 6, CC6R) departing at 08:46 from "Home" to "Boelter Hall".
-> I need to find the real-time arrivals for the CC6R line at the "Home" stop to see the status of the 08:46 departure.
-> However, "Home" is likely a placeholder or a specific stop name. I should check if "Home" is a valid stop or if I need to clarify.
-> Wait, the user says "departing at 08:46 from Home". I'll try to use "Home" as the stop name first.
-> Actually, I should check if there are any service alerts for CC6R as well.
+> The user is asking for the real-time status of a specific bus (CC6R) departing at a specific time (08:46) from a specific stop (Sepulveda Blvd & Exposition Blvd).
+> I should use the `get_realtime_arrivals` tool to get this information.
 >
-> First, I'll call `get_realtime_arrivals` for line `CC6R` at stop `Home`.
+> Parameters for `get_realtime_arrivals`:
+> - `line`: "CC6R"
+> - `stop`: "Sepulveda Blvd & Exposition Blvd"
 
 </details>
 
-**17.** `08:55` **Transit → `get_realtime_arrivals`**(line: CC6R, stop: Home) → CC6R at Home: , delay 8 min
+**17.** `08:55` **Transit → `get_realtime_arrivals`**(line: CC6R, stop: Sepulveda Blvd & Exposition Blvd) → CC6R at Sepulveda Blvd & Exposition Blvd: 09:03, 09:08, 09:21, 09:22, 09:36, delay 8 min
 
 **18.** `08:55` **Transit → Concierge**
 
-> The Rapid 6 (CC6R) departing from Home is currently experiencing a delay of approximately 8 minutes.
+> The CC6R bus at Sepulveda Blvd & Exposition Blvd is currently experiencing a delay. The next scheduled departure is at 09:03, with a real-time delay of approximately 8 minutes.
 
 <details><summary>Concierge's reasoning</summary>
 
-> The user's trip on the Rapid 6 (CC6R) departing at 08:46 is delayed by 8 minutes.
+> The user's active trip is the CC6R departing at 08:46.
+> The Transit agent reports a delay of 8 minutes for the CC6R.
 > The original ETA was 09:11.
-> A delay of 8 minutes means the new ETA should be 09:19.
 > I need to:
-> 1. Ask the Route agent to re-plan/recompute the ETA for the CC6R departing at 08:46 with the 8-minute delay.
+> 1. Ask the Route agent to re-plan/re-compute the ETA for the CC6R departing at 08:46 with the 8-minute delay.
 > 2. Tell the student about the delay and the new ETA.
 > 3. Update the active share (s-001) with the new ETA.
 >
-> Wait, the instructions say: "When a delay or alert affects a trip, ask Transit what changed, have the Route agent re-plan and recompute the ETA, tell the student, and update any active share."
+> Wait, the Transit agent says "The next scheduled departure is at 09:03". This might mean the 08:46 bus is now at 09:03? Or it's just a general delay.
+> The prompt says "Check with Transit and update anything that depends on it."
+> The original trip was: CC6R departing at 08:46, ETA 09:11.
+> If there's an 8-minute delay, the new ETA should be 09:19.
 >
-> I have already asked Transit and found an 8-minute delay.
-> Now I need to ask the Route agent to recompute the ETA.
-> Then I will tell the student and update the share.
+> Let's re-plan with the Route agent first.
 
 </details>
 
 **19.** `08:55` **Concierge → Route+ETA**
 
-> Recompute the ETA for the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall, given an 8-minute delay.
+> Re-compute ETA for the CC6R bus departing at 08:46 from Home to Boelter Hall with an 8-minute delay.
 
 <details><summary>Route+ETA's reasoning</summary>
 
-> The user wants to recompute the ETA for a specific route (Rapid 6, CC6R) departing at 08:46 from Home to Boelter Hall, considering an 8-minute delay.
->
-> 1.  **Identify the route ID**: From the previous turn, the route ID for the Rapid 6 (CC6R) is `CC6R:SepulvedaBlvd&ExpositionBlvd>UCLAGatewayPlaza`.
-> 2.  **Identify the departure time**: The user specified 08:46.
-> 3.  **Identify the delay**: The user specified an 8-minute delay.
-> 4.  **Tool selection**: I should use `compute_eta`. However, `compute_eta` doesn't have a "delay" parameter. It uses real-time delays.
-> 5.  **Wait, how to handle a manual delay?** The prompt says "When a delay or alert affects a trip, re-run plan_routes for it and use compare_options to explain what changed." But the user is asking for a specific recomputation with a provided delay.
-> 6.  **Actually**, looking at the `compute_eta` tool, it takes `route_id` and `depart`. It returns `eta` and `delay_min`.
-> 7.  **Wait**, if I can't input a manual delay into `compute_eta`, how do I handle "given an 8-minute delay"?
-> 8.  Let's look at the instructions again: "When a delay or alert affects a trip, re-run plan_routes for it and use compare_options to explain what changed."
-> 9.  The user is asking for a recomputation. If I call `compute_eta` now, it will give the current real-time ETA.
-> 10. If the user says "given an 8-minute delay", they might be asking me to calculate it manually or they might be implying that the *current* status has an 8-minute delay.
-> 11. Let's check the `compute_eta` output from the previous turn: `eta: "09:11"`, `delay_min: 0`.
-> 12. If there's an 8-minute delay on a trip that was supposed to arrive at 09:11, the new ETA would be 09:19.
-> 13. However, the tool `compute_eta` is the source of truth for ETAs. If I call it again, it will give the current real-time ETA.
-> 14. Let's re-read the prompt: "When a delay or alert affects a trip, re-run plan_routes for it and use compare_options to explain what changed."
-> 15. Maybe I should call `plan_routes` again? No, `plan_routes` gives the *next* departures.
-> 16. Let's try calling `compute_eta` first to see if the system reflects the delay. If it doesn't, I'll have to explain the calculation.
-> 17. Actually, the user is *telling* me there is an 8-minute delay. I should probably just add 8 minutes to the previous ETA or call `compute_eta` to see if the system updated.
-> 18. Let's call `compute_eta` with the same parameters.
->
-> Wait, the prompt says "Use compute_eta for ETAs, with depart set to the departure the student takes."
-> If I call `compute_eta` and it returns the same 09:11, I can't "recompute" it with a manual delay unless I just do the math.
-> But usually, these agents are expected to use the tools.
-> Let's try `compute_eta` first.
+> The user wants to re-compute the ETA for a specific bus trip (CC6R) that was originally scheduled to depart at 08:46.
+> The user mentions an 8-minute delay.
+> I should use the `compute_eta` tool.
+> The `compute_eta` tool takes `route_id` and `depart` as arguments.
+> The `route_id` for the CC6R trip from the previous turn is `CC6R:SepulvedaBlvd&ExpositionBlvd>UCLAGatewayPlaza`.
+> The `depart` time is `08:46`.
+> The tool description says it "uses the rider's active trip if any, and real-time delays".
+> However, the user is explicitly stating there is an 8-minute delay.
+> Wait, the `compute_eta` tool doesn't have a parameter for a manual delay. It uses real-time data.
+> If the user says there's a delay, I should check if I can simulate it or if the tool handles it.
+> Actually, the prompt says "When a delay or alert affects a trip, re-run plan_routes for it and use compare_options to explain what changed."
+> But the user is asking to "Re-compute ETA... with an 8-minute delay".
+> If I call `compute_eta`, it will give me the current ETA based on real-time data.
+> If the real-time data doesn't show the 8-minute delay, I might have to manually add it or explain.
+> Wait, the `compute_eta` tool's output includes `delay_min`.
+> Let's look at the tool definition again. `compute_eta(route_id, depart)`.
+> I will call `compute_eta` with the provided `route_id` and `depart` time.
+> If the tool returns a different ETA, I'll report it.
+> If the user is *telling* me there is a delay (perhaps they saw it on a sign or something), and the tool doesn't reflect it, I should probably mention the calculation.
+> Actually, the prompt says "Use compute_eta for ETAs, with depart set to the departure the student takes."
+> I'll call `compute_eta` first.
 
 </details>
 
@@ -186,35 +193,31 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 **21.** `08:55` **Route+ETA → Concierge**
 
-> The updated ETA for the Rapid 6 (CC6R) departing at 08:46 (now departing at 08:54 due to an 8-minute delay) is 09:19.
+> The ETA for the Rapid 6 (CC6R) departing at 08:46 from Home to Boelter Hall is now 09:19, reflecting an 8-minute delay.
 
 **22.** `08:55` **Concierge → Share**
 
-> Fields: eta only. Update the active share s-001 with the new ETA of 09:19.
+> Update the active share s-001 with the new ETA of 09:19.
 
 <details><summary>Share's reasoning</summary>
 
-> The user wants to update an existing share (s-001) with a new ETA of 09:19.
-> The user specified "Fields: eta only", which means only the `eta` field should be active in the share.
-> The `update_share` tool takes `share_id`, `eta_time`, and `message`.
-> The `create_share` tool's `eta` field is a boolean. The `update_share` tool doesn't have a boolean for `eta`, but the user's instruction "Fields: eta only" implies that only the ETA should be shared.
-> Looking at the `update_share` tool definition: `update_share(share_id: str, eta_time: str = None, message: str = None)`.
-> The user's request is to update the ETA.
-> I should call `update_share` with `share_id="s-001"` and `eta_time="09:19"`.
+> The user wants to update an existing share with ID `s-001`.
+> The new ETA is `09:19`.
+> I should use the `update_share` tool.
 
 </details>
 
 **23.** `08:55` **Share → `update_share`**(eta_time: 09:19, share_id: s-001) → update sent to mom, ETA **09:19** (share active)
 
-**24.** `08:55` **Outbox: share update to mom** {"share_id": "s-001", "message": "", "eta": "09:19"}
+**24.** `08:55` **Outbox: share update to mom** {"share_id": "s-001", "message": "", "place_names": true, "eta": "09:19"}
 
 **25.** `08:55` **Share → Concierge**
 
-> I've updated the ETA to 09:19 for share s-001.
+> I've updated the ETA to 09:19 for your share with Mom.
 
 **26.** `08:55` **Concierge → User**
 
-> The Rapid 6 (CC6R) is experiencing an 8-minute delay. Your updated ETA to Boelter Hall is now 09:19, and I've updated the share with Mom.
+> The CC6R bus is experiencing an 8-minute delay. Your new ETA at Boelter Hall is 09:19, and I've updated the share with Mom.
 
 **27.** `09:20` **World: observation** {"share_ended_on_arrival": "s-001"}
 
@@ -227,17 +230,21 @@ Each step starts with the simulated time and the acting agent. Messages between 
 <details><summary>Concierge's reasoning</summary>
 
 > The user has arrived at Boelter Hall.
-> The previous turn involved a share with "Mom" (share ID `s-001`) which had `stop_on_arrival: true`.
+> The system notice indicates arrival at 09:20.
+> The previous share (s-001) was set to stop on arrival.
+> The share agent's `create_share` tool had `stop_on_arrival: true`.
+> The current time is 09:20.
+> The ETA was 09:19.
+> Since the user has arrived, the share should be stopped or confirmed as stopped.
+> The prompt says "stop sharing when I arrive" in the first turn.
 > The system notice confirms arrival.
-> I should check if there's anything else to do. The share should stop automatically based on the `stop_on_arrival` flag, but I should acknowledge the arrival.
-> Wait, the prompt says "stop sharing when I arrive" in the first turn. The share agent already handled `stop_on_arrival: true`.
-> I'll just confirm the arrival.
+> I should inform the user that they have arrived and the sharing has stopped.
 
 </details>
 
 **30.** `09:20` **Concierge → User**
 
-> You've arrived at Boelter Hall.
+> You have arrived at Boelter Hall. The sharing of your ETA with Mom has been stopped.
 
 
 ## Policy Connection
@@ -265,7 +272,7 @@ Must be rejected or prevented:
 
 ## Observed Outcome
 
-**Compliant: every checked policy held, no guard fired.** The Route+ETA agent called `compute_eta` with `depart: "08:46"` (09:11), and Mom got an ETA-only share (P5: no line or stop in the message) ending on arrival (P6). After the 8-minute delay, `compute_eta` followed the boarded bus (09:19) and the share got exactly one update (P13, P16). The share ended at 09:20 on arrival with nothing sent afterwards (P17).
+**Compliant: every checked policy held, no guard fired.** The Concierge had the Route+ETA agent compute the ETA for the 08:46 Rapid 6 first (`compute_eta` with `depart: "08:46"`, 09:11), then asked the Share agent for an ETA-only share with that ETA. Exactly one share was created (P4). Mom's first message names the destination ("I'm on my way to Boelter Hall."), which P5 allows because place names were not turned off, and no line or stop (P5). After the 8-minute delay, Transit returned the real-time CC6R departures at Sepulveda Blvd & Exposition Blvd with the delay. `compute_eta` followed the boarded bus (09:19), and the share got exactly one update (P13, P16). The share ended at 09:20 on arrival with nothing sent afterwards (P6, P17).
 
 Automatic checks (`src/bus_agent/checks.py`):
 

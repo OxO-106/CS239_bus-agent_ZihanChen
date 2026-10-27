@@ -29,7 +29,7 @@ All three are compliant: every checked policy held, and no guard had to fire. Ge
 | `OLLAMA_NUM_CTX` | `16384` | Context window |
 | `OLLAMA_KEEP_ALIVE` | `30m` | How long Ollama keeps the model loaded |
 | `MODEL_<AGENT>`, `THINK_<AGENT>` | — | Per-agent overrides; `<AGENT>` is `CONCIERGE`, `SCHEDULE`, `TRANSIT`, `ROUTE` or `SHARE` |
-| `GUARDS` | `P5,P13,P15` | Policies the tools and the Concierge enforce, comma-separated; `GUARDS=` with no value turns them all off. `P5`: a share message names no line or stop the share doesn't include. `P13`: a share's ETA is `compute_eta` for the rider's trip, the Concierge's replies name only that trip's times, and `compute_eta` takes the departure the rider chose. `P15`: a Concierge reply shows every planned route or states the count |
+| `GUARDS` | `P4,P5,P13,P15` | Policies the tools and the Concierge enforce, comma-separated; `GUARDS=` with no value turns them all off. `P4`: while a contact has an active share from the agents, another `create_share` to them is rejected (one confirmation, one share). `P5`: a share message names the line only with the route field, and names no stop or trip end when the share's place names are off; a plain message says no more than the recipient's active shares. `P13`: a share's ETA is `compute_eta` for the rider's trip, the Concierge's replies name only that trip's times, the Route+ETA agent's replies give each route only its own times, and `compute_eta` takes the departure the rider chose. `P15`: a Concierge reply shows every planned route or states the count |
 
 All other data is local and committed: trimmed GTFS feeds, mock buildings, places and contacts, and a generated sample schedule. Real-time data and sending are simulated.
 
@@ -48,7 +48,7 @@ Open http://localhost:8239. It looks like a regular map app:
 - **Top right:** a chip for each live share (red if the recipient isn't a trusted contact) with **Their view** and **Stop**, a **Share trip** button, and the **Inspector** button.
 - **Share sheet** (Share trip, or "Share this trip" on a route's step-by-step view):
   - **Who:** trusted contacts only.
-  - **What they see:** arrival time, live location (exact, street or area) and route, each switched separately. **Hide where I live** (on by default) shows only the area near Home; turn it off for someone like Mom to show the location at the chosen precision.
+  - **What they see:** arrival time, live location (exact, street or area) and route, each switched separately. **Hide where I live** (on by default) shows only the area near Home; turn it off for someone like Mom to show the location at the chosen precision. **Name places** (on by default) says where you're going in the messages and on the trip page; turn it off and no place is named.
   - **How long:** until I arrive, 30 min, 1 hour or 2 hours, never more than 4 hours.
   - **Send by:** text, email or a link, with a preview of the exact message.
 
@@ -73,7 +73,7 @@ A scenario (`scenarios/*.json`) has a start time, uploads, and a timeline of eve
 
 After each run, `bus_agent/checks.py` scores the trace against SR2, SR3, SR5, SR7, SR11, SR12 and SR17 and stores the result in the header. `python -m bus_agent.checks traces/*.json` prints the violation table.
 
-Agents: the Concierge talks to the user and calls the specialists through `bus.py`, a hub that rejects specialist-to-specialist messages. Schedule, Transit, Route+ETA, and Share each have their own tools (`bus_agent/tools.py`). The guards (`GUARDS`) live in the share tools (P5, P13) and in the `Concierge` class in `agents.py` (P13 and P15 on its replies). A blocked share returns an error naming the right value. A blocked reply goes back to the Concierge to rewrite, up to 2 times, before a fallback built from tool results is sent. Every block is logged as a `guard` event. Without guards, the tools validate nothing.
+Agents: the Concierge talks to the user and calls the specialists through `bus.py`, a hub that rejects specialist-to-specialist messages. Schedule, Transit, Route+ETA, and Share each have their own tools (`bus_agent/tools.py`). The guards (`GUARDS`) live in the share tools (P4, P5, P13) and in the `Concierge` and `RouteAgent` classes in `agents.py` (P13 and P15 on the Concierge's replies, P13 on the Route+ETA agent's). A blocked share returns an error naming the right value. A blocked reply goes back to its agent to rewrite, up to 2 times, before a fallback built from tool results is sent. Every block is logged as a `guard` event. Without guards, the tools validate nothing.
 
 ## Tests
 

@@ -23,6 +23,6 @@ cp .env.example .env
 python -m bus_agent.web
 ```
 
-**Status:** the three submitted traces (one per scenario) are compliant on every checked policy. P5, P13 and P15 are enforced by guards in the code; the first, unguarded version broke P13 and P15, and [src/traces/README.md](src/traces/README.md#what-makes-these-runs-compliant) explains what changed.
+**Status:** the three submitted traces (one per scenario) are compliant on every checked policy. P4 (one share per confirmation), P5, P13 and P15 are enforced by guards in the code; the first, unguarded version broke P13 and P15, and [src/traces/README.md](src/traces/README.md#what-makes-these-runs-compliant) explains what changed.
 
 License: [MIT](LICENSE).

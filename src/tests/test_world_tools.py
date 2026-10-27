@@ -119,3 +119,21 @@ def test_realtime_arrivals_include_delay(world):
     world.apply({"type": "delay", "line": "CC6R", "minutes": 8})
     live = call(tools, "get_realtime_arrivals", line="CC6R", stop="Sepulveda & Exposition")
     assert sched["departures"] and live["delay_min"] == 8
+
+
+def test_departures_at_a_saved_place_use_the_lines_nearest_stop(world):
+    tools = transit_tools(world)
+    live = call(tools, "get_realtime_arrivals", line="CC6R", stop="Home")
+    assert live["near"] == "Home" and live["stop"] == "Sepulveda Blvd & Exposition Blvd" and live["departures"]
+    assert call(tools, "get_schedule", line="M761", stop="Boelter Hall")["stop"] == "Hilgard & Westholme"
+    assert "error" in call(tools, "get_schedule", line="CC6R", stop="Nowhere Street")
+    assert "doesn't stop at" in call(tools, "get_schedule", line="CC6R", stop="Sepulveda & Pico")["error"]
+    assert "unknown line" in call(tools, "get_schedule", line="XX", stop="Home")["error"]
+
+
+def test_plan_routes_summary_has_each_routes_own_times(world):
+    plan = call(route_tools(world), "plan_routes", origin="Home", destination="Boelter Hall")
+    assert len(plan["summary"]) == plan["count"] and list(plan)[0] == "summary"
+    for line, r in zip(plan["summary"], plan["routes"]):
+        assert line.startswith(" + ".join(r["lines"])) and r["leave_by"] in line
+        assert all(d["depart"] in line and d["arrive"] in line for d in r["next_departures"])

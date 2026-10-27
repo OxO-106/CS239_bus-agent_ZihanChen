@@ -402,7 +402,8 @@ class Session:
         ends = (f"when {name} arrives" if minutes is None else f"in {minutes} min" if minutes < 60
                 else f"in {minutes // 60} hour{'s' if minutes > 60 else ''}")
         eta = f", arriving around {trip['arrive']}" if trip and f.get("eta") else ""
-        lead = f"{name} is on the way to {trip['destination']}{eta}." if trip else f"{name} is sharing their trip with you."
+        to = f" to {trip['destination']}" if trip and opts.get("place_names", True) else ""
+        lead = f"{name} is on the way{to}{eta}." if trip else f"{name} is sharing their trip with you."
         channel = opts.get("channel", "text")
         if channel == "email":
             return {"subject": f"{name} is sharing their trip with you", "sees": sees,
@@ -420,7 +421,8 @@ class Session:
     def share(self, opts):
         """Share sheet: who, what, how long, sent how. Only trusted contacts; at most 4 hours.
 
-        hide_home (default on) blurs the location to the area near Home; off shows it at the chosen precision."""
+        hide_home (default on) blurs the location to the area near Home; off shows it at the chosen precision.
+        place_names (default on) names the destination in the messages and on the trip page; off names no place."""
         w = self.world
         contact = w.contacts.get(opts.get("recipient"))
         if not contact or not contact.get("trusted"):
@@ -436,13 +438,15 @@ class Session:
         link = f"{self.link_base}/t/{token}"
         msg = self._share_message(contact["name"], opts, trip, link)
         self.trace.log("user", "action", {"action": "share", **{k: opts.get(k) for k in ("recipient", "fields", "precision",
-                                                                                           "hide_home", "duration", "channel")},
+                                                                                           "hide_home", "place_names",
+                                                                                           "duration", "channel")},
                                           "trip": trip})
         result = self._tool("create_share", recipient=opts["recipient"], live_location=bool(f.get("live_location")),
                             route=bool(f.get("route")), eta=bool(f.get("eta")),
                             precision=PRECISION.get(opts.get("precision", "area"), "neighborhood"),
                             duration_min=DURATION_MIN[opts.get("duration", "arrive")] or MAX_SHARE_MIN,
                             stop_on_arrival=True, message=msg["text"], eta_time=trip["arrive"] if trip and f.get("eta") else None,
+                            hide_places=not opts.get("place_names", True),
                             channel=channel, trip=trip, protect_sensitive=bool(opts.get("hide_home", True)),
                             link_base=self.link_base, token=token)
         if "error" in result:
@@ -475,7 +479,8 @@ class Session:
                 share["ended_at"] = w.hhmm
                 if share["channel"] != "link":
                     w.send("message", {"to": share["recipient"], "channel": share["channel"], "share_id": share["share_id"],
-                                       "text": f"{name} arrived at {trip.get('destination', 'their destination')}. Sharing has ended."})
+                                       "text": f"{name} arrived at {trip.get('destination', 'their destination')}. Sharing has ended."
+                                               if share["place_names"] else f"{name} arrived. Sharing has ended."})
             elif share["status"] == "active" and share["expires_at"] and w.now.isoformat() >= share["expires_at"]:
                 share.update(status="expired", ended_at=w.hhmm)
                 if share["channel"] != "link":
@@ -505,8 +510,9 @@ class Session:
         if share["status"] == "active" and share["expires_at"] and w.now.isoformat() >= share["expires_at"]:
             share.update(status="expired", ended_at=w.hhmm)
         trip = share.get("trip") or {}
-        dest = w.buildings.get(trip.get("destination")) or w.places.get(trip.get("destination"))
-        view = {"status": share["status"], "name": PROFILE["name"], "destination": trip.get("destination"),
+        destination = trip.get("destination") if share["place_names"] else None  # place names off: no place shown
+        dest = w.buildings.get(destination) or w.places.get(destination)
+        view = {"status": share["status"], "name": PROFILE["name"], "destination": destination,
                 "ended_at": share.get("ended_at"), "started": share["created_at"], "now": w.hhmm,
                 "ends": "arrival" if share["expires_at"] is None or share.get("stop_on_arrival") else share["expires_at"][11:16],
                 "fields": share["fields"]}

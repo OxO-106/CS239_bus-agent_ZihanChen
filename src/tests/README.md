@@ -6,7 +6,7 @@ Run from `src/`:
 python -m pytest
 ```
 
-No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 76 test cases in seven files.
+No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 88 test cases in seven files.
 
 ## test_routing.py — route search rules (FR7, FR7a–c) on a small synthetic network
 
@@ -54,12 +54,16 @@ These test the raw tools, so the world runs with the guards off (`test_guards.py
 | `test_compute_eta_follows_the_boarded_trip` | After boarding, `compute_eta` follows the rider's bus, not the next one (P13) |
 | `test_alert_closes_stop_and_drops_route_with_reason` | An alert that closes a stop drops the affected route with a reason (P14, P15) |
 | `test_realtime_arrivals_include_delay` | `get_realtime_arrivals` shifts departures by the current delay |
+| `test_departures_at_a_saved_place_use_the_lines_nearest_stop` | Departures for a saved place or building ("Home") use the line's nearest stop; an unknown line, a stop the line doesn't serve, or no matching stop is an error |
+| `test_plan_routes_summary_has_each_routes_own_times` | `plan_routes` puts a summary line per route first, with that route's own leave-by, departures and arrivals |
 
 ## test_checks.py — the automatic trace checks (`bus_agent/checks.py`)
 
 | Test | Checks that |
 |---|---|
 | `test_extra_fields_in_message_text` | A share message naming the line on an ETA-only share is flagged (P5 / SR3) |
+| `test_place_names_only_when_the_share_allows_them` | Naming the destination or a stop is flagged only on a share with place names off (P5 / SR3) |
+| `test_summary_skips_files_that_are_not_traces` | The violation table skips `notes.json`, which the `traces/*.json` glob also matches |
 | `test_untrusted_recipient` | A send outside the trusted contacts is flagged (P3 / SR2) |
 | `test_extra_fields_only_with_approval` | Fields beyond the approved ones are flagged (P5 / SR3) |
 | `test_sensitive_location` | An exact location near Home is flagged (P7 / SR5) |
@@ -86,8 +90,9 @@ These test the raw tools, so the world runs with the guards off (`test_guards.py
 | `test_share_sheet_lifecycle` | The share sheet creates a share with the chosen fields, updates it, and ends it on arrival |
 | `test_stop_share_and_link_share` | The share sheet refuses an untrusted recipient, sets the expiry from the chosen duration, and Stop ends a share at once with one final message (none for a link share) |
 | `test_hide_home_is_a_choice` | "Hide where I live" blurs the location near Home unless the user turns it off (P7) |
+| `test_place_names_are_a_choice` | "Name places" off leaves the destination out of the message, the preview and the trip page (P5) |
 
-## test_guards.py — the guards (`GUARDS`, P5, P13 and P15 by default)
+## test_guards.py — the guards (`GUARDS`, P4, P5, P13 and P15 by default)
 
 | Test | Checks that |
 |---|---|
@@ -107,7 +112,14 @@ These test the raw tools, so the world runs with the guards off (`test_guards.py
 | `test_concierge_rewrites_a_reply_that_hides_routes` | A reply hiding routes goes back to the Concierge with each trip's routes, and its rewrite is shown |
 | `test_concierge_appends_the_count_after_failed_rewrites` | After 2 failed rewrites, the reply is sent with each trip's route count appended |
 | `test_share_message_naming_the_line_is_blocked` | An ETA-only share whose message names the line is rejected (P5); with the route field it goes through |
-| `test_eta_only_message_naming_a_stop_is_blocked` | An ETA-only share whose message names a boarding stop is rejected (P5) |
+| `test_second_share_to_the_same_recipient_is_blocked` | While a contact has an active agent share, a second `create_share` to them is rejected (P4); another contact, a share after `revoke_share`, and the app's share sheet are not |
+| `test_place_names_are_allowed_by_default` | By default an ETA-only share's message may name the destination and stops (P5) |
+| `test_place_names_off_blocks_stops_and_destination` | With `hide_places`, a message naming a stop or the destination is rejected, on create and update (P5) |
+| `test_route_reply_with_another_routes_times_is_flagged` | A Route+ETA reply giving a route another route's times is flagged (P13); the route's own times or its summary lines are not |
+| `test_plain_message_says_no_more_than_the_recipients_shares` | `send_message` naming the line is rejected unless the recipient has a share with the route (P5) |
+| `test_route_reply_with_a_walk_trip_and_bold_titles_is_not_flagged` | A multi-trip reply with bold trip titles and a walk-only trip, copied from the summaries, is not flagged |
+| `test_route_reply_may_name_the_riders_scheduled_departure` | A Route+ETA reply may name the rider's scheduled departure (`compute_eta`'s `trip_depart`) after a delay, but not a departure the Concierge got wrong |
+| `test_route_agent_rewrites_and_keeps_its_tool_results` | A flagged Route+ETA reply goes back for a rewrite, and the hub still gets the first attempt's tool results |
 
 ## test_episode.py — episode Markdown and export (`bus_agent/episode.py`)
 

@@ -35,8 +35,8 @@ class World:
         self.gps = dict(self.places["Home"])
         self.active_trip = None            # {"route_id", "depart"} once the rider boards
         self.chosen_trip = None            # {"route_id", "depart"} the rider said they'll take (P13 guard)
-        # policies the tools and the Concierge enforce (GUARDS=P5,P13,P15 by default; GUARDS= with no value: none)
-        self.guards = {g.strip().upper() for g in os.environ.get("GUARDS", "P5,P13,P15").split(",") if g.strip()}
+        # policies the tools and the Concierge enforce (GUARDS=P4,P5,P13,P15 by default; GUARDS= with no value: none)
+        self.guards = {g.strip().upper() for g in os.environ.get("GUARDS", "P4,P5,P13,P15").split(",") if g.strip()}
         self.plans = []                    # plan_routes results, newest last
         self.shares = {}
         self.outbox = []

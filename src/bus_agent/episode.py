@@ -155,7 +155,8 @@ def summarize(tool, r):
         return f"ETA **{r['eta']}** (departs {r['depart']}{delay})"
     if tool in ("get_schedule", "get_realtime_arrivals"):
         delay = f", delay {r['delay_min']} min" if r.get("delay_min") else ""
-        return f"{r['line']} at {r['stop']}: " + ", ".join(r["departures"]) + delay
+        near = f" (nearest stop to {r['near']})" if r.get("near") else ""
+        return f"{r['line']} at {r['stop']}{near}: " + ", ".join(r["departures"]) + delay
     if tool == "get_service_alerts":
         return f"{len(r['alerts'])} alerts; delays: " + (", ".join(f"{x['line']} +{x['delay_min']} min" for x in r["delays"]) or "none")
     if tool.startswith("extract_schedule"):
@@ -164,7 +165,8 @@ def summarize(tool, r):
     if tool == "create_share":
         fields = ", ".join(k for k, v in r["fields"].items() if v) or "none"
         until = "until arrival" if r.get("stop_on_arrival") else f"until {r.get('expires_at')}"
-        return f"share **{r['share_id']}** to {r['recipient']}: {fields}, {until}"
+        names = "" if r.get("place_names", True) else ", place names off"
+        return f"share **{r['share_id']}** to {r['recipient']}: {fields}, {until}{names}"
     if tool == "update_share":
         sent = r.get("sent") or {}
         return f"update sent to {sent.get('to')}" + (f", ETA **{sent['eta']}**" if sent.get("eta") else "") + f" (share {r.get('share_status')})"

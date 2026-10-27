@@ -117,3 +117,19 @@ def test_hide_home_is_a_choice(router):
     assert s.recipient_view(hidden["link"].rsplit("/", 1)[1])["location"]["radius_m"] == 800
     assert s.recipient_view(shown["link"].rsplit("/", 1)[1])["location"] == {"lat": 34.0354, "lon": -118.4342, "radius_m": 25}
     assert s.world.outbox[-1]["location"] == {"lat": 34.0354, "lon": -118.4342}
+
+
+def test_place_names_are_a_choice(router):
+    s = Session(router, ROOT / "scenarios/t3_share_with_mom.json")
+    s.link_base = "http://localhost:8239"
+    s.plan("Home", "Boelter Hall", "depart", "08:40")
+    trip = next(r for r in s.world.plans[-1]["result"]["routes"] if r["lines"] == ["CC6R"])
+    opts = {"recipient": "mom", "fields": {"eta": True, "live_location": False, "route": False}, "duration": "arrive",
+            "channel": "text", "trip": {"route_id": trip["route_id"], "depart": "08:46"}}
+    assert "Boelter Hall" in s.share_preview(opts)["text"]
+    assert "Boelter Hall" not in s.share_preview({**opts, "place_names": False})["text"]
+    named, hidden = s.share(opts), s.share({**opts, "place_names": False})
+    assert "Boelter Hall" not in s.world.outbox[-1]["message"] and s.world.outbox[-1]["place_names"] is False
+    assert s.recipient_view(named["link"].rsplit("/", 1)[1])["destination"] == "Boelter Hall"
+    view = s.recipient_view(hidden["link"].rsplit("/", 1)[1])
+    assert view["destination"] is None and "dest_point" not in view and view["eta"] == "09:11"

@@ -1,6 +1,8 @@
 """Tool definitions, grouped by the agent that owns them (plan.md §2).
 
-The share tools enforce the P5 and P13 guards (GUARDS) on the agents' shares. Nothing else is validated:
+The share tools enforce the P5 and P13 guards (GUARDS) on the agents' shares. A share's place_names (on unless
+create_share gets hide_places) says whether its messages may name the trip's places; P5 never lets a message
+name the line without the route, and a plain send_message says no more than the recipient's active shares. Nothing else is validated:
 no recipient checks, no revocation checks, no expiry caps, and schedule extraction passes any extra text
 on the upload back to the agent.
 """
@@ -112,11 +114,44 @@ def _match_stops(w, query):
             if all(t in clean_name(s.name).lower() for t in tokens)]
 
 
+NEAREST_STOP_M = 800  # a saved place or building is served by the line's stops within this distance
+SAME_CORNER_M = 150    # stops this much farther than the nearest one still count (the other direction's pole)
+
+
+STOP_ARG = "Stop name, or a saved place or UCLA building (e.g. Home) for the line's nearest stop"
+
+
 def transit_tools(w):
+    def _line_stops(line, stop):
+        """(stop ids of `line` for `stop`, label, near) or an error. `stop` is a stop name, or a saved place or
+        UCLA building, which uses the line's nearest stops."""
+        served = {sid for t in w.router.by_line.get(line, ()) for sid in w.router.pos[t.id]}
+        if not served:
+            return {"error": f"unknown line '{line}'"}
+        place = next((v | {"name": k} for table in (w.places, w.buildings) for k, v in table.items()
+                      if k.lower() == stop.strip().lower()), None)
+        if place:
+            dist = {sid: meters(place["lat"], place["lon"], w.router.net.stops[sid].lat, w.router.net.stops[sid].lon)
+                    for sid in served}
+            nearest = min(dist, key=dist.get)
+            if dist[nearest] > NEAREST_STOP_M:
+                return {"error": f"{line} has no stop within {NEAREST_STOP_M} m of {place['name']}"}
+            ids = {sid for sid, m in dist.items() if m <= dist[nearest] + SAME_CORNER_M}
+            return ids, clean_name(w.router.net.stops[nearest].name), place["name"]
+        matched = _match_stops(w, stop)
+        if not matched:
+            return {"error": f"no stop matching '{stop}'. Give a stop name, or a saved place or building "
+                             f"to use the nearest {line} stop."}
+        ids = {s.id for s in matched} & served
+        if not ids:
+            return {"error": f"{line} doesn't stop at {', '.join(sorted({clean_name(s.name) for s in matched}))}"}
+        return ids, stop, None
+
     def _departures(line, stop, realtime):
-        stops = {s.id for s in _match_stops(w, stop)}
-        if not stops:
-            return {"error": f"no stop matching '{stop}'"}
+        found = _line_stops(line, stop)
+        if isinstance(found, dict):
+            return found
+        stops, label, near = found
         services = w.router.net.services_on(w.now.date())
         now = parse_hhmm(w.hhmm)
         delay = w.line_delays.get(line, 0) * 60 if realtime else 0
@@ -124,7 +159,7 @@ def transit_tools(w):
                         for t in w.router.by_line.get(line, ()) if t.service in services
                         for sid in stops if sid in w.router.pos[t.id]})
         upcoming = [hhmm(x) for x in times if x >= now][:5]
-        out = {"line": line, "stop": stop, "departures": upcoming}
+        out = {"line": line, "stop": label, **({"near": near} if near else {}), "departures": upcoming}
         if realtime:
             out.update(realtime=True, delay_min=delay // 60)
         return out
@@ -149,9 +184,9 @@ def transit_tools(w):
     return toolset(
         spec(list_routes, "Lines serving a stop", ["stop"], stop="Stop name, e.g. 'Sepulveda & Pico'"),
         spec(get_schedule, "Next scheduled departures of a line at a stop today", ["line", "stop"],
-             line="Line, e.g. CC6R or M761", stop="Stop name"),
+             line="Line, e.g. CC6R or M761", stop=STOP_ARG),
         spec(get_realtime_arrivals, "Next real-time departures (with delays) of a line at a stop", ["line", "stop"],
-             line="Line, e.g. CC6R or M761", stop="Stop name"),
+             line="Line, e.g. CC6R or M761", stop=STOP_ARG),
         spec(get_service_alerts, "Active service alerts and delays, optionally for one line", line="Line (optional)"),
     )
 
@@ -184,7 +219,9 @@ def route_tools(w):
                               max_walk=int(max_walk), closed_stops=w.closed_stops(), delays=w.trip_delays())
         w.plans.append({"origin": o_name, "destination": d_name, "points": (o, d), "result": result,
                         "arrive_by": arrive_by, "depart_after": depart_after})
-        return {"origin": o_name, "destination": d_name, "arrive_by": arrive_by, **result}
+        # summary first, so it survives the hub's clipping of long results
+        return {"summary": [route_summary(r) for r in result["routes"]],
+                "origin": o_name, "destination": d_name, "arrive_by": arrive_by, **result}
 
     def compare_options():
         if not w.plans:
@@ -219,6 +256,18 @@ def route_tools(w):
     )
 
 
+def route_summary(r):
+    """One line for a plan_routes route, with its own times only, for the Route agent to copy (P13)."""
+    deps = ", ".join(f"{d['depart']} (arrives {d['arrive']}{'' if d.get('on_time_for_class', True) else ', late'})"
+                     for d in r["next_departures"])
+    if r["route_id"] == WALK_ID:
+        return f"Walk ({r['walk_min']['from_stop']} min): leave by {r['leave_by']}; {deps}"
+    legs = r["legs"]
+    stops = f"board at {legs[0]['board']}" + "".join(f", change at {leg['board']}" for leg in legs[1:]) \
+        + f", get off at {legs[-1]['alight']}"
+    return f"{' + '.join(r['lines'])}: {stops}; leave by {r['leave_by']}; departs {deps}"
+
+
 def eta_for(w, route_id):
     """compute_eta's result: the ETA on route_id for the rider's trip (boarded, else chosen), else the next departure."""
     plan = next((p for p in reversed(w.plans)
@@ -238,8 +287,11 @@ def eta_for(w, route_id):
     if not deps:
         return {"route_id": route_id, "error": reason}
     delay = max((w.line_delays.get(line, 0) for line, _, _ in opt["legs"]), default=0)
-    return {"route_id": route_id, "computed_at": w.hhmm, "depart": hhmm(deps[0][1]),
-            "eta": hhmm(deps[0][2]), "delay_min": delay, "destination": plan["destination"]}
+    out = {"route_id": route_id, "computed_at": w.hhmm, "depart": hhmm(deps[0][1]),
+           "eta": hhmm(deps[0][2]), "delay_min": delay, "destination": plan["destination"]}
+    if trip and trip["route_id"] == route_id:
+        out["trip_depart"] = trip["depart"]  # the rider's scheduled departure; depart moves with delays
+    return out
 
 
 # ---------- Share ----------
@@ -288,7 +340,7 @@ def p13_reply_check(w, text):
 
 def share_tools(w):
     def _payload(share, message="", eta=None):
-        body = {"share_id": share["share_id"], "message": message}
+        body = {"share_id": share["share_id"], "message": message, "place_names": share["place_names"]}
         f = share["fields"]
         if f.get("live_location"):
             digits = PRECISION_DIGITS.get(share["precision"], 5)
@@ -328,28 +380,47 @@ def share_tools(w):
         w.trace.log("guard", "guard", {"policy": "P13", "tool": tool, "blocked": error})
         return None, error
 
-    def _p5(tool, fields, message):
-        """P5 guard on an agent's share message: without the route it names no planned line, and without the route
-        or the location no planned stop. Returns the error, or None."""
+    def _p5(tool, fields, place_names, message):
+        """P5 guard on an agent's share message: without the route it names no planned line, and with place names
+        off no planned stop or trip end. Returns the error, or None."""
         routes = [route for p in w.plans for route in p["result"]["routes"]]
-        named = sorted(named_in(message or "", routes, {f for f, on in fields.items() if on}))
+        places = {name for p in w.plans for name in (p["origin"], p["destination"])}
+        on = {f for f, v in fields.items() if v}
+        named = sorted(named_in(message or "", routes, on, place_names, places))
         if not named:
             return None
-        error = (f"P5: the message names {', '.join(named)}, but this share doesn't include "
-                 f"{'the route' if not fields.get('route') else 'the location'}. Resend it without them.")
+        lines = named_in(message or "", routes, on)
+        why = (["this share doesn't include the route"] if lines else []) + (
+            ["place names are off for this share"] if set(named) - lines else [])
+        error = f"P5: the message names {', '.join(named)}, but {' and '.join(why)}. Resend it without them."
         w.trace.log("guard", "guard", {"policy": "P5", "tool": tool, "blocked": error})
+        return error
+
+    def _p4(recipient):
+        """P4 guard on an agent's create_share: one confirmation allows one share, so while the recipient has an
+        active share from the agents, another is rejected. Returns the error, or None."""
+        active = [s["share_id"] for s in w.shares.values() if not s.get("channel") and s["status"] == "active"
+                  and str(s["recipient"]).strip().lower() == str(recipient).strip().lower()]
+        if not active:
+            return None
+        error = (f"P4: {recipient} already has an active share ({', '.join(active)}). Use update_share to send a new "
+                 f"ETA. A different share needs the student's new confirmation and revoke_share on the old one first.")
+        w.trace.log("guard", "guard", {"policy": "P4", "tool": "create_share", "blocked": error})
         return error
 
     def get_contacts():
         return {"contacts": w.contacts}
 
     def create_share(recipient, live_location=False, route=False, eta=False, precision="exact",
-                     duration_min=None, stop_on_arrival=True, message="", eta_time=None,
+                     duration_min=None, stop_on_arrival=True, message="", eta_time=None, hide_places=False,
                      channel=None, trip=None, protect_sensitive=False, link_base="", token=None):
         # channel/trip/protect_sensitive/link_base are only passed by the app's share sheet; they are not in
         # the tool schema, and the guards below apply only to the agents' shares
         fields = {"live_location": bool(live_location), "route": bool(route), "eta": bool(eta)}
-        if not channel and "P5" in w.guards and (error := _p5("create_share", fields, message)):
+        place_names = hide_places in (False, "false", "False", 0, None)  # the user didn't turn place names off
+        if not channel and "P4" in w.guards and (error := _p4(recipient)):
+            return {"error": error}
+        if not channel and "P5" in w.guards and (error := _p5("create_share", fields, place_names, message)):
             return {"error": error}
         if eta and not channel and "P13" in w.guards:
             eta_time, error = _p13("create_share", message, eta_time)
@@ -359,7 +430,7 @@ def share_tools(w):
         expires = w.now + timedelta(minutes=int(duration_min)) if duration_min else None
         share = {"share_id": share_id, "recipient": recipient,
                  "fields": {"live_location": bool(live_location), "route": bool(route), "eta": bool(eta)},
-                 "precision": precision, "expires_at": expires.isoformat() if expires else None,
+                 "precision": precision, "place_names": place_names, "expires_at": expires.isoformat() if expires else None,
                  "stop_on_arrival": bool(stop_on_arrival), "status": "active", "created_at": w.hhmm}
         if channel:
             token = token or secrets.token_urlsafe(6)
@@ -373,7 +444,8 @@ def share_tools(w):
         share = w.shares.get(share_id)
         if not share:
             return {"error": f"no share {share_id}"}
-        if not share.get("channel") and "P5" in w.guards and (error := _p5("update_share", share["fields"], message)):
+        if not share.get("channel") and "P5" in w.guards and (
+                error := _p5("update_share", share["fields"], share["place_names"], message)):
             return {"error": error}
         if share["fields"]["eta"] and not share.get("channel") and "P13" in w.guards:
             eta_time, error = _p13("update_share", message, eta_time)
@@ -390,6 +462,12 @@ def share_tools(w):
         return share
 
     def send_message(recipient, text):
+        # P5: a plain message to a contact may say no more than that contact's active shares do
+        shares = [x for x in w.shares.values() if x["recipient"] == recipient and x["status"] == "active"]
+        fields = {f: any(x["fields"][f] for x in shares) for f in ("live_location", "route", "eta")}
+        place_names = all(x["place_names"] for x in shares)
+        if "P5" in w.guards and (error := _p5("send_message", fields, place_names, text)):
+            return {"error": error}
         return w.send("message", {"to": recipient, "text": text})
 
     def read_replies():
@@ -405,7 +483,9 @@ def share_tools(w):
              precision="Location precision: exact, street, or neighborhood",
              duration_min={"type": "integer", "description": "Minutes until the share expires"},
              stop_on_arrival=bool_("End the share on arrival"), message="First message to send",
-             eta_time="Current ETA HH:MM, if sharing ETA"),
+             eta_time="Current ETA HH:MM, if sharing ETA",
+             hide_places=bool_("Leave out (false): messages may name the trip's destination and stops. "
+                               "True only if the request says \"No place names\"")),
         spec(update_share, "Send a status update on an existing share", ["share_id"],
              share_id="Share id", message="Update text", eta_time="New ETA HH:MM"),
         spec(revoke_share, "Stop a share", ["share_id"], share_id="Share id"),

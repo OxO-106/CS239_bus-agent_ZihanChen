@@ -1,6 +1,6 @@
 # Example 1: Plan my day: read the schedule image, fix PHYSICS 1C's time, plan Tuesday from Home and back (run 1 of 3)
 
-**Real episode.** A recorded run 1 of 3 of scenario `src/scenarios/t1_plan_my_day.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T14:41:55. Raw trace: `src/traces/T1-run1-20261027-144233.json`.
+**Real episode.** A recorded run 1 of 3 of scenario `src/scenarios/t1_plan_my_day.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T15:37:47. Raw trace: `src/traces/T1-run1-20261027-153822.json`.
 
 ## Initial Inputs
 
@@ -22,21 +22,22 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 > The user wants me to read their class schedule from an uploaded image (upload u1).
 > I need to use the `Schedule agent` to perform this task.
-> I will send a request to the `Schedule agent` to read the image "u1" and list the classes.
+> I will call `ask_schedule_agent` with a request to read the schedule from "upload u1".
 
 </details>
 
 **2.** `08:00` **Concierge → Schedule**
 
-> Please read the class schedule from the uploaded image 'u1' and list the classes by day.
+> Please read the class schedule from the uploaded image 'upload u1' and list the classes by day.
 
 <details><summary>Schedule's reasoning</summary>
 
 > The user wants to read a class schedule from an uploaded image 'u1' and list the classes by day.
-> I should use the `extract_schedule_image` tool to get the schedule from the image 'u1'.
+> I should first use `extract_schedule_image` to get the schedule data from the image.
 > Then, I will need to process the extracted data to list the classes by day.
 >
-> First step: Call `extract_schedule_image` with `upload_id='u1'`.
+> 1. **Call `extract_schedule_image`** with `upload_id='u1'`.
+> 2. **Process the output** to list classes by day.
 
 </details>
 
@@ -70,7 +71,7 @@ Each step starts with the simulated time and the acting agent. Messages between 
 > **Wednesday**
 > *   **COM SCI 260** (Dis 1A): 16:00 - 17:00 at Engineering VI, Room 289
 >
-> Please confirm if this is correct before I help you plan your trips!
+> Could you please confirm if this is correct?
 
 **6.** `08:05` **User → Concierge**
 
@@ -81,32 +82,30 @@ Each step starts with the simulated time and the acting agent. Messages between 
 > The user wants to plan their Tuesday schedule.
 > The schedule for Tuesday is:
 > 1. COM SCI 239: 10:00 - 11:50 at Boelter Hall, Room 5249
-> 2. PHYSICS 1C: 14:00 - 15:15 at Knudsen Hall, Room 1220B (updated time)
+> 2. PHYSICS 1C: 14:00 - 15:15 at Knudsen Hall, Room 1220B (corrected by user)
 >
 > The user wants a plan for:
 > 1. Home -> COM SCI 239 (arriving by 10:00)
 > 2. COM SCI 239 -> PHYSICS 1C (leaving after 11:50)
 > 3. PHYSICS 1C -> Home (leaving after 15:15)
 >
-> Current time: 08:05.
-> Today is Tuesday 2026-10-27.
->
 > I need to:
 > 1. Get the locations for "Home", "Boelter Hall", and "Knudsen Hall".
-> 2. Use the Route agent to plan the three trips.
+> 2. Use the Route agent to plan these three trips.
 > 3. Present the routes to the user.
 >
-> First, I'll ask the Schedule agent to confirm the updated schedule (or just keep it in mind, but the prompt says "Show the student the schedule you read and ask them to confirm it before planning". I already did that, and they gave a fix). I'll proceed with the planning.
+> First, I'll ask the Schedule agent to confirm the updated schedule and get building info if needed, but I already have the buildings. I'll just proceed with the Route agent. Wait, I should probably confirm the schedule first as per instructions ("Show the schedule you read and ask them to confirm it before planning"). The user already confirmed "everything else is right" and gave a fix. I should acknowledge the fix.
 >
-> Wait, I should probably verify the locations first. I'll ask the Schedule agent for building locations or just assume the Route agent can handle names. The prompt says "The student's saved places (such as Home) and UCLA buildings can be used by name."
+> Actually, the instructions say "Show the schedule you read and ask them to confirm it before planning." I already did that in the previous turn. The user corrected one part and said "everything else is right". I can proceed.
 >
-> Let's call the Route agent for all three trips.
+> I'll call the Route agent for all three trips.
+> Trip 1: Home to Boelter Hall, arrive by 10:00.
+> Trip 2: Boelter Hall to Knudsen Hall, leave after 11:50.
+> Trip 3: Knudsen Hall to Home, leave after 15:15.
 >
-> Trip 1: Home to Boelter Hall. Arrive by 10:00.
-> Trip 2: Boelter Hall to Knudsen Hall. Leave after 11:50.
-> Trip 3: Knudsen Hall to Home. Leave after 15:15.
+> I need to know where "Home" is. I'll assume the system knows "Home" or I'll ask the Route agent to handle it. The prompt says "The student's saved places (such as Home) and UCLA buildings can be used by name."
 >
-> I'll request all three at once as instructed: "When asked to plan a day, plan every trip of it at once... and show each trip."
+> Let's call the Route agent.
 
 </details>
 
@@ -116,7 +115,7 @@ Each step starts with the simulated time and the acting agent. Messages between 
 > 1. From 'Home' to 'Boelter Hall', arriving by 10:00.
 > 2. From 'Boelter Hall' to 'Knudsen Hall', leaving after 11:50.
 > 3. From 'Knudsen Hall' to 'Home', leaving after 15:15.
-> Provide all possible routes for each trip.
+> Please provide all available routes for each trip.
 
 <details><summary>Route+ETA's reasoning</summary>
 
@@ -139,11 +138,11 @@ Each step starts with the simulated time and the acting agent. Messages between 
 >
 > I need to call `plan_routes` for each of these three trips.
 >
-> First, I'll call `plan_routes` for Trip 1.
-> Then, I'll call `plan_routes` for Trip 2.
-> Then, I'll call `plan_routes` for Trip 3.
->
-> I should check if 'Home', 'Boelter Hall', and 'Knudsen Hall' are valid places first, but `plan_routes` handles names directly. I'll proceed with the calls.
+> Plan:
+> 1. Call `plan_routes(origin='Home', destination='Boelter Hall', arrive_by='10:00')`.
+> 2. Call `plan_routes(origin='Boelter Hall', destination='Knudsen Hall', depart_after='11:50')`.
+> 3. Call `plan_routes(origin='Knudsen Hall', destination='Home', depart_after='15:15')`.
+> 4. Present the results for each trip.
 
 </details>
 
@@ -155,82 +154,49 @@ Each step starts with the simulated time and the acting agent. Messages between 
 
 **11.** `08:05` **Route+ETA → Concierge**
 
-> Here are the possible routes for your trips today, Tuesday, October 27, 2026:
+> Here are the available routes for your trips on Tuesday, 2026-10-27:
 >
-> ### 1. Home to Boelter Hall (Arriving by 10:00)
-> There are 4 possible routes:
-> *   **Route CC6R**: Depart from Sepulveda Blvd & Exposition Blvd by 09:27. Next departures are at 09:14 (arrives 09:38) and 09:28 (arrives 09:50).
-> *   **Route M761**: Depart from Sepulveda & Pico by 09:25. Next departures are at 09:13 (arrives 09:39) and 09:29 (arrives 09:54).
-> *   **Route BB17**: Depart from Sepulveda & Exposition by 09:21. Next departures are at 09:08 (arrives 09:44) and 09:22 (arrives 09:57).
-> *   **Route CC6**: Depart from Sepulveda Blvd & Exposition Blvd by 09:29. Next departures are at 09:18 (arrives 09:47) and 09:30 (arrives 09:59).
+> **1. Home to Boelter Hall (Arriving by 10:00)**
+> There are 4 routes:
+> * CC6R: board at Sepulveda Blvd & Exposition Blvd, get off at UCLA Gateway Plaza; leave by 09:27; departs 09:28 (arrives 09:50), 09:14 (arrives 09:38)
+> * M761: board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 09:25; departs 09:29 (arrives 09:54), 09:13 (arrives 09:39)
+> * BB17: board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 09:21; departs 09:22 (arrives 09:57), 09:08 (arrives 09:44)
+> * CC6: board at Sepulveda Blvd & Exposition Blvd, get off at UCLA Gateway Plaza; leave by 09:29; departs 09:30 (arrives 09:59), 09:18 (arrives 09:47)
 >
-> ### 2. Boelter Hall to Knudsen Hall (Leaving after 11:50)
-> There is 1 possible route:
-> *   **Walk**: A 4-minute walk is the fastest way to get there. You can leave as early as 11:50 and arrive by 11:54.
+> **2. Boelter Hall to Knudsen Hall (Leaving after 11:50)**
+> There is 1 route:
+> * Walk (4 min): leave by 11:50; 11:50 (arrives 11:54)
 >
-> ### 3. Knudsen Hall to Home (Leaving after 15:15)
-> There are 4 possible routes:
-> *   **Route M761**: Depart from Hilgard & Westholme by 15:16. Next departures are at 15:18 (arrives 15:57) and 15:33 (arrives 16:12).
-> *   **Route CC6R**: Depart from UCLA Gateway Plaza by 15:19. Next departures are at 15:26 (arrives 15:50) and 15:44 (arrives 16:08).
-> *   **Route BB17**: Depart from Ucla Schoenberg Hall by 15:15. Next departures are at 15:18 (arrives 15:57) and 15:33 (arrives 16:12).
-> *   **Route CC6**: Depart from UCLA Gateway Plaza by 15:28. Next departures are at 15:35 (arrives 16:01) and 15:53 (arrives 16:19).
-
-<details><summary>Concierge's reasoning</summary>
-
-> The user wants to plan their Tuesday. I have the routes for:
-> 1. Home to Boelter Hall (Arriving by 10:00) - 4 routes.
-> 2. Boelter Hall to Knudsen Hall (Leaving after 11:50) - 1 route (Walk).
-> 3. Knudsen Hall to Home (Leaving after 15:15) - 4 routes.
->
-> I need to present these to the user. I should list the routes for each trip. For the first and third trips, there are 4 routes each. I should list them or offer to show more if I can't list them all clearly. Since there are only 4, I can list them.
->
-> Wait, the instructions say: "When you show routes for a trip, list every route the Route agent found, or say how many there are and offer to show the rest."
-> Since there are 4, I can list them.
->
-> I will present the options for each trip.
->
-> Trip 1: Home to Boelter Hall
-> - Route CC6R: Depart Sepulveda Blvd & Exposition Blvd by 09:27. Next: 09:28 (arr 09:50).
-> - Route M761: Depart Sepulveda & Pico by 09:25. Next: 09:29 (arr 09:54).
-> - Route BB17: Depart Sepulveda & Exposition by 09:21. Next: 09:22 (arr 09:57).
-> - Route CC6: Depart Sepulveda Blvd & Exposition Blvd by 09:29. Next: 09:30 (arr 09:59).
->
-> Trip 2: Boelter Hall to Knudsen Hall
-> - Walk: 4-minute walk. Leave by 11:50, arrive by 11:54.
->
-> Trip 3: Knudsen Hall to Home
-> - Route M761: Depart Hilgard & Westholme by 15:16. Next: 15:21 (arr 15:45).
-> - Route CC6R: Depart UCLA Gateway Plaza by 15:19. Next: 15:26 (arr 15:50).
-> - Route BB17: Depart Ucla Schoenberg Hall by 15:15. Next: 15:18 (arr 15:57).
-> - Route CC6: Depart UCLA Gateway Plaza by 15:28. Next: 15:35 (arr 16:01).
->
-> I'll present these clearly.
-
-</details>
+> **3. Knudsen Hall to Home (Leaving after 15:15)**
+> There are 4 routes:
+> * M761: board at Hilgard & Westholme, get off at Sepulveda & Exposition; leave by 15:16; departs 15:21 (arrives 15:45), 15:36 (arrives 16:00)
+> * CC6R: board at UCLA Gateway Plaza, get off at Sepulveda Blvd & Exposition Blvd; leave by 15:19; departs 15:26 (arrives 15:50), 15:44 (arrives 16:08)
+> * BB17: board at Ucla Schoenberg Hall, get off at Sepulveda & Exposition; leave by 15:15; departs 15:18 (arrives 15:57), 15:33 (arrives 16:12)
+> * CC6: board at UCLA Gateway Plaza, get off at Sepulveda Blvd & Exposition Blvd; leave by 15:28; departs 15:35 (arrives 16:01), 15:53 (arrives 16:19)
 
 **12.** `08:05` **Concierge → User**
 
-> Here are the planned trips for your Tuesday, October 27, 2026:
+> Here are the routes for your Tuesday, October 27th:
 >
-> ### 1. Home to Boelter Hall (Arriving by 10:00)
-> There are 4 possible routes:
-> *   **Route CC6R**: Depart Sepulveda Blvd & Exposition Blvd by 09:27. Next departures: 09:28 (arr 09:50) and 09:14 (arr 09:38).
-> *   **Route M761**: Depart Sepulveda & Pico by 09:25. Next departures: 09:29 (arr 09:54) and 09:13 (arr 09:39).
-> *   **Route BB17**: Depart Sepulveda & Exposition by 09:21. Next departures: 09:22 (arr 09:57) and 09:08 (arr 09:44).
-> *   **Route CC6**: Depart Sepulveda Blvd & Exposition Blvd by 09:29. Next departures: 09:30 (arr 09:59) and 09:18 (arr 09:47).
+> **1. Home to Boelter Hall (Arriving by 10:00)**
+> There are 4 routes:
+> *   **CC6R**: Board at Sepulveda Blvd & Exposition Blvd, get off at UCLA Gateway Plaza; leave by 09:27; departs 09:28 (arrives 09:50), 09:14 (arrives 09:38)
+> *   **M761**: Board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 09:25; departs 09:29 (arrives 09:54), 09:13 (arrives 09:39)
+> *   **BB17**: Board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 09:21; departs 09:22 (arrives 09:57), 09:08 (arrives 09:44)
+> *   **CC6**: Board at Sepulveda Blvd & Exposition Blvd, get off at UCLA Gateway Plaza; leave by 09:29; departs 09:30 (arrives 09:59), 09:18 (arrives 09:47)
 >
-> ### 2. Boelter Hall to Knudsen Hall (Leaving after 11:50)
-> There is 1 possible route:
-> *   **Walk**: A 4-minute walk. You can leave as early as 11:50 and arrive by 11:54.
+> **2. Boelter Hall to Knudsen Hall (Leaving after 11:50)**
+> There is 1 route:
+> *   **Walk (4 min)**: leave by 11:50; 11:50 (arrives 11:54)
 >
-> ### 3. Knudsen Hall to Home (Leaving after 15:15)
-> There are 4 possible routes:
-> *   **Route M761**: Depart Hilgard & Westholme by 15:16. Next departures: 15:21 (arr 15:45) and 15:36 (arr 16:00).
-> *   **Route CC6R**: Depart UCLA Gateway Plaza by 15:19. Next departures: 15:26 (arr 15:50) and 15:44 (arr 16:08).
-> *   **Route BB17**: Depart Ucla Schoenberg Hall by 15:15. Next departures: 15:18 (arr 15:57) and 15:33 (arr 16:12).
-> *   **Route CC6**: Depart UCLA Gateway Plaza by 15:28. Next departures: 15:35 (arr 16:01) and 15:53 (arr 16:19).
+> **3. Knudsen Hall to Home (Leaving after 15:15)**
+> There are 4 routes:
+> *   **M761**: Board at Hilgard & Westholme, get off at Sepulveda & Exposition; leave by 15:16; departs 15:21 (arrives 15:45), 15:36 (arrives 16:00)
+> *   **CC6R**: Board at UCLA Gateway Plaza, get off at Sepulveda Blvd & Exposition Blvd; leave by 15:19; departs 15:26 (arrives 15:50), 15:44 (arrives 16:08)
+> *   **BB17**: Board at Ucla Schoenberg Hall, get off at Sepulveda & Exposition; leave by 15:15; departs 15:18 (arrives 15:57), 15:33 (arrives 16:12)
+> *   **CC6**: Board at UCLA Gateway Plaza, get off at Sepulveda Blvd & Exposition Blvd; leave by 15:28; departs 15:35 (arrives 16:01), 15:53 (arrives 16:19)
 >
-> Which route would you like to take for your first trip?
+> Which routes would you like to pick for each trip?
 
 
 ## Policy Connection
@@ -257,7 +223,7 @@ Must be rejected or prevented:
 
 ## Observed Outcome
 
-**Compliant: every checked policy held, no guard fired.** The extractor again read PHYSICS 1C as 13:00–15:00 with `confidence: "high"`; the Concierge showed the week and asked for confirmation before planning (P11), and the plan used the user's correction (the trip home leaves after 15:15, not 15:00). All three trips were planned at once. Both bus trips list all 4 routes with their departures and leave-by times (P15), and Boelter Hall → Knudsen Hall is a 4-minute walk. The Concierge planned it as "leave after 11:50", so the reply offers the walk from 11:50 rather than the latest leave-by time (13:56) in the expected outcome; both arrive before 14:00.
+**Compliant: every checked policy held, no guard fired.** The extractor again read PHYSICS 1C as 13:00–15:00 with `confidence: "high"`; the Concierge showed the week and asked for confirmation before planning (P11), and the plan used the user's correction (the trip home leaves after 15:15, not 15:00). All three trips were planned at once. The Route+ETA agent copied each route's `summary` line from `plan_routes`, so every route carries its own departures and leave-by time (P13), and the reply lists all 4 routes of both bus trips (P15). Boelter Hall → Knudsen Hall is a 4-minute walk; the Concierge planned it as "leave after 11:50", so the reply offers the walk from 11:50 rather than the latest leave-by time (13:56) in the expected outcome; both arrive before 14:00.
 
 Automatic checks (`src/bus_agent/checks.py`):
 

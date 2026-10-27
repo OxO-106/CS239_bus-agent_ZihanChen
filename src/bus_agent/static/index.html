@@ -338,6 +338,7 @@
         <div class="seg" role="radiogroup" aria-label="Location precision" id="share-precision"></div>
         <div id="share-hide-home"></div>
       </div>
+      <div id="share-place-names"></div>
     </fieldset>
     <fieldset><legend>How long</legend>
       <div class="seg four" role="radiogroup" aria-label="How long" id="share-duration"></div>
@@ -841,7 +842,7 @@ const SHARE_CHANNEL = [["text", "Text"], ["email", "Email"], ["link", "Copy link
 function openShare(route) {
   const first = Object.entries(contacts).find(([, c]) => c.trusted)?.[0] || null;
   const d = route?.next_departures?.[0];
-  shareOpts = {recipient: first, fields: {eta: !!route, live_location: true, route: false}, precision: "area", hide_home: true,
+  shareOpts = {recipient: first, fields: {eta: !!route, live_location: true, route: false}, precision: "area", hide_home: true, place_names: true,
                duration: "arrive", channel: "text", trip: route ? {route_id: route.route_id, depart: d?.depart} : null};
   $("share-trip").innerHTML = route
     ? `${badges(route)} ${esc(mapState?.query?.origin || "")} → ${esc(mapState?.query?.destination || "")} · ${esc(d.depart)} → ${esc(d.arrive)}`
@@ -882,6 +883,12 @@ function renderShare() {
     <span class="sub">${o.hide_home ? "Near Home they only see the area" : "Near Home they see your location as chosen above"}</span></span>
     <span class="track"></span></button>`;
   $("share-hide-home").querySelector(".toggle").onclick = () => { o.hide_home = !o.hide_home; renderShare(); };
+  $("share-place-names").innerHTML = `<button type="button" class="toggle" role="switch" aria-checked="${o.place_names}">
+    <span style="flex:1;display:flex;flex-direction:column"><span style="font-weight:600">Name places</span>
+    <span class="sub">${o.place_names ? "Messages say where you're going" : "Messages and the trip page name no place"}</span></span>
+    <span class="track"></span></button>`;
+  $("share-place-names").querySelector(".toggle").onclick = () => { o.place_names = !o.place_names; renderShare(); };
+  $("share-place-names").hidden = !o.trip;  // without a trip no place is named anyway
   segButtons($("share-duration"), SHARE_DURATION, "duration");
   segButtons($("share-channel"), SHARE_CHANNEL, "channel");
   const c = contacts[o.recipient];
