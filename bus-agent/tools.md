@@ -1,25 +1,49 @@
-ask_user: (Concierge) Takes `question` (string); shows it to the user in the chat and returns the user's answer as a string (in a scenario run, the next scripted answer).
-ask_schedule_agent: (Concierge) Takes `request` (string); delivers it to the Schedule agent through the hub and returns that agent's reply text followed by the raw results of the tools it called.
-ask_transit_agent: (Concierge) Takes `request` (string); delivers it to the Transit agent through the hub and returns its reply text plus the raw results of the tools it called.
-ask_route_agent: (Concierge) Takes `request` (string); delivers it to the Route+ETA agent through the hub and returns its reply text plus the raw results of the tools it called.
-ask_share_agent: (Concierge) Takes `request` (string); delivers it to the Share agent through the hub and returns its reply text plus the raw results of the tools it called.
-extract_schedule_image: (Schedule) Takes `upload_id` (e.g. "u1") of an uploaded schedule image; runs one vision-model call and returns `{"classes": [{course, section, days, start, end, building, room, confidence}], "other_text"}`, or an error if there is no such image upload.
-extract_schedule_text: (Schedule) Takes `upload_id` of an uploaded schedule text (pasted or .txt); runs one model call and returns the same `{"classes": [...], "other_text"}` structure, or an error.
-lookup_building: (Schedule) Takes `name` of a UCLA building; returns `{building, lat, lon}` from the building table, or an error listing the known buildings.
-get_classes: (Schedule) Takes `day` (M, Tu, W, Th or F); returns `{day, classes}` from the extracted schedule, or an error if nothing has been extracted yet.
-list_routes: (Transit) Takes `stop` (stop name, e.g. "Sepulveda & Pico"); returns the matched GTFS stop names and every line that serves them.
-get_schedule: (Transit) Takes `line` (e.g. CC6R, M761) and `stop`; returns the next 5 scheduled departures of that line at that stop today (HH:MM), or an error if no stop matches.
-get_realtime_arrivals: (Transit) Takes `line` and `stop`; returns the next 5 departures shifted by the line's current real-time delay, with `realtime: true` and `delay_min`.
-get_service_alerts: (Transit) Takes an optional `line`; returns the active service alerts (text, affected lines, closed stops) and current per-line delays, all lines if none is given.
-list_places: (Route+ETA) Takes nothing; returns the user's saved places (each with its `sensitive` flag) and the names of all UCLA buildings.
-geocode: (Route+ETA) Takes `name` of a saved place or UCLA building; returns `{name, lat, lon}`, or an error for an unknown place.
-walk_time: (Route+ETA) Takes `origin` and `destination` (places or buildings); returns the walking time in whole minutes.
-plan_routes: (Route+ETA) Takes `origin`, `destination`, optional `arrive_by` (HH:MM), `depart_after` (HH:MM, default now) and `max_walk` (minutes, default 10); searches the GTFS feeds and returns every suitable walk + bus/Metro route with `route_id`, lines, legs, walk minutes, 2 next departures with arrival times, leave-by time, labels and total `count`, plus the `excluded` routes with a reason each.
-compare_options: (Route+ETA) Takes nothing; diffs the latest plan against the previous plan for the same trip and returns each route as kept, changed, dropped (with reason) or new, or an error if there is no earlier plan.
-compute_eta: (Route+ETA) Takes `route_id` from a `plan_routes` result; returns `{route_id, computed_at, depart, eta, delay_min, destination}` for the rider's boarded trip on that route if there is one, otherwise for the next departure, including real-time delays.
-get_contacts: (Share) Takes nothing; returns the user's saved contacts with name, channel, `trusted` flag and notes.
-create_share: (Share) Takes `recipient` (contact key or address), booleans `live_location`, `route`, `eta`, `precision` (exact, street or neighborhood), `duration_min`, `stop_on_arrival`, `message` and `eta_time`; records a new active share, sends the first update to the outbox, and returns the share record (`share_id`, fields, precision, `expires_at`, status).
-update_share: (Share) Takes `share_id`, optional `message` and `eta_time`; sends a status update with the share's fields to its recipient through the outbox and returns `{sent, share_status}`, or an error for an unknown share.
-revoke_share: (Share) Takes `share_id`; marks the share revoked and returns the updated share record, or an error for an unknown share.
-send_message: (Share) Takes `recipient` and `text`; puts a text message in the outbox and returns the outbox entry.
-read_replies: (Share) Takes nothing; returns the contacts' new replies (sender, text, time) and marks them read.
+ask_user: Inputs: `question` (string). Returns: the user's answer as a string (in a scenario run, the next scripted answer). Used by: Concierge.
+
+ask_schedule_agent: Inputs: `request` (string). Returns: the Schedule agent's reply text, followed by the raw results of the tools it called. Used by: Concierge.
+
+ask_transit_agent: Inputs: `request` (string). Returns: the Transit agent's reply text, followed by the raw results of the tools it called. Used by: Concierge.
+
+ask_route_agent: Inputs: `request` (string). Returns: the Route+ETA agent's reply text, followed by the raw results of the tools it called. Used by: Concierge.
+
+ask_share_agent: Inputs: `request` (string). Returns: the Share agent's reply text, followed by the raw results of the tools it called. Used by: Concierge.
+
+extract_schedule_image: Inputs: `upload_id` (string, e.g. "u1") of an uploaded schedule image. Returns: `{"classes": [{course, section, days, start, end, building, room, confidence}], "other_text"}` from one vision-model call, or an error if there is no such image. Used by: Schedule.
+
+extract_schedule_text: Inputs: `upload_id` (string) of an uploaded schedule text (pasted or .txt). Returns: the same `{"classes": [...], "other_text"}` structure from one model call, or an error. Used by: Schedule.
+
+lookup_building: Inputs: `name` (string), a UCLA building. Returns: `{building, lat, lon}` from the building table, or an error listing the known buildings. Used by: Schedule.
+
+get_classes: Inputs: `day` (M, Tu, W, Th or F). Returns: `{day, classes}` from the extracted schedule, or an error if nothing has been extracted yet. Used by: Schedule.
+
+list_routes: Inputs: `stop` (string, e.g. "Sepulveda & Pico"). Returns: `{stop, matched_stops, lines}`, the matching GTFS stops and every line that serves them. Used by: Transit.
+
+get_schedule: Inputs: `line` (e.g. CC6R, M761), `stop` (string). Returns: `{line, stop, departures}`, the next 5 scheduled departures today as HH:MM, or an error if no stop matches. Used by: Transit.
+
+get_realtime_arrivals: Inputs: `line`, `stop`. Returns: `{line, stop, departures, realtime: true, delay_min}`, the next 5 departures shifted by the line's current delay. Used by: Transit.
+
+get_service_alerts: Inputs: `line` (optional). Returns: `{alerts, delays}`, the active alerts (`id`, `text`, `lines`, `closed_stops`) and per-line delays, for all lines if none is given. Used by: Transit.
+
+list_places: Inputs: none. Returns: `{places, buildings}`, the saved places with their `sensitive` flag and the names of all UCLA buildings. Used by: Route+ETA.
+
+geocode: Inputs: `name` (string), a saved place or UCLA building. Returns: `{name, lat, lon}`, or an error for an unknown place. Used by: Route+ETA.
+
+walk_time: Inputs: `origin`, `destination` (places or buildings). Returns: `{origin, destination, walk_min}`, the walking time in whole minutes. Used by: Route+ETA.
+
+plan_routes: Inputs: `origin`, `destination`, optional `arrive_by` (HH:MM), `depart_after` (HH:MM, default now), `max_walk` (minutes, default 10). Returns: `{origin, destination, arrive_by, count, routes, excluded}`, every suitable walk + bus/Metro route (`route_id`, lines, legs, walk minutes, 2 next departures with arrivals, `leave_by`, labels) and each excluded route with its reason. Used by: Route+ETA.
+
+compare_options: Inputs: none. Returns: `{origin, destination, changes}`, each route of the previous plan for the same trip marked kept, changed, dropped (with reason) or new, or an error if there is no earlier plan. Used by: Route+ETA.
+
+compute_eta: Inputs: `route_id` (from a `plan_routes` result). Returns: `{route_id, computed_at, depart, eta, delay_min, destination}` for the rider's boarded trip on that route, otherwise for the next departure, including real-time delays. Used by: Route+ETA.
+
+get_contacts: Inputs: none. Returns: `{contacts}`, each with name, channel, `trusted` flag and note. Used by: Share.
+
+create_share: Inputs: `recipient` (contact key or address), booleans `live_location`, `route`, `eta`, `precision` (exact, street or neighborhood), `duration_min`, `stop_on_arrival`, `message`, `eta_time` (HH:MM). Returns: the new share record (`share_id`, `recipient`, `fields`, `precision`, `expires_at`, `stop_on_arrival`, `status`), after sending the first update to the outbox. Used by: Share.
+
+update_share: Inputs: `share_id`, optional `message`, `eta_time`. Returns: `{sent, share_status}` after sending an update with the share's fields to its recipient, or an error for an unknown share. Used by: Share.
+
+revoke_share: Inputs: `share_id`. Returns: the share record with `status: "revoked"`, or an error for an unknown share. Used by: Share.
+
+send_message: Inputs: `recipient`, `text`. Returns: the outbox entry for the text message. Used by: Share.
+
+read_replies: Inputs: none. Returns: `{replies}`, the contacts' new replies (`from`, `text`, `at`), which are then marked read. Used by: Share.
