@@ -105,7 +105,7 @@ Results: [bench/README.md](bench/README.md).
 | `data/gtfs/` | Trimmed GTFS feeds (Culver CityBus, LA Metro bus and rail, Big Blue Bus) |
 | `data/mock/` | UCLA buildings, saved places (placeholder Home), contacts |
 | `data/samples/` | A generated fake schedule, as image and text |
-| `docs/` | `DEMO.md` (the 5-minute demo flow) and `plan.md` (design notes) |
+| `docs/` | `plan.md` (design notes) |
 | `requirements.md` | What the app does and must never do (FR and SR requirements) |
 | `bench/` | Model checks: tool calling and schedule extraction |
 | `tests/` | Routing, acceptance, world/tools, checks, and web app tests; test cases in [tests/README.md](tests/README.md) |

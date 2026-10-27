@@ -14,3 +14,6 @@ __pycache__/
 
 # Transit API key
 transit_api_key.txt
+
+# demo script, kept locally only
+src/docs/DEMO.md
