@@ -90,3 +90,7 @@ Results: [bench/README.md](bench/README.md).
 | `tests/` | Routing, acceptance, world/tools, checks, and web app tests |
 
 No real personal data is committed. The real home address and schedule live only in `data/local/` (gitignored).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
