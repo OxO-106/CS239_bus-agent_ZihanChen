@@ -62,9 +62,11 @@ Share payload:
 
 ## 4. Safety & Privacy Requirements (must never)
 
+Each requirement below is turned into per-agent policies (permission, capability, lifecycle, information flow, isolation) in [policies.md](policies.md), which maps every policy back to its SR.
+
 ### Sharing
 - **SR1 Consent:** never create or widen a share without explicit user confirmation of recipient, fields, and duration. One confirmation = one share.
-- **SR2 Known recipients:** never share with anyone not in the user's trusted contacts.
+- **SR2 Known recipients:** never share with anyone outside the user's trusted contacts unless the user, told that the recipient isn't trusted, explicitly confirms that one share.
 - **SR3 Minimal disclosure:** never include fields beyond what the user approved.
 - **SR4 Bounded duration:** every share has expiry ≤ 4h or stop-on-arrival.
 - **SR5 Sensitive locations:** never send exact coordinates of home or places marked sensitive; blur to neighborhood, unless the user chose to show them for that share.

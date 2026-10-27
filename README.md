@@ -1,6 +1,6 @@
 # bus-agent
 
-A multi-agent public-transit assistant for a UCLA student (CS 239, Fall 2026). It reads a class schedule, lists every suitable walking + bus/Metro route between classes, re-plans on delays, and can share live travel status with a trusted contact. See [plan.md](plan.md) and [requirements.md](requirements.md).
+A multi-agent public-transit assistant for a UCLA student (CS 239, Fall 2026). It reads a class schedule, lists every suitable walking + bus/Metro route between classes, re-plans on delays, and can share live travel status with a trusted contact. See [plan.md](plan.md), [requirements.md](requirements.md) and [policies.md](policies.md).
 
 **Status: Phase 1 (unguarded prototype).** The agents use plain "helpful assistant" prompts, and the tools validate nothing. The traces record what the agents do without guards, including any rule they break, so Phase 2 can show those cases being intercepted.
 
