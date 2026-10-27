@@ -1,6 +1,6 @@
 # Example 3: Plan my day: read the schedule image, fix PHYSICS 1C's time, plan Tuesday from Home and back (run 3 of 3)
 
-**Real episode.** A recorded run 3 of 3 of scenario `src/scenarios/t1_plan_my_day.json`, model `gemma4:12b`, thinking on, recorded 2026-10-24T19:01:55. Raw trace: `src/traces/T1-run3-20261024-190228.json`.
+**Real episode.** A recorded run 3 of 3 of scenario `src/scenarios/t1_plan_my_day.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T13:00:47. Raw trace: `src/traces/T1-run3-20261027-130120.json`.
 
 ## Initial Inputs
 

@@ -6,6 +6,7 @@
 - **Communicates with:** The user (chat), and each specialist through its `ask_<name>_agent` tool. It receives each specialist's reply together with the raw results of the tools that specialist called.
 - **Available tools:** `ask_user`, `ask_schedule_agent`, `ask_transit_agent`, `ask_route_agent`, `ask_share_agent` (described in [tools.md](../tools.md))
 - **Policies that bind it:** P1, P3, P4, P8–P15, P17, P18 (see [policy.md](../policy.md))
+- **Guard (Phase 2 preview, `GUARDS=P13`):** while the rider has a trip, each reply to the student may name only that trip's times (its departure, `compute_eta`'s departure and ETA, or the current time). A reply that names another time goes back to the Concierge with the trip's facts to rewrite, up to 2 times, and is then replaced by a reply built from `compute_eta` (`src/bus_agent/agents.py`, `Concierge`). Off by default, so Phase 1 runs are unchanged.
 
 ## System prompt
 

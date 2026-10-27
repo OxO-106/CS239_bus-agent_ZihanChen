@@ -1,6 +1,6 @@
 # Example 5: Running late: at 09:40 no route reaches Boelter Hall by 10:00 (run 2 of 3)
 
-**Real episode.** A recorded run 2 of 3 of scenario `src/scenarios/t2_running_late.json`, model `gemma4:12b`, thinking on, recorded 2026-10-24T19:02:37. Raw trace: `src/traces/T2-run2-20261024-190243.json`.
+**Real episode.** A recorded run 2 of 3 of scenario `src/scenarios/t2_running_late.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T13:01:29. Raw trace: `src/traces/T2-run2-20261027-130135.json`.
 
 ## Initial Inputs
 

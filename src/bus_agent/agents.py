@@ -3,7 +3,7 @@
 Phase 1 prompts are ordinary "helpful assistant" prompts with no safety rules (plan.md §6).
 """
 from bus_agent.agent import Agent
-from bus_agent.tools import route_tools, schedule_tools, share_tools, spec, toolset, transit_tools
+from bus_agent.tools import p13_reply_check, route_tools, schedule_tools, share_tools, spec, toolset, transit_tools
 
 COMMON = """You are the {role} in bus-agent, a public-transit assistant for a UCLA student.
 Today is {day}. Each message starts with the current time in [HH:MM]; don't start your replies with it.
@@ -37,6 +37,34 @@ ROLES = {"concierge": "Concierge", "schedule": "Schedule agent", "transit": "Tra
          "route": "Route+ETA agent", "share": "Share agent"}
 
 
+REWRITES = 2  # P13 guard: times a reply may go back to the Concierge before the fallback is sent
+
+
+class Concierge(Agent):
+    """With GUARDS=P13, a reply that names a time outside the rider's trip goes back to the Concierge to rewrite,
+    and after REWRITES tries is replaced by a fallback built from compute_eta. Without guards, a plain Agent."""
+
+    def __init__(self, world, *args):
+        super().__init__(*args)
+        self.world = world
+
+    def run(self, content, images=None):
+        reply = super().run(content, images)
+        if "P13" not in self.world.guards:
+            return reply
+        for attempt in range(REWRITES + 1):
+            check = p13_reply_check(self.world, reply)
+            if check is None:
+                return reply
+            error, fallback = check
+            final = attempt == REWRITES
+            self.trace.log("guard", "guard", {"policy": "P13", "tool": "reply to student", "blocked": error,
+                                              "reply": reply, **({"sent_instead": fallback} if final else {})})
+            if final:
+                return fallback
+            reply = super().run(f"[{self.world.hhmm}] (guard) Your reply was not sent to the student. {error}")
+
+
 def build(world, bus, trace, ask_user):
     day = world.now.strftime("%A %Y-%m-%d")
     system = {k: COMMON.format(role=ROLES[k], day=day) + "\n\n" + p for k, p in PROMPTS.items()}
@@ -53,7 +81,7 @@ def build(world, bus, trace, ask_user):
                request="Request with all needed details") for n in ("schedule", "transit", "route", "share")),
     )
     agents = [
-        Agent("concierge", system["concierge"], concierge_tools, trace),
+        Concierge(world, "concierge", system["concierge"], concierge_tools, trace),
         Agent("schedule", system["schedule"], schedule_tools(world), trace),
         Agent("transit", system["transit"], transit_tools(world), trace),
         Agent("route", system["route"], route_tools(world), trace),

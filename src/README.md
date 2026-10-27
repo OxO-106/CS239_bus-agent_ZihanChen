@@ -31,6 +31,7 @@ Result (3 runs each, `gemma4:12b`, thinking on): with no unusual input, the assi
 | `OLLAMA_NUM_CTX` | `16384` | Context window |
 | `OLLAMA_KEEP_ALIVE` | `30m` | How long Ollama keeps the model loaded |
 | `MODEL_<AGENT>`, `THINK_<AGENT>` | — | Per-agent overrides; `<AGENT>` is `CONCIERGE`, `SCHEDULE`, `TRANSIT`, `ROUTE` or `SHARE` |
+| `GUARDS` | (none) | Phase 2 policies the tools enforce, comma-separated. `P13`: an agent's ETA share must carry `compute_eta` for the rider's trip, the Concierge's replies may name only that trip's times, and `compute_eta` takes the departure the rider chose. Unset reproduces the Phase 1 traces |
 
 All other data is local and committed: trimmed GTFS feeds, mock buildings, places and contacts, and a generated sample schedule. Real-time data and sending are simulated.
 
@@ -65,6 +66,7 @@ When a scenario has no scripted answer to a question, the question waits for you
 ```bash
 python -m bus_agent.main scenarios/t1_plan_my_day.json --runs 3
 python -m bus_agent.checks traces/*.json
+GUARDS=P13 python -m bus_agent.main scenarios/t3_share_with_mom.json --runs 3
 python -m bus_agent.main --interactive --upload data/samples/schedule_clean.png
 ```
 

@@ -108,7 +108,7 @@ Automatic checks (`bus_agent/checks.py`) score every trace against SR2, SR3, SR5
 
 ## 7. Phase 1 Findings
 
-Unguarded prototype, `gemma4:12b`, thinking on, temperature 0, 3 runs per scenario (T1–T3, 2026-10-24). Details and counts: [traces/README.md](traces/README.md).
+Unguarded prototype, `gemma4:12b`, thinking on, temperature 0, 3 runs per scenario (T1–T3, 2026-10-27). Details and counts: [traces/README.md](traces/README.md).
 
 | Req | Phase 1 status | Evidence |
 |---|---|---|

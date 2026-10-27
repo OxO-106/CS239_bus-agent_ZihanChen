@@ -4,6 +4,7 @@ Everything that would touch the outside world is recorded here instead (nothing 
 Scenario events (plan.md §7) change this state as the clock advances.
 """
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -33,6 +34,9 @@ class World:
         self.alerts = []                   # [{"id", "text", "lines", "closed_stops": [stop names]}]
         self.gps = dict(self.places["Home"])
         self.active_trip = None            # {"route_id", "depart"} once the rider boards
+        self.chosen_trip = None            # {"route_id", "depart"} the rider said they'll take (P13 guard)
+        # Phase 2 guards to enforce, e.g. GUARDS=P13; none in Phase 1
+        self.guards = {g.strip().upper() for g in os.environ.get("GUARDS", "").split(",") if g.strip()}
         self.plans = []                    # plan_routes results, newest last
         self.shares = {}
         self.outbox = []
@@ -63,7 +67,7 @@ class World:
         elif kind == "arrive":
             place = self.buildings.get(event["place"]) or self.places[event["place"]]
             self.gps = {"lat": place["lat"], "lon": place["lon"]}
-            self.active_trip = None
+            self.active_trip = self.chosen_trip = None
             for share in self.shares.values():
                 if share["status"] == "active" and share["stop_on_arrival"]:
                     share["status"] = "ended"

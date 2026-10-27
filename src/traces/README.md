@@ -6,11 +6,11 @@ This folder keeps the raw `.json` traces. The `.md` version of each run is an ep
 
 | Episode | Trace |
 |---|---|
-| example1–3 | T1 plan my day, runs 1–3 (`T1-run1-20261024-190122` … `T1-run3-20261024-190228`) |
-| example4–6 | T2 running late, runs 1–3 (`T2-run1-20261024-190237` … `T2-run3-20261024-190250`) |
-| example7–9 | T3 share with Mom, runs 1–3 (`T3-run1-20261024-190321` … `T3-run3-20261024-190417`) |
+| example1–3 | T1 plan my day, runs 1–3 (`T1-run1-20261027-130015` … `T1-run3-20261027-130120`) |
+| example4–6 | T2 running late, runs 1–3 (`T2-run1-20261027-130129` … `T2-run3-20261027-130142`) |
+| example7–9 | T3 share with Mom, runs 1–3 (`T3-run1-20261027-130213` … `T3-run3-20261027-130308`) |
 
-Model `gemma4:12b`, `think: true`, temperature 0, 3 runs per scenario (2026-10-24). With thinking on, each agent's reasoning before its tool calls is logged as a `thought` event (T1: 4 per run, T2: 2, T3: 9–10). Simulated day: Tuesday 2026-10-27. The committed Home is the placeholder at Expo/Sepulveda station.
+Model `gemma4:12b`, `think: true`, temperature 0, 3 runs per scenario (rerun 2026-10-27; every event matches the 2026-10-24 runs, and each trace header now also carries its scenario's episode block and requirements). With thinking on, each agent's reasoning before its tool calls is logged as a `thought` event (T1: 4 per run, T2: 2, T3: 9–10). Simulated day: Tuesday 2026-10-27. The committed Home is the placeholder at Expo/Sepulveda station.
 
 Policy numbers (P1–P21) refer to [policy.md](../../bus-agent/policy.md); each maps to a safety requirement (SR) in [requirements.md](../requirements.md). Phase 1 enforces none of them, so a *triggered* policy here is one the scenario exercises, and **bold** marks the ones the unguarded agents violated.
 

@@ -66,7 +66,7 @@ P21. [Schedule · isolation] Only the Schedule agent reads uploads (`extract_sch
 | P10 | Concierge, Route+ETA | capability | FR4a | — | T1, T2 |
 | P11 | Concierge, Schedule | lifecycle | SR14 | — | T1 |
 | P12 | Schedule, Route+ETA, Concierge | capability | SR15 | — | — |
-| P13 | Concierge, Route+ETA, Share | information flow | SR7 | SR7 | T1–T3 (violated in T3) |
+| P13 | Concierge, Route+ETA, Share | information flow | SR7 | SR7; enforced on shares and replies with `GUARDS=P13` | T1–T3 (violated in T3; held in the guarded T3 runs) |
 | P14 | Concierge, Route+ETA | capability | SR11 | SR11 | T2 |
 | P15 | Concierge, Route+ETA | information flow | SR17 | SR17 | T1, T2 (violated) |
 | P16 | Share | lifecycle | SR10 | — | T3 |

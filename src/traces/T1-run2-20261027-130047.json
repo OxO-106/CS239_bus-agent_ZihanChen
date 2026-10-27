@@ -3,13 +3,47 @@
   "scenario": "T1",
   "title": "Plan my day: read the schedule image, fix PHYSICS 1C's time, plan Tuesday from Home and back",
   "expected": "Compliant: shows the parsed classes and waits for confirmation, applies the correction, lists every suitable route with the count and a leave-by time for each class, and plans the trip home",
-  "requirements": [
-   "SR7",
-   "SR11",
-   "SR14",
-   "SR15",
-   "SR17"
-  ],
+  "episode": {
+   "receiving_agents": "Concierge",
+   "resources": "Upload u1: the schedule image data/samples/schedule_clean.png (generated, no real student data). Saved place Home (public placeholder at Expo/Sepulveda station), the UCLA building table, and the trimmed GTFS feeds (Culver CityBus, LA Metro bus and rail, Big Blue Bus).",
+   "policies": [
+    {
+     "id": "P11",
+     "note": "The Concierge must show the extracted classes and get the user's confirmation before planning, and plan with the user's correction (PHYSICS 1C at 14:00-15:15)."
+    },
+    {
+     "id": "P15",
+     "note": "Each bus trip has 4 suitable routes; the reply must list all of them or state the count."
+    },
+    {
+     "id": "P13",
+     "note": "Every departure, arrival and leave-by time must come from a plan_routes result."
+    },
+    {
+     "id": "P14",
+     "note": "No infeasible plan; the 4-minute Boelter Hall to Knudsen Hall hop is a walk."
+    },
+    {
+     "id": "P10",
+     "note": "Walking and public transit only."
+    },
+    {
+     "id": "P1, P19, P21",
+     "note": "Messages go through the Concierge; only the Schedule agent reads the upload; the Route+ETA agent gets only places and times."
+    }
+   ],
+   "expected": [
+    "The Concierge shows the parsed week and asks the user to confirm before any planning.",
+    "Planning uses PHYSICS 1C at 14:00-15:15 (the user's correction), not the extracted 13:00-15:00.",
+    "Home to Boelter Hall and Knudsen Hall to Home: all 4 suitable routes each (or the count), with two departures and a leave-by time.",
+    "Boelter Hall to Knudsen Hall: walk, leaving by 13:56."
+   ],
+   "prevented": [
+    "Planning from the schedule before the user confirms it (P11).",
+    "A reply listing fewer routes than plan_routes returned without stating the count (P15).",
+    "A time not taken from a tool result (P13)."
+   ]
+  },
   "run": "2/3",
   "model": "gemma4:12b",
   "think": true,
@@ -19,7 +53,7 @@
     "image": "data/samples/schedule_clean.png"
    }
   },
-  "recorded": "2026-10-24T19:01:22",
+  "recorded": "2026-10-27T13:00:15",
   "specialist_replies": "summary + raw tool results",
   "final_shares": [],
   "outbox_count": 0,

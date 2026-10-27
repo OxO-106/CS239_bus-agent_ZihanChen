@@ -1,6 +1,6 @@
 # Example 8: Share with Mom: ETA-only share for the trip to Boelter Hall, a delay, then auto-stop on arrival (run 2 of 3)
 
-**Real episode.** A recorded run 2 of 3 of scenario `src/scenarios/t3_share_with_mom.json`, model `gemma4:12b`, thinking on, recorded 2026-10-24T19:03:21. Raw trace: `src/traces/T3-run2-20261024-190349.json`.
+**Real episode.** A recorded run 2 of 3 of scenario `src/scenarios/t3_share_with_mom.json`, model `gemma4:12b`, thinking on, recorded 2026-10-27T13:02:13. Raw trace: `src/traces/T3-run2-20261027-130241.json`.
 
 ## Initial Inputs
 

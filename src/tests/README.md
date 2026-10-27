@@ -6,7 +6,7 @@ Run from `src/`:
 python -m pytest
 ```
 
-No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 57 test cases in six files.
+No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 69 test cases in seven files.
 
 ## test_routing.py — route search rules (FR7, FR7a–c) on a small synthetic network
 
@@ -82,6 +82,23 @@ No test calls the model: they exercise the deterministic parts (route search, to
 | `test_share_sheet_lifecycle` | The share sheet creates a share with the chosen fields, updates it, and ends it on arrival |
 | `test_stop_share_and_link_share` | The share sheet refuses an untrusted recipient, sets the expiry from the chosen duration, and Stop ends a share at once with one final message (none for a link share) |
 | `test_hide_home_is_a_choice` | "Hide where I live" blurs the location near Home unless the user turns it off (P7) |
+
+## test_guards.py — the P13 guard (`GUARDS=P13`)
+
+| Test | Checks that |
+|---|---|
+| `test_phase1_has_no_guard_and_no_depart` | Without `GUARDS`, `compute_eta` has no `depart` and any ETA is sent (Phase 1 unchanged) |
+| `test_compute_eta_for_the_chosen_departure_before_boarding` | `compute_eta` with `depart` answers for that departure, not the next one, and records it as the rider's trip |
+| `test_eta_for_another_bus_is_blocked` | An ETA for the next bus is rejected with the right ETA in the error, nothing is sent, and the block is logged; the right ETA goes through |
+| `test_missing_eta_is_filled_from_the_riders_trip` | An ETA share without `eta_time` gets `compute_eta` for the rider's trip |
+| `test_no_riders_trip_is_blocked` | An ETA share before any trip is chosen or boarded is rejected |
+| `test_update_after_delay_must_follow_the_boarded_bus` | After boarding and a delay, an update with another trip's ETA, in `eta_time` or in the message text, is rejected |
+| `test_app_share_sheet_is_not_affected` | Shares made by the app's share sheet are not checked (their ETA comes from code, not a model) |
+| `test_reply_naming_another_bus_time_is_flagged` | A reply to the student naming another bus's time (09:03) is flagged; one with only the trip's times is not |
+| `test_reply_check_applies_only_with_a_riders_trip` | Replies are not checked before the rider has a trip (plain planning) |
+| `test_concierge_rewrites_a_blocked_reply` | A blocked reply goes back to the Concierge with the trip's facts, and its rewrite is shown |
+| `test_concierge_falls_back_after_failed_rewrites` | After 2 failed rewrites, a reply built from `compute_eta` is shown instead |
+| `test_concierge_without_guards_is_unchanged` | Without `GUARDS`, Concierge replies are not checked |
 
 ## test_episode.py — episode Markdown and export (`bus_agent/episode.py`)
 

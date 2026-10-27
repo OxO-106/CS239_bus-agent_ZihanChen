@@ -5,6 +5,7 @@ schedule extraction passes any extra text on the upload back to the agent. Phase
 """
 import json
 import math
+import re
 import secrets
 from datetime import timedelta
 from pathlib import Path
@@ -193,26 +194,14 @@ def route_tools(w):
         return {"origin": latest["origin"], "destination": latest["destination"],
                 "changes": _compare_options(earlier[-1]["result"], latest["result"])}
 
-    def compute_eta(route_id):
-        plan = next((p for p in reversed(w.plans)
-                     if any(r["route_id"] == route_id for r in p["result"]["routes"])), None)
-        if plan is None:
-            return {"error": f"route {route_id} not in any plan"}
-        if route_id == WALK_ID:  # on foot: no timetable or delays, just the walk from now
-            secs = next(r for r in plan["result"]["routes"] if r["route_id"] == WALK_ID)["walk_min"]["from_stop"] * 60
-            return {"route_id": route_id, "computed_at": w.hhmm, "depart": w.hhmm,
-                    "eta": hhmm(parse_hhmm(w.hhmm) + secs), "delay_min": 0, "destination": plan["destination"]}
-        opt = w.router.find(*plan["points"], route_id)
-        now = parse_hhmm(w.hhmm)
-        if w.active_trip and w.active_trip["route_id"] == route_id:
-            now = parse_hhmm(w.active_trip["depart"]) - math.ceil(opt["walk"][0]) * 60
-        deps, reason = w.router.departures(opt, w.router.net.services_on(w.now.date()), now, 1, w.trip_delays())
-        if not deps:
-            return {"route_id": route_id, "error": reason}
-        delay = max((w.line_delays.get(line, 0) for line, _, _ in opt["legs"]), default=0)
-        return {"route_id": route_id, "computed_at": w.hhmm, "depart": hhmm(deps[0][1]),
-                "eta": hhmm(deps[0][2]), "delay_min": delay, "destination": plan["destination"]}
+    def compute_eta(route_id, depart=None):
+        if depart and "P13" in w.guards:  # the departure the rider takes; shares follow it until boarding
+            w.chosen_trip = {"route_id": route_id, "depart": depart}
+        return eta_for(w, route_id)
 
+    eta_props = {"route_id": "route_id from plan_routes"}
+    if "P13" in w.guards:
+        eta_props["depart"] = "HH:MM departure the rider takes, if they chose one (optional, default the next one)"
     return toolset(
         spec(list_places, "Saved places and UCLA buildings"),
         spec(geocode, "Coordinates of a saved place or UCLA building", ["name"], name="Place or building name"),
@@ -224,8 +213,31 @@ def route_tools(w):
              max_walk={"type": "integer", "description": "Max walk minutes per walk, 10 default, 15 to show more"}),
         spec(compare_options, "Diff the latest plan against the previous plan for the same trip"),
         spec(compute_eta, "Current ETA for a route (uses the rider's active trip if any, and real-time delays)",
-             ["route_id"], route_id="route_id from plan_routes"),
+             ["route_id"], **eta_props),
     )
+
+
+def eta_for(w, route_id):
+    """compute_eta's result: the ETA on route_id for the rider's trip (boarded, else chosen), else the next departure."""
+    plan = next((p for p in reversed(w.plans)
+                 if any(r["route_id"] == route_id for r in p["result"]["routes"])), None)
+    if plan is None:
+        return {"error": f"route {route_id} not in any plan"}
+    if route_id == WALK_ID:  # on foot: no timetable or delays, just the walk from now
+        secs = next(r for r in plan["result"]["routes"] if r["route_id"] == WALK_ID)["walk_min"]["from_stop"] * 60
+        return {"route_id": route_id, "computed_at": w.hhmm, "depart": w.hhmm,
+                "eta": hhmm(parse_hhmm(w.hhmm) + secs), "delay_min": 0, "destination": plan["destination"]}
+    opt = w.router.find(*plan["points"], route_id)
+    now = parse_hhmm(w.hhmm)
+    trip = w.active_trip or w.chosen_trip
+    if trip and trip["route_id"] == route_id:
+        now = parse_hhmm(trip["depart"]) - math.ceil(opt["walk"][0]) * 60
+    deps, reason = w.router.departures(opt, w.router.net.services_on(w.now.date()), now, 1, w.trip_delays())
+    if not deps:
+        return {"route_id": route_id, "error": reason}
+    delay = max((w.line_delays.get(line, 0) for line, _, _ in opt["legs"]), default=0)
+    return {"route_id": route_id, "computed_at": w.hhmm, "depart": hhmm(deps[0][1]),
+            "eta": hhmm(deps[0][2]), "delay_min": delay, "destination": plan["destination"]}
 
 
 # ---------- Share ----------
@@ -237,6 +249,39 @@ NEAR_SENSITIVE_M = 300  # shares made in the app show only the area within this 
 def near_sensitive(w, point):
     return any(p.get("sensitive") and meters(point["lat"], point["lon"], p["lat"], p["lon"]) < NEAR_SENSITIVE_M
                for p in w.places.values())
+
+
+def _hhmm(text):
+    """'9:32', '09:32 AM' -> '09:32'."""
+    m = re.search(r"(\d{1,2}):(\d{2})", str(text))
+    return f"{int(m[1]):02d}:{m[2]}" if m else str(text)
+
+
+def times_in(text):
+    return {_hhmm(x) for x in re.findall(r"\b\d{1,2}:\d{2}\b", text or "")}
+
+
+def p13_reply_check(w, text):
+    """P13 on a reply to the student: once the rider has a trip (boarded, else chosen), every time it names must be
+    the trip's departure, compute_eta's departure or ETA for it, or the current time.
+    Returns None, or (error for the Concierge, a fallback reply built from compute_eta)."""
+    trip = w.active_trip or w.chosen_trip
+    if not trip:
+        return None
+    result = eta_for(w, trip["route_id"])
+    if not result.get("eta"):
+        return None
+    line = trip["route_id"].split(":")[0]
+    other = sorted(times_in(text) - {trip["depart"], result["depart"], result["eta"], w.hhmm})
+    if not other:
+        return None
+    facts = (f"the rider's trip is the {line} that departs {trip['depart']}"
+             + (f" (now {result['depart']}, {result['delay_min']} min late)" if result["delay_min"] else "")
+             + f", arriving at {result['destination']} at {result['eta']}")
+    error = (f"P13: your reply names {', '.join(other)}, which is not a time of the rider's trip: {facts}. "
+             f"Rewrite the reply using only these times.")
+    fallback = f"Your {line} bus (the {trip['depart']} departure) is expected at {result['destination']} at {result['eta']}."
+    return error, fallback
 
 
 def share_tools(w):
@@ -258,6 +303,29 @@ def share_tools(w):
                 body["home_shown_by_user"] = True  # the user turned off "Hide where I live" for this share
         return body
 
+    def _p13(tool, message, eta_time):
+        """P13 guard on an agent's ETA share: returns (ETA to send, error). The ETA must be compute_eta for the
+        rider's trip (boarded, else chosen), and the message may name no other time."""
+        trip = w.active_trip or w.chosen_trip
+        if not trip:
+            error = ("P13: no rider's trip yet. Ask the Route+ETA agent for compute_eta with the route_id and the "
+                     "departure the rider takes (depart), then share that ETA.")
+        else:
+            result = eta_for(w, trip["route_id"])
+            right, which = result.get("eta"), f"the rider's trip ({trip['route_id'].split(':')[0]} departing {trip['depart']})"
+            other = sorted(times_in(message) - {right, trip["depart"], result.get("depart")})
+            if not right:
+                error = f"P13: no ETA for {which}: {result.get('error')}"
+            elif eta_time and _hhmm(eta_time) != right:
+                error = f"P13: ETA {eta_time} is not for {which}; compute_eta for it gives {right}. Resend with eta_time {right}."
+            elif other:
+                error = (f"P13: the message names {', '.join(other)}, which is not the ETA of {which} ({right}). "
+                         f"Leave other times out or use {right}.")
+            else:
+                return right, None
+        w.trace.log("guard", "guard", {"policy": "P13", "tool": tool, "blocked": error})
+        return None, error
+
     def get_contacts():
         return {"contacts": w.contacts}
 
@@ -266,6 +334,10 @@ def share_tools(w):
                      channel=None, trip=None, protect_sensitive=False, link_base="", token=None):
         # channel/trip/protect_sensitive/link_base are only passed by the app's share sheet; they are not in
         # the tool schema, so the agents' (Phase 1) sharing works exactly as before
+        if eta and not channel and "P13" in w.guards:
+            eta_time, error = _p13("create_share", message, eta_time)
+            if error:
+                return {"error": error}
         share_id = f"s-{len(w.shares) + 1:03d}"
         expires = w.now + timedelta(minutes=int(duration_min)) if duration_min else None
         share = {"share_id": share_id, "recipient": recipient,
@@ -284,6 +356,10 @@ def share_tools(w):
         share = w.shares.get(share_id)
         if not share:
             return {"error": f"no share {share_id}"}
+        if share["fields"]["eta"] and not share.get("channel") and "P13" in w.guards:
+            eta_time, error = _p13("update_share", message, eta_time)
+            if error:
+                return {"error": error}
         sent = w.send("share_update", {"to": share["recipient"], **_payload(share, message, eta_time)})
         return {"sent": sent, "share_status": share["status"]}
 
