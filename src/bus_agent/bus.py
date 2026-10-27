@@ -1,6 +1,6 @@
 """Inter-agent message routing (hub topology: specialists talk only to the Concierge).
 
-With pass_through (the Phase 1 default), a specialist's reply to the Concierge also carries the raw
+With pass_through (the default), a specialist's reply to the Concierge also carries the raw
 results of the tools it called, so the Concierge sees the data itself and not only a summary. This is
 a common multi-agent pattern, and it means text inside tool results (alert text, upload notes)
 reaches the agent that can trigger shares.

@@ -49,7 +49,7 @@ These test the raw tools, so the world runs with the guards off (`test_guards.py
 | `test_trace_keeps_a_snapshot_of_mutable_results` | The trace stores a copy of each tool result, so later changes don't rewrite history |
 | `test_share_payload_has_only_selected_fields` | A share payload contains only the fields that were selected (P5) |
 | `test_arrival_ends_stop_on_arrival_shares` | Arrival ends shares created with `stop_on_arrival` (P17) |
-| `test_phase1_update_after_revoke_is_still_sent` | Documents the Phase 1 gap: `update_share` after `revoke_share` is still sent (P17 not enforced yet) |
+| `test_update_after_revoke_is_still_sent` | Documents a gap: `update_share` after `revoke_share` is still sent (P17 isn't guarded) |
 | `test_delay_changes_route_and_eta` | A real-time delay changes the planned departures and `compute_eta` |
 | `test_compute_eta_follows_the_boarded_trip` | After boarding, `compute_eta` follows the rider's bus, not the next one (P13) |
 | `test_alert_closes_stop_and_drops_route_with_reason` | An alert that closes a stop drops the affected route with a reason (P14, P15) |
@@ -91,7 +91,7 @@ These test the raw tools, so the world runs with the guards off (`test_guards.py
 
 | Test | Checks that |
 |---|---|
-| `test_phase1_has_no_guard_and_no_depart` | With the guards off, `compute_eta` has no `depart` and any ETA is sent |
+| `test_guards_off_has_no_depart_and_no_eta_check` | With the guards off, `compute_eta` has no `depart` and any ETA is sent |
 | `test_compute_eta_for_the_chosen_departure_before_boarding` | `compute_eta` with `depart` answers for that departure, not the next one, and records it as the rider's trip |
 | `test_eta_for_another_bus_is_blocked` | An ETA for the next bus is rejected with the right ETA in the error, nothing is sent, and the block is logged; the right ETA goes through |
 | `test_missing_eta_is_filled_from_the_riders_trip` | An ETA share without `eta_time` gets `compute_eta` for the rider's trip |

@@ -36,7 +36,7 @@ def run_scenario(path, router, run=1, runs=1):
                    "uploads": sc.get("uploads", {}), "recorded": datetime.now().isoformat(timespec="seconds"),
                    "specialist_replies": "summary + raw tool results"})
     world = World(router, sc["start"], trace, _uploads(sc.get("uploads")))
-    if world.guards:  # Phase 2: which policies the tools enforce
+    if world.guards:  # which policies the tools and the Concierge enforce
         trace.header["guards"] = sorted(world.guards)
     trace.clock = lambda: world.hhmm
     bus = Bus(trace, lambda: world.hhmm)

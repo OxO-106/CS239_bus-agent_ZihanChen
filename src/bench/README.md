@@ -31,7 +31,7 @@ It also chose correctly not to call a tool for "Thanks, that's all for now!" (3/
 | Same schedule as plain text | 28/28 × 3 | ~2.2 s |
 
 Findings:
-- **Use a JSON schema in `format`.** With `format: "json"`, the model returned only the first class every time. That mode allows a single object, so it stopped after one. The schema in `bus_agent/tools.py` (`SCHEDULE_SCHEMA`) fixes this, and it will also hold the Phase 2 quarantined extractor to schedule JSON only.
+- **Use a JSON schema in `format`.** With `format: "json"`, the model returned only the first class every time. That mode allows a single object, so it stopped after one. The schema in `bus_agent/tools.py` (`SCHEDULE_SCHEMA`) fixes this, and it would also hold a stricter extractor to schedule JSON only.
 - **`section` is needed.** Two sections of the same course (a lecture on Tu/Th and another on M/W) can't be told apart without it.
 - **End times are estimated** from where each block ends on the grid. They were correct here, but this is why SR14 has the user confirm the schedule.
 

@@ -25,6 +25,8 @@ Every run produces a trace (JSON + Markdown) of agent thoughts, tool calls, inte
 
 **Hub topology:** specialists talk only to the Concierge. Delays reach Route+ETA only via Transit → Concierge, so every ETA is grounded in a Transit result.
 
+**Guards** (on by default, `GUARDS`): the share tools reject a message naming a line or stop the share doesn't include (P5) and an ETA that isn't `compute_eta` for the rider's trip (P13). The Concierge's replies are checked for times outside the rider's trip (P13) and for hidden routes (P15) before the student sees them.
+
 ## 3. Core feature: all suitable routes
 
 Current map apps often show only one or two lines and drop routes they suggested earlier. bus-agent lists them all.
@@ -72,7 +74,7 @@ Speed is **not** a filter: a slower direct line is listed next to the fastest. W
 
 ## 4. Safety requirements
 
-Full text in `requirements.md`. IDs are fixed; `policies.md` references them.
+Full text in `requirements.md`. IDs are fixed; the policies in `bus-agent/policy.md` (P1–P21) reference them.
 
 | Area | Requirements |
 |---|---|
@@ -98,29 +100,30 @@ Full text in `requirements.md`. IDs are fixed; `policies.md` references them.
 
 **Simulation:** each scenario JSON has a start time, user request, scripted replies, and an event timeline. Messages and shares go to an outbox in the trace; nothing is really sent.
 
-**Real-time sources (later):** one `TransitSource` interface — `ReplaySource` (default, used for graded traces), `GtfsRtSource` (agency feeds), `TransitAppSource` (Transit API; the key is in the gitignored `transit_api_key.txt`, 1,500 calls/month and 5/min; cache ≥ 60 s; check terms before committing responses). Record mode saves a real snapshot as a scenario; live mode is optional for Dec 3.
+**Real-time sources (not built):** only replayed scenario timelines exist. A live source could come from agency GTFS-realtime feeds or the Transit API (the key is in the gitignored `transit_api_key.txt`; 1,500 calls/month and 5/min, so cache ≥ 60 s, and check the terms before committing responses).
 
-**Repo layout**
+**Repo layout** (one folder per submission archive)
 ```
-requirements.md  policies.md (Phase 2)  plan.md  README.md  .env.example
-bus_agent/
-  llm.py      Ollama client          agent.py    tool-calling loop
-  agents.py   five agents + prompts  tools.py    tool definitions
-  gtfs.py     load/trim GTFS         routing.py  route search, IDs, diff
-  world.py    delays, alerts, shares, outbox
-  bus.py      inter-agent routing    trace.py    JSON + Markdown traces
-  main.py     CLI: scenario or interactive
-bench/  data/ (gtfs/, local/ untracked)  scenarios/  tests/  traces/
+bus-agent/   app.md  policy.md  tools.md  agents/agent1-5.md  episodes/example1-3.md
+src/         README.md  requirements.md  .env.example
+  bus_agent/
+    llm.py      Ollama client            agent.py    tool-calling loop
+    agents.py   five agents, prompts, Concierge reply guards
+    tools.py    tool definitions, share guards
+    gtfs.py     load/trim GTFS           routing.py  route search, IDs, diff
+    world.py    delays, alerts, shares, outbox
+    bus.py      inter-agent routing      trace.py    JSON traces
+    episode.py  episode Markdown         checks.py   policy checks on traces
+    main.py     CLI: scenario or interactive
+    web.py      web app (static/)
+  bench/  data/ (gtfs/, mock/, samples/, local/ untracked)  docs/  scenarios/  tests/  traces/
+make_archives.py   builds the two archives
 ```
 
-## 6. Deliverables and grading
+## 6. Deliverables
 
-Course instructions, copied verbatim:
+The course submission guideline asks for two archives, built by `make_archives.py`:
+- `{name}-bus-agent-{uid}-requirements.tar.gz`: `bus-agent/` (app description, policies, tools, one file per agent with its system prompt, episodes).
+- `{name}-bus-agent-{uid}-whole.tar.gz`: `src/` (code, `README.md`, `requirements.md`, tests with a README describing each test case, scenarios and traces), plus `bus-agent/`.
 
-Phase 1 — Prototype: Build a working multi-agent application without a safety-enforcing framework. Submit at least three complete agentic traces (JSON or Markdown) capturing agent thoughts, actions, inter-agent messages, and observations, alongside a requirements.md specifying what the application does and what it must never do.
-
-Phase 2 — Safe Port: Port the application to our multi-agent policy-assurance framework. Convert policies.md into explicit enforceable rules. Submit at least three traces: one compliant run and two demonstrating policy violations being correctly intercepted.
-
-Deliverables (public GitHub repository): requirements.md, policies.md, Phase 1 source + traces, Phase 2 source + traces, traces/README.md explaining each scenario and which policy was triggered.
-
-Grading: requirements 15% · policies 15% · Phase 1 20% · Phase 2 30% · presentation + open-source artifact 20%.
+The course also asks for at least three complete traces with agent thoughts, actions, inter-agent messages and observations, plus `traces/README.md` naming the policies each scenario triggered: `src/traces/` holds one trace per scenario (T1–T3). Phase 2 asks for the app to be ported to the course's policy-assurance framework, with one compliant trace and two showing violations being intercepted.

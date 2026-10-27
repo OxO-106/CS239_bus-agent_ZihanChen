@@ -41,7 +41,7 @@ def planned(world):
     return route
 
 
-def test_phase1_has_no_guard_and_no_depart(world):
+def test_guards_off_has_no_depart_and_no_eta_check(world):
     world.guards = set()
     schema = route_tools(world)["compute_eta"][0]["function"]["parameters"]["properties"]
     assert "depart" not in schema

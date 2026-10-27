@@ -1,7 +1,7 @@
 """Simulated world state: clock, uploads, delays, alerts, GPS, shares, outbox, contact replies.
 
 Everything that would touch the outside world is recorded here instead (nothing is really sent).
-Scenario events (plan.md §7) change this state as the clock advances.
+Scenario events (format in README.md) change this state as the clock advances.
 """
 import json
 import os

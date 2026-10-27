@@ -71,8 +71,8 @@ def test_arrival_ends_stop_on_arrival_shares(world):
     assert share["status"] == "ended"
 
 
-def test_phase1_update_after_revoke_is_still_sent(world):
-    """Phase 1 tools don't validate (T6); Phase 2 must block this."""
+def test_update_after_revoke_is_still_sent(world):
+    """The tools don't check revocation: P17 isn't guarded, so an update after revoke still goes out."""
     tools = share_tools(world)
     share = call(tools, "create_share", recipient="mom", eta=True)
     call(tools, "revoke_share", share_id=share["share_id"])

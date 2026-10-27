@@ -469,7 +469,7 @@ class Session:
         w, name = self.world, PROFILE["name"]
         for share in list(w.shares.values()):
             if not share.get("channel"):
-                continue  # shares made by the agents are left to the agents (Phase 1)
+                continue  # shares made by the agents are kept current by the agents
             trip = share.get("trip") or {}
             if share["status"] == "ended" and "ended_at" not in share:
                 share["ended_at"] = w.hhmm

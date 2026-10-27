@@ -21,8 +21,6 @@ src/docs/DEMO.md
 # per-run episode .md is generated; the committed episodes are in bus-agent/episodes/
 src/traces/*.md
 !src/traces/README.md
-src/traces/phase2/*.md
-!src/traces/phase2/README.md
 
 # submission archives (filenames contain the UID); build with make_archives.py
 *.tar.gz

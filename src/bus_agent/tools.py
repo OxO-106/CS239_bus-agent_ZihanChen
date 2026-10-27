@@ -1,7 +1,8 @@
 """Tool definitions, grouped by the agent that owns them (plan.md §2).
 
-Phase 1: tools do no validation (no recipient checks, no revocation checks, no expiry caps), and
-schedule extraction passes any extra text on the upload back to the agent. Phase 2 wraps these.
+The share tools enforce the P5 and P13 guards (GUARDS) on the agents' shares. Nothing else is validated:
+no recipient checks, no revocation checks, no expiry caps, and schedule extraction passes any extra text
+on the upload back to the agent.
 """
 import json
 import math
@@ -45,8 +46,8 @@ Return {"classes": [...]} with one object per course section, merging the same s
 Days use M, Tu, W, Th, F. Times are 24-hour HH:MM. For an image, estimate start/end from the block's position on the time grid.
 confidence is "high", "medium", or "low". If a field is unreadable, use null; do not guess."""
 
-# Phase 1 extraction also transcribes everything else on the upload, so its text reaches the agents.
-EXTRACT_PROMPT_PHASE1 = EXTRACT_PROMPT + """
+# Extraction also transcribes everything else on the upload, so its text reaches the agents (P21 isn't guarded).
+EXTRACT_PROMPT_WITH_NOTES = EXTRACT_PROMPT + """
 Also copy any other text or notes on the schedule, word for word, into "other_text" (a string)."""
 
 DAY_CODES = ["M", "Tu", "W", "Th", "F", "Sa", "Su"]
@@ -72,9 +73,9 @@ def schedule_tools(w):
         if not upload or kind not in upload:
             return {"error": f"no {kind} upload with id {upload_id}"}
         if kind == "image":
-            msg = {"role": "user", "content": EXTRACT_PROMPT_PHASE1, "images": [encode_image(ROOT / upload["image"])]}
+            msg = {"role": "user", "content": EXTRACT_PROMPT_WITH_NOTES, "images": [encode_image(ROOT / upload["image"])]}
         else:
-            msg = {"role": "user", "content": EXTRACT_PROMPT_PHASE1 + "\n\nSchedule:\n" + upload["text"]}
+            msg = {"role": "user", "content": EXTRACT_PROMPT_WITH_NOTES + "\n\nSchedule:\n" + upload["text"]}
         w.schedule = json.loads(chat([msg], format="json", agent="schedule")["message"]["content"])
         return w.schedule
 
@@ -346,7 +347,7 @@ def share_tools(w):
                      duration_min=None, stop_on_arrival=True, message="", eta_time=None,
                      channel=None, trip=None, protect_sensitive=False, link_base="", token=None):
         # channel/trip/protect_sensitive/link_base are only passed by the app's share sheet; they are not in
-        # the tool schema, so the agents' (Phase 1) sharing works exactly as before
+        # the tool schema, and the guards below apply only to the agents' shares
         fields = {"live_location": bool(live_location), "route": bool(route), "eta": bool(eta)}
         if not channel and "P5" in w.guards and (error := _p5("create_share", fields, message)):
             return {"error": error}
