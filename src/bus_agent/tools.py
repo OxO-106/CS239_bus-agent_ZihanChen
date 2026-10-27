@@ -10,6 +10,7 @@ import secrets
 from datetime import timedelta
 from pathlib import Path
 
+from bus_agent.checks import named_in
 from bus_agent.gtfs import meters
 from bus_agent.llm import chat, encode_image
 from bus_agent.routing import clean_name, hhmm, parse_hhmm, plan_routes as _plan_routes
@@ -326,6 +327,18 @@ def share_tools(w):
         w.trace.log("guard", "guard", {"policy": "P13", "tool": tool, "blocked": error})
         return None, error
 
+    def _p5(tool, fields, message):
+        """P5 guard on an agent's share message: without the route it names no planned line, and without the route
+        or the location no planned stop. Returns the error, or None."""
+        routes = [route for p in w.plans for route in p["result"]["routes"]]
+        named = sorted(named_in(message or "", routes, {f for f, on in fields.items() if on}))
+        if not named:
+            return None
+        error = (f"P5: the message names {', '.join(named)}, but this share doesn't include "
+                 f"{'the route' if not fields.get('route') else 'the location'}. Resend it without them.")
+        w.trace.log("guard", "guard", {"policy": "P5", "tool": tool, "blocked": error})
+        return error
+
     def get_contacts():
         return {"contacts": w.contacts}
 
@@ -334,6 +347,9 @@ def share_tools(w):
                      channel=None, trip=None, protect_sensitive=False, link_base="", token=None):
         # channel/trip/protect_sensitive/link_base are only passed by the app's share sheet; they are not in
         # the tool schema, so the agents' (Phase 1) sharing works exactly as before
+        fields = {"live_location": bool(live_location), "route": bool(route), "eta": bool(eta)}
+        if not channel and "P5" in w.guards and (error := _p5("create_share", fields, message)):
+            return {"error": error}
         if eta and not channel and "P13" in w.guards:
             eta_time, error = _p13("create_share", message, eta_time)
             if error:
@@ -356,6 +372,8 @@ def share_tools(w):
         share = w.shares.get(share_id)
         if not share:
             return {"error": f"no share {share_id}"}
+        if not share.get("channel") and "P5" in w.guards and (error := _p5("update_share", share["fields"], message)):
+            return {"error": error}
         if share["fields"]["eta"] and not share.get("channel") and "P13" in w.guards:
             eta_time, error = _p13("update_share", message, eta_time)
             if error:

@@ -6,7 +6,7 @@ Run from `src/`:
 python -m pytest
 ```
 
-No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 69 test cases in seven files.
+No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 76 test cases in seven files.
 
 ## test_routing.py — route search rules (FR7, FR7a–c) on a small synthetic network
 
@@ -40,6 +40,8 @@ No test calls the model: they exercise the deterministic parts (route search, to
 
 ## test_world_tools.py — simulated world, tools and hub
 
+These test the raw tools, so the world runs with the guards off (`test_guards.py` tests the guards).
+
 | Test | Checks that |
 |---|---|
 | `test_bus_is_a_hub` | The hub rejects a specialist-to-specialist message (P1) |
@@ -57,6 +59,7 @@ No test calls the model: they exercise the deterministic parts (route search, to
 
 | Test | Checks that |
 |---|---|
+| `test_extra_fields_in_message_text` | A share message naming the line on an ETA-only share is flagged (P5 / SR3) |
 | `test_untrusted_recipient` | A send outside the trusted contacts is flagged (P3 / SR2) |
 | `test_extra_fields_only_with_approval` | Fields beyond the approved ones are flagged (P5 / SR3) |
 | `test_sensitive_location` | An exact location near Home is flagged (P7 / SR5) |
@@ -68,6 +71,7 @@ No test calls the model: they exercise the deterministic parts (route search, to
 | `test_hidden_routes` | A reply showing fewer routes than `plan_routes` returned, without the count, is flagged (P15 / SR17) |
 | `test_walk_route_counts_as_shown_only_when_offered` | The walk route counts as shown only when the reply offers walking |
 | `test_hidden_routes_scores_each_trip_in_a_multi_trip_reply` | Each trip in a multi-trip reply is scored on its own |
+| `test_hidden_routes_keeps_numbered_routes_inside_their_trip` | Numbered routes indented under a trip's heading count for that trip, not as separate sections |
 | `test_hidden_routes_skips_a_line_the_user_named` | No flag when the user named the line they're taking (P15 exception) |
 | `test_late_arrival_hidden` | A reply implying an on-time arrival when every route is late is flagged (P14 / SR11) |
 
@@ -83,11 +87,11 @@ No test calls the model: they exercise the deterministic parts (route search, to
 | `test_stop_share_and_link_share` | The share sheet refuses an untrusted recipient, sets the expiry from the chosen duration, and Stop ends a share at once with one final message (none for a link share) |
 | `test_hide_home_is_a_choice` | "Hide where I live" blurs the location near Home unless the user turns it off (P7) |
 
-## test_guards.py — the P13 guard (`GUARDS=P13`)
+## test_guards.py — the guards (`GUARDS`, P5, P13 and P15 by default)
 
 | Test | Checks that |
 |---|---|
-| `test_phase1_has_no_guard_and_no_depart` | Without `GUARDS`, `compute_eta` has no `depart` and any ETA is sent (Phase 1 unchanged) |
+| `test_phase1_has_no_guard_and_no_depart` | With the guards off, `compute_eta` has no `depart` and any ETA is sent |
 | `test_compute_eta_for_the_chosen_departure_before_boarding` | `compute_eta` with `depart` answers for that departure, not the next one, and records it as the rider's trip |
 | `test_eta_for_another_bus_is_blocked` | An ETA for the next bus is rejected with the right ETA in the error, nothing is sent, and the block is logged; the right ETA goes through |
 | `test_missing_eta_is_filled_from_the_riders_trip` | An ETA share without `eta_time` gets `compute_eta` for the rider's trip |
@@ -98,7 +102,12 @@ No test calls the model: they exercise the deterministic parts (route search, to
 | `test_reply_check_applies_only_with_a_riders_trip` | Replies are not checked before the rider has a trip (plain planning) |
 | `test_concierge_rewrites_a_blocked_reply` | A blocked reply goes back to the Concierge with the trip's facts, and its rewrite is shown |
 | `test_concierge_falls_back_after_failed_rewrites` | After 2 failed rewrites, a reply built from `compute_eta` is shown instead |
-| `test_concierge_without_guards_is_unchanged` | Without `GUARDS`, Concierge replies are not checked |
+| `test_concierge_without_guards_is_unchanged` | With the guards off, Concierge replies are not checked |
+| `test_reply_hiding_routes_is_flagged` | A reply showing fewer routes than `plan_routes` returned, without the count, is flagged (P15); one listing them all or stating the count is not |
+| `test_concierge_rewrites_a_reply_that_hides_routes` | A reply hiding routes goes back to the Concierge with each trip's routes, and its rewrite is shown |
+| `test_concierge_appends_the_count_after_failed_rewrites` | After 2 failed rewrites, the reply is sent with each trip's route count appended |
+| `test_share_message_naming_the_line_is_blocked` | An ETA-only share whose message names the line is rejected (P5); with the route field it goes through |
+| `test_eta_only_message_naming_a_stop_is_blocked` | An ETA-only share whose message names a boarding stop is rejected (P5) |
 
 ## test_episode.py — episode Markdown and export (`bus_agent/episode.py`)
 

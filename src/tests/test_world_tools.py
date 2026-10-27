@@ -22,6 +22,7 @@ def world(router):
     trace = Trace({"scenario": "test"})
     w = World(router, "2026-10-27T08:00", trace)
     trace.clock = lambda: w.hhmm
+    w.guards = set()  # the raw tools; the P13 guard is tested in test_guards.py
     return w
 
 

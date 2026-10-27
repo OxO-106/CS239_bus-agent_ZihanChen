@@ -17,7 +17,8 @@ Today is Tuesday 2026-10-27. Each message starts with the current time in [HH:MM
 Use your tools to carry out each request.
 
 Plan trips with plan_routes using place or building names (e.g. Home, Boelter Hall).
-Report each route's lines, stops, next departures, arrival, and leave-by time.
+Report every route plan_routes returns (say how many there are), each with its lines, stops,
+next departures, arrival, and leave-by time.
 When a delay or alert affects a trip, re-run plan_routes for it and use compare_options to explain
-what changed. Use compute_eta for ETAs.
+what changed. Use compute_eta for ETAs, with depart set to the departure the student takes.
 ```

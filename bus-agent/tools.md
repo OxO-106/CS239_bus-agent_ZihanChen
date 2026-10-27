@@ -34,13 +34,13 @@ plan_routes: Inputs: `origin`, `destination`, optional `arrive_by` (HH:MM), `dep
 
 compare_options: Inputs: none. Returns: `{origin, destination, changes}`, each route of the previous plan for the same trip marked kept, changed, dropped (with reason) or new, or an error if there is no earlier plan. Used by: Route+ETA.
 
-compute_eta: Inputs: `route_id` (from a `plan_routes` result), and with `GUARDS=P13` an optional `depart` (HH:MM), the departure the rider takes. Returns: `{route_id, computed_at, depart, eta, delay_min, destination}` for the rider's boarded trip on that route, else the chosen `depart`, otherwise the next departure, including real-time delays. Used by: Route+ETA.
+compute_eta: Inputs: `route_id` (from a `plan_routes` result), and an optional `depart` (HH:MM), the departure the rider takes (with the P13 guard, the default). Returns: `{route_id, computed_at, depart, eta, delay_min, destination}` for the rider's boarded trip on that route, else the chosen `depart`, otherwise the next departure, including real-time delays. Used by: Route+ETA.
 
 get_contacts: Inputs: none. Returns: `{contacts}`, each with name, channel, `trusted` flag and note. Used by: Share.
 
-create_share: Inputs: `recipient` (contact key or address), booleans `live_location`, `route`, `eta`, `precision` (exact, street or neighborhood), `duration_min`, `stop_on_arrival`, `message`, `eta_time` (HH:MM). Returns: the new share record (`share_id`, `recipient`, `fields`, `precision`, `expires_at`, `stop_on_arrival`, `status`), after sending the first update to the outbox. With `GUARDS=P13`, an ETA share returns an error and sends nothing unless its ETA (and every time in `message`) is `compute_eta` for the rider's trip; a missing `eta_time` is filled in. Used by: Share.
+create_share: Inputs: `recipient` (contact key or address), booleans `live_location`, `route`, `eta`, `precision` (exact, street or neighborhood), `duration_min`, `stop_on_arrival`, `message`, `eta_time` (HH:MM). Returns: the new share record (`share_id`, `recipient`, `fields`, `precision`, `expires_at`, `stop_on_arrival`, `status`), after sending the first update to the outbox. With the default guards, it returns an error and sends nothing if `message` names a planned line or stop the share doesn't include (P5), or if an ETA share's ETA, or any time in `message`, isn't `compute_eta` for the rider's trip (P13); a missing `eta_time` is filled in. Used by: Share.
 
-update_share: Inputs: `share_id`, optional `message`, `eta_time`. Returns: `{sent, share_status}` after sending an update with the share's fields to its recipient, or an error for an unknown share. With `GUARDS=P13`, the same ETA check as `create_share`. Used by: Share.
+update_share: Inputs: `share_id`, optional `message`, `eta_time`. Returns: `{sent, share_status}` after sending an update with the share's fields to its recipient, or an error for an unknown share. With the default guards, the same P5 and P13 checks as `create_share`. Used by: Share.
 
 revoke_share: Inputs: `share_id`. Returns: the share record with `status: "revoked"`, or an error for an unknown share. Used by: Share.
 

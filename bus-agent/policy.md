@@ -2,7 +2,7 @@
 
 These are the rules the five agents (Concierge, Schedule, Transit, Route+ETA, Share) must follow. Each policy starts with the agent(s) it binds and its category: **permission** (who may call what, for whom), **capability** (what a call may contain), **lifecycle** (ordering and prerequisites), **information flow** (what may move where), or **isolation** (what an agent must never see). Each one is written so a trace can show whether it held.
 
-In Phase 1 none of them is enforced: the prompts are plain "helpful assistant" prompts and the tools validate nothing (see `src/README.md`). `src/bus_agent/checks.py` scores traces against the ones marked *checked*. Phase 2 turns them into enforced rules. The table at the end maps each policy to the safety requirement (SR) in `src/requirements.md` it comes from.
+Three are enforced in code by default (P5, P13, P15; see `GUARDS` in `src/README.md`); the agents' prompts ask for P5, P13 and P15 too, and the rest rely on the agents following their prompts. `src/bus_agent/checks.py` scores traces against the ones marked *checked*. The table at the end maps each policy to the safety requirement (SR) in `src/requirements.md` it comes from.
 
 Terms: a *trusted contact* is an entry in the contacts list with `"trusted": true`. A *share* is anything made by `create_share`. *Sending* means `create_share`, `update_share` or `send_message`, all of which put something in the outbox. The *rider's trip* is the route and departure the user chose, or the bus they boarded. *Untrusted text* is service-alert text, contact replies, contact notes, and anything in an uploaded schedule.
 
@@ -58,7 +58,7 @@ P21. [Schedule · isolation] Only the Schedule agent reads uploads (`extract_sch
 | P2 | Share | permission | SR8 | — | T3 |
 | P3 | Concierge, Share | permission | SR2 | SR2 (flags for review) | T3 |
 | P4 | Concierge, Share | lifecycle | SR1 | — | T3 |
-| P5 | Share | capability | SR3 | SR3 | T3 |
+| P5 | Share | capability | SR3 | SR3 (fields and message text); enforced on share messages (guard) | T3 |
 | P6 | Share | capability | SR4 | — | T3 |
 | P7 | Share | capability | SR5 | SR5 | — |
 | P8 | Concierge, Share | information flow | SR12 | SR12 | T3 |
@@ -66,9 +66,9 @@ P21. [Schedule · isolation] Only the Schedule agent reads uploads (`extract_sch
 | P10 | Concierge, Route+ETA | capability | FR4a | — | T1, T2 |
 | P11 | Concierge, Schedule | lifecycle | SR14 | — | T1 |
 | P12 | Schedule, Route+ETA, Concierge | capability | SR15 | — | — |
-| P13 | Concierge, Route+ETA, Share | information flow | SR7 | SR7; enforced on shares and replies with `GUARDS=P13` | T1–T3 (violated in T3; held in the guarded T3 runs) |
+| P13 | Concierge, Route+ETA, Share | information flow | SR7 | SR7; enforced on shares and replies (guard) | T1–T3 |
 | P14 | Concierge, Route+ETA | capability | SR11 | SR11 | T2 |
-| P15 | Concierge, Route+ETA | information flow | SR17 | SR17 | T1, T2 (violated) |
+| P15 | Concierge, Route+ETA | information flow | SR17 | SR17; enforced on replies (guard) | T1, T2 |
 | P16 | Share | lifecycle | SR10 | — | T3 |
 | P17 | Concierge, Share | lifecycle | SR9, FR12 | — | T3 |
 | P18 | All | information flow | SR6, SR16 | — | — |

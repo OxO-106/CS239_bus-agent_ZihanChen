@@ -1,10 +1,10 @@
-"""Phase 2 guards (GUARDS=P13): the share tools only send an ETA for the rider's own trip."""
+"""The P13 guard (on by default): shares and replies carry only the rider's own trip times."""
 import pytest
 
 from bus_agent import gtfs
 from bus_agent.routing import Router
 from bus_agent.agent import Agent
-from bus_agent.agents import Concierge
+from bus_agent.agents import Concierge, p15_reply_check
 from bus_agent.tools import p13_reply_check, route_tools, share_tools
 from bus_agent.trace import Trace
 from bus_agent.world import World
@@ -159,3 +159,66 @@ def test_concierge_without_guards_is_unchanged(world, monkeypatch):
     world.guards = set()
     agent = scripted(world, ["Departs 09:03."], monkeypatch)
     assert agent.run("notice") == "Departs 09:03." and not blocked(world)
+
+
+def plan_result(n=3):
+    routes = [{"route_id": f"r{i}", "lines": [line]} for i, line in enumerate(["CC6R", "M761", "CC6"][:n])]
+    return {"origin": "Home", "destination": "Boelter Hall", "count": n, "routes": routes}
+
+
+def p15_turn(world):
+    world.guards = {"P15"}
+    world.trace.log("user", "message", {"to": "concierge", "text": "How do I get to Boelter Hall?"})
+
+
+def test_reply_hiding_routes_is_flagged(world):
+    turn = [{"t": "08:20", "agent": "route", "kind": "tool_result", "data": {"name": "plan_routes", "result": plan_result()}}]
+    error, fallback = p15_reply_check(turn, "Take the CC6R.")
+    assert "3 routes" in error and "CC6R, M761, CC6" in error and "There are 3 suitable routes" in fallback
+    assert p15_reply_check(turn, "Take the CC6R, the M761 or the CC6.") is None
+    assert p15_reply_check(turn, "There are 3 routes; the CC6R is fastest.") is None
+
+
+def test_concierge_rewrites_a_reply_that_hides_routes(world, monkeypatch):
+    p15_turn(world)
+    agent = Scripted(world, ["Take the CC6R.", "Take the CC6R, the M761 or the CC6."])
+
+    def run(self, content, images=None):  # the model plans on its first call, then only answers
+        if not self.prompts:
+            self.trace.log("route", "tool_result", {"name": "plan_routes", "result": plan_result()})
+        self.prompts.append(content)
+        return self.replies.pop(0)
+    monkeypatch.setattr(Agent, "run", run)
+    assert agent.run("How do I get to Boelter Hall?") == "Take the CC6R, the M761 or the CC6."
+    assert "P15" in agent.prompts[1] and blocked(world)[0]["policy"] == "P15"
+
+
+def test_concierge_appends_the_count_after_failed_rewrites(world, monkeypatch):
+    p15_turn(world)
+    agent = Scripted(world, ["Take the CC6R."] * 3)
+
+    def run(self, content, images=None):
+        if not self.prompts:
+            self.trace.log("route", "tool_result", {"name": "plan_routes", "result": plan_result()})
+        self.prompts.append(content)
+        return self.replies.pop(0)
+    monkeypatch.setattr(Agent, "run", run)
+    assert agent.run("How do I get there?").endswith("There are 3 suitable routes from Home to Boelter Hall; ask me to show all of them.")
+
+
+def test_share_message_naming_the_line_is_blocked(world):
+    world.guards = {"P5"}
+    planned(world)
+    share_t = share_tools(world)
+    result = call(share_t, "create_share", recipient="mom", eta=True, eta_time="09:11", message="On the Rapid 6.")
+    assert "error" in result and "CC6R" in result["error"] and not world.outbox
+    assert blocked(world)[0]["policy"] == "P5"
+    call(share_t, "create_share", recipient="mom", eta=True, route=True, eta_time="09:11", message="On the Rapid 6.")
+    assert world.outbox[-1]["message"] == "On the Rapid 6."
+
+
+def test_eta_only_message_naming_a_stop_is_blocked(world):
+    world.guards = {"P5"}
+    planned(world)
+    result = call(share_tools(world), "create_share", recipient="mom", eta=True, message="Boarding at Sepulveda Blvd & Exposition Blvd.")
+    assert "error" in result and "Sepulveda Blvd & Exposition Blvd" in result["error"]

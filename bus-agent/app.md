@@ -12,4 +12,4 @@ Five LLM agents work together in a hub topology: the **Concierge** talks to the 
 - **React to delays and alerts:** recompute ETAs and leave-by times, re-plan, and report which routes were kept, changed, dropped or added.
 - **Share live travel status:** share only the fields the user picks (ETA, route, live location at a chosen precision) with a contact, for one trip, update the share when the ETA changes, and end it on arrival, at expiry, or when the user says stop.
 
-Files in this folder: [policy.md](policy.md) (P1–P21), [tools.md](tools.md), [agents/](agents) (one file per agent with its system prompt) and [episodes/](episodes) (nine recorded runs: example1–3 plan my day, example4–6 running late, example7–9 share with Mom).
+Files in this folder: [policy.md](policy.md) (P1–P21), [tools.md](tools.md), [agents/](agents) (one file per agent with its system prompt) and [episodes/](episodes) (three recorded runs: example1 plan my day, example2 running late, example3 share with Mom).

@@ -4,13 +4,11 @@ A multi-agent public-transit assistant for a UCLA student (CS 239, Fall 2026). I
 
 Everything below runs from this `src/` folder.
 
-**Status: Phase 1 (unguarded prototype).** The agents use plain "helpful assistant" prompts, and the tools validate nothing. The traces record what the agents do without guards, including any rule they break, so Phase 2 can show those cases being intercepted.
+## Traces
 
-## Phase 1 traces
+Three traces, one per scenario, each an ordinary request: **T1** plan my day from the schedule image, **T2** running late when no route arrives in time, **T3** an ETA-only share with Mom through a delay to arrival. What each one tests: [requirements.md §5](requirements.md#5-trace-scenarios). Traces and results: [traces/README.md](traces/README.md).
 
-Three scenarios, each an ordinary request: **T1** plan my day from the schedule image, **T2** running late when no route arrives in time, **T3** an ETA-only share with Mom through a delay to arrival. What each one tests: [requirements.md §5](requirements.md#5-trace-scenarios). Runs and results: [traces/README.md](traces/README.md).
-
-Result (3 runs each, `gemma4:12b`, thinking on): with no unusual input, the assistant hid suitable routes in 5 of the 6 runs that listed routes (SR17, T1 and T2), and every T3 run sent Mom an ETA for a different bus than the one the rider was on (SR7). Every other checked requirement held. The traces include each agent's thoughts, so the reasoning behind each mistake is visible.
+All three are compliant: every checked policy held, and no guard had to fire. Getting there took tool, prompt and guard changes. The first version, with plain prompts and no validation, hid suitable routes (P15) and sent Mom an ETA for the wrong bus (P13); [traces/README.md](traces/README.md#what-makes-these-runs-compliant) explains what changed.
 
 ## Setup
 
@@ -31,7 +29,7 @@ Result (3 runs each, `gemma4:12b`, thinking on): with no unusual input, the assi
 | `OLLAMA_NUM_CTX` | `16384` | Context window |
 | `OLLAMA_KEEP_ALIVE` | `30m` | How long Ollama keeps the model loaded |
 | `MODEL_<AGENT>`, `THINK_<AGENT>` | — | Per-agent overrides; `<AGENT>` is `CONCIERGE`, `SCHEDULE`, `TRANSIT`, `ROUTE` or `SHARE` |
-| `GUARDS` | (none) | Phase 2 policies the tools enforce, comma-separated. `P13`: an agent's ETA share must carry `compute_eta` for the rider's trip, the Concierge's replies may name only that trip's times, and `compute_eta` takes the departure the rider chose. Unset reproduces the Phase 1 traces |
+| `GUARDS` | `P5,P13,P15` | Policies the tools and the Concierge enforce, comma-separated; `GUARDS=` with no value turns them all off. `P5`: a share message names no line or stop the share doesn't include. `P13`: a share's ETA is `compute_eta` for the rider's trip, the Concierge's replies name only that trip's times, and `compute_eta` takes the departure the rider chose. `P15`: a Concierge reply shows every planned route or states the count |
 
 All other data is local and committed: trimmed GTFS feeds, mock buildings, places and contacts, and a generated sample schedule. Real-time data and sending are simulated.
 
@@ -55,7 +53,7 @@ Open http://localhost:8239. It looks like a regular map app:
   - **Send by:** text, email or a link, with a preview of the exact message.
 
   Sending is simulated: the text or email goes into the outbox with a link to `/t/<token>`.
-- **Shared trip page** (`/t/<token>`, what Mom sees): the arrival time with any delay, a circle for the shared location at the chosen precision, and trip progress. It shows only the fields that were shared. While the share is live the app keeps it current: after boarding and after delays the ETA comes from `compute_eta`, and a text update goes out. On arrival, expiry or Stop, the page and a final message say sharing has ended, and nothing live is shown any more. Shares made through the chat are the agents' own (Phase 1, unguarded) and don't get this page.
+- **Shared trip page** (`/t/<token>`, what Mom sees): the arrival time with any delay, a circle for the shared location at the chosen precision, and trip progress. It shows only the fields that were shared. While the share is live the app keeps it current: after boarding and after delays the ETA comes from `compute_eta`, and a text update goes out. On arrival, expiry or Stop, the page and a final message say sharing has ended, and nothing live is shown any more. Shares made through the chat are the agents' own and don't get this page.
 - **Assistant:** the round button at the bottom right opens and closes a floating chat window (a bottom sheet on a phone). Everything above also works through the chat (the paperclip uploads a schedule there). Button actions are logged in the trace as the user's actions and the app's tool calls, so the checks see them too.
 - **Inspector drawer:** *Session* picks a scenario (T1, T2, T3) or live chat and saves the trace. *Checks* shows the safety checks, live shares, and everything that left the phone. *Activity* shows every agent message and tool call as it happens. While a scenario runs, a player bar at the bottom shows the next event with a **Play** button.
 
@@ -64,9 +62,8 @@ When a scenario has no scripted answer to a question, the question waits for you
 ## Run
 
 ```bash
-python -m bus_agent.main scenarios/t1_plan_my_day.json --runs 3
+python -m bus_agent.main scenarios/t1_plan_my_day.json
 python -m bus_agent.checks traces/*.json
-GUARDS=P13 python -m bus_agent.main scenarios/t3_share_with_mom.json --runs 3
 python -m bus_agent.main --interactive --upload data/samples/schedule_clean.png
 ```
 
@@ -76,7 +73,7 @@ A scenario (`scenarios/*.json`) has a start time, uploads, and a timeline of eve
 
 After each run, `bus_agent/checks.py` scores the trace against SR2, SR3, SR5, SR7, SR11, SR12 and SR17 and stores the result in the header. `python -m bus_agent.checks traces/*.json` prints the violation table.
 
-Agents: the Concierge talks to the user and calls the specialists through `bus.py`, a hub that rejects specialist-to-specialist messages. Schedule, Transit, Route+ETA, and Share each have their own tools (`bus_agent/tools.py`). In Phase 1 the tools don't validate anything.
+Agents: the Concierge talks to the user and calls the specialists through `bus.py`, a hub that rejects specialist-to-specialist messages. Schedule, Transit, Route+ETA, and Share each have their own tools (`bus_agent/tools.py`). The guards (`GUARDS`) live in the share tools (P5, P13) and in the `Concierge` class in `agents.py` (P13 and P15 on its replies). A blocked share returns an error naming the right value. A blocked reply goes back to the Concierge to rewrite, up to 2 times, before a fallback built from tool results is sent. Every block is logged as a `guard` event. Without guards, the tools validate nothing.
 
 ## Tests
 
@@ -103,7 +100,7 @@ Results: [bench/README.md](bench/README.md).
 |---|---|
 | `bus_agent/` | `episode.py` episode Markdown and export; `web.py` + `static/index.html` web app; `llm.py` Ollama client; `gtfs.py` feed loading; `routing.py` deterministic route search; `agent.py` tool-calling loop; `agents.py` prompts; `tools.py`; `bus.py` hub; `world.py` simulated world and outbox; `trace.py`; `checks.py`; `main.py` CLI |
 | `scenarios/` | Scenario timelines (T1 plan my day, T2 running late, T3 share with Mom) |
-| `traces/` | Phase 1 traces (JSON), `notes.json` (a note on what happened in each run) and the README; the episodes exported from them are in `../bus-agent/episodes/` |
+| `traces/` | The three submitted traces (JSON), `notes.json` (a note on each run) and the README; the episodes exported from them are in `../bus-agent/episodes/` |
 | `data/gtfs/` | Trimmed GTFS feeds (Culver CityBus, LA Metro bus and rail, Big Blue Bus) |
 | `data/mock/` | UCLA buildings, saved places (placeholder Home), contacts |
 | `data/samples/` | A generated fake schedule, as image and text |

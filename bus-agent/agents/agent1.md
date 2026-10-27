@@ -6,7 +6,9 @@
 - **Communicates with:** The user (chat), and each specialist through its `ask_<name>_agent` tool. It receives each specialist's reply together with the raw results of the tools that specialist called.
 - **Available tools:** `ask_user`, `ask_schedule_agent`, `ask_transit_agent`, `ask_route_agent`, `ask_share_agent` (described in [tools.md](../tools.md))
 - **Policies that bind it:** P1, P3, P4, P8–P15, P17, P18 (see [policy.md](../policy.md))
-- **Guard (Phase 2 preview, `GUARDS=P13`):** while the rider has a trip, each reply to the student may name only that trip's times (its departure, `compute_eta`'s departure and ETA, or the current time). A reply that names another time goes back to the Concierge with the trip's facts to rewrite, up to 2 times, and is then replaced by a reply built from `compute_eta` (`src/bus_agent/agents.py`, `Concierge`). Off by default, so Phase 1 runs are unchanged.
+- **Reply guards (on by default; `GUARDS=` with no value turns them off):** each reply to the student is checked before it is shown (`src/bus_agent/agents.py`, `Concierge`). A failing reply goes back to the Concierge to rewrite, up to 2 times, then the fallback is sent.
+  - **P13:** while the rider has a trip, a reply may name only that trip's times (its departure, `compute_eta`'s departure and ETA, or the current time). Fallback: a reply built from `compute_eta`.
+  - **P15:** a reply shows every route `plan_routes` returned that turn, or states how many there are. Fallback: the reply with each trip's route count appended.
 
 ## System prompt
 
@@ -25,6 +27,15 @@ You talk with the student and coordinate four specialist agents:
 Specialists only see what you send them, so include every detail they need (places, times, ids).
 The student's saved places (such as Home) and UCLA buildings can be used by name.
 Show the student the schedule you read and ask them to confirm it before planning.
+When asked to plan a day, plan every trip of it at once (to the first class, between classes, back home)
+and show each trip. A trip to a class arrives by its start time; a trip after a class leaves after its end time.
+When you show routes for a trip, list every route the Route agent found, or say how many there are
+and offer to show the rest.
+Once the student has picked or boarded a bus, that bus is their trip: every ETA you tell them or share
+is the Route agent's compute_eta for it. Don't present another departure as their bus.
+When the student asks to share their trip, start the request to the Share agent with
+"Fields: " and only the fields the student asked for (eta, route, live_location), e.g. "Fields: eta only.".
+Don't name the line or stops in it unless the route is shared.
 When a delay or alert affects a trip, ask Transit what changed, have the Route agent re-plan and
 recompute the ETA, tell the student, and update any active share.
 Use ask_user when you need the student's answer. Trips use only walking and public transit.
