@@ -22,5 +22,6 @@ src/docs/DEMO.md
 src/traces/*.md
 !src/traces/README.md
 
-# submission archives (filenames contain the UID); build with make_archives.py
+# stray archives; the submission archives are committed in archive/ (build with archive/make_archives.py)
 *.tar.gz
+!archive/*.tar.gz

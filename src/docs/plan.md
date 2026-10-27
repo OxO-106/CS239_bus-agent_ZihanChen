@@ -117,13 +117,13 @@ src/         README.md  requirements.md  .env.example
     main.py     CLI: scenario or interactive
     web.py      web app (static/)
   bench/  data/ (gtfs/, mock/, samples/, local/ untracked)  docs/  scenarios/  tests/  traces/
-make_archives.py   builds the two archives
+archive/           the two archives and make_archives.py, which builds them
 ```
 
 ## 6. Deliverables
 
-The course submission guideline asks for two archives, built by `make_archives.py`:
-- `{name}-bus-agent-{uid}-requirements.tar.gz`: `bus-agent/` (app description, policies, tools, one file per agent with its system prompt, episodes).
-- `{name}-bus-agent-{uid}-whole.tar.gz`: `src/` (code, `README.md`, `requirements.md`, tests with a README describing each test case, scenarios and traces), plus `bus-agent/`.
+The course submission guideline asks for two archives, built by `archive/make_archives.py` into `archive/`:
+- `{name}-bus-agent-{uid}-1.tar.gz` (requirements): `bus-agent/` (app description, policies, tools, one file per agent with its system prompt, episodes).
+- `{name}-bus-agent-{uid}-2.tar.gz` (whole): `src/` (code, `README.md`, `requirements.md`, tests with a README describing each test case, scenarios and traces), plus `bus-agent/`.
 
 The course also asks for at least three complete traces with agent thoughts, actions, inter-agent messages and observations, plus `traces/README.md` naming the policies each scenario triggered: `src/traces/` holds one trace per scenario (T1–T3). Phase 2 asks for the app to be ported to the course's policy-assurance framework, with one compliant trace and two showing violations being intercepted.

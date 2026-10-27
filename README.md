@@ -6,13 +6,13 @@ The repository follows the course submission guidelines: each top-level folder i
 
 | Folder | Archive | Contents |
 |---|---|---|
-| [bus-agent/](bus-agent) | `{name}-bus-agent-{uid}-requirements.tar.gz` | Application description: [app.md](bus-agent/app.md), [policy.md](bus-agent/policy.md) (P1–P21), [tools.md](bus-agent/tools.md), [agents/](bus-agent/agents) (agent1–5 with their system prompts), [episodes/](bus-agent/episodes) (example1–3, the three recorded traces) |
-| [src/](src) | `{name}-bus-agent-{uid}-whole.tar.gz` | Source code and requirements: [README.md](src/README.md) (setup and run), [requirements.md](src/requirements.md), the code, [tests/](src/tests), data, scenarios and [traces/](src/traces) (raw JSON traces and the [README](src/traces/README.md) naming the policy each scenario triggered) |
+| [bus-agent/](bus-agent) | `ZihanChen-bus-agent-306999065-1.tar.gz` (requirements) | Application description: [app.md](bus-agent/app.md), [policy.md](bus-agent/policy.md) (P1–P21), [tools.md](bus-agent/tools.md), [agents/](bus-agent/agents) (agent1–5 with their system prompts), [episodes/](bus-agent/episodes) (example1–3, the three recorded traces) |
+| [src/](src) | `ZihanChen-bus-agent-306999065-2.tar.gz` (whole) | Source code and requirements: [README.md](src/README.md) (setup and run), [requirements.md](src/requirements.md), the code, [tests/](src/tests), data, scenarios and [traces/](src/traces) (raw JSON traces and the [README](src/traces/README.md) naming the policy each scenario triggered) |
 
-Build both archives (they hold only tracked files, so `.env` and `src/data/local/` stay out; the `.tar.gz` files are gitignored):
+Both archives are committed in [archive/](archive), with the script that builds them. They hold only tracked files, so `.env` and `src/data/local/` stay out. To rebuild them:
 
 ```bash
-python make_archives.py <name> <uid>
+python archive/make_archives.py ZihanChen 306999065
 ```
 
 Quick start (details in [src/README.md](src/README.md)):
