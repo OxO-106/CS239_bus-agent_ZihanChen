@@ -17,3 +17,7 @@ transit_api_key.txt
 
 # demo script, kept locally only
 src/docs/DEMO.md
+
+# per-run episode .md is generated; the committed episodes are in bus-agent/episodes/
+src/traces/*.md
+!src/traces/README.md

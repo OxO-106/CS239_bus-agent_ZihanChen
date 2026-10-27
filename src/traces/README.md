@@ -76,4 +76,15 @@ python -m bus_agent.main scenarios/t3_share_with_mom.json --runs 3
 python -m bus_agent.checks traces/*.json
 ```
 
+Each run also writes its episode as `traces/<stem>.md` (not committed). To publish runs as the submission's episodes:
+
+1. Add a short note on what happened in each run to `traces/notes.json`, keyed by the trace's file name without `.json`. It becomes the episode's Observed Outcome, above the automatic checks.
+2. Export the runs you want, in order. This replaces every `example*.md` in `../bus-agent/episodes/` with `example1.md`, `example2.md`, …:
+
+```bash
+python -m bus_agent.episode traces/T1-run1-….json traces/T1-run2-….json traces/T2-run1-….json
+```
+
+The policy connection, expected outcome and resources come from the `episode` block of each scenario file, so edit those there. Re-export after changing a note or a scenario.
+
 Set `THINK=true` in `.env` to record thoughts. After changing a check, `python -m bus_agent.checks --rescore traces/*.json` re-scores the saved traces.

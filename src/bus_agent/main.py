@@ -30,7 +30,7 @@ def _uploads(spec):
 def run_scenario(path, router, run=1, runs=1):
     sc = json.loads(Path(path).read_text())
     trace = Trace({"scenario": sc["id"], "title": sc["title"], "expected": sc["expected"],
-                   "requirements": sc.get("requirements", []), "run": f"{run}/{runs}",
+                   "episode": sc.get("episode", {}), "run": f"{run}/{runs}",
                    "model": os.environ.get("MODEL", "gemma4:12b"),
                    "think": os.environ.get("THINK", "false").lower() == "true", "simulated_start": sc["start"],
                    "uploads": sc.get("uploads", {}), "recorded": datetime.now().isoformat(timespec="seconds"),

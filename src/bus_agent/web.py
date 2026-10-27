@@ -121,7 +121,7 @@ class Session:
         self.step_i = 0
         start = self.sc["start"] if self.sc else datetime.now().isoformat(timespec="minutes")
         header = ({"scenario": self.sc["id"], "title": self.sc["title"], "expected": self.sc["expected"],
-                   "requirements": self.sc.get("requirements", []), "uploads": self.sc.get("uploads", {})}
+                   "episode": self.sc.get("episode", {}), "uploads": self.sc.get("uploads", {})}
                   if self.sc else {"scenario": "web", "title": "web session"})
         header.update(recorded=datetime.now().isoformat(timespec="seconds"), app="web",
                       specialist_replies="summary + raw tool results")

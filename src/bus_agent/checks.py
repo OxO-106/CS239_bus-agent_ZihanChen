@@ -245,7 +245,7 @@ def rescore(path, scenario, contacts, places):
     path.write_text(json.dumps(d, indent=1, ensure_ascii=False), "utf-8")
     t = Trace(d["header"])
     t.events = d["events"]
-    path.with_suffix(".md").write_text(t.markdown(), "utf-8")
+    path.with_suffix(".md").write_text(t.markdown(path.stem), "utf-8")
 
 
 if __name__ == "__main__":

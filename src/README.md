@@ -68,9 +68,9 @@ python -m bus_agent.checks traces/*.json
 python -m bus_agent.main --interactive --upload data/samples/schedule_clean.png
 ```
 
-A scenario run writes `traces/<id>-run<n>-<timestamp>.json` and a `.md` with the same name. Each trace has a header (scenario, expected outcome, requirements, run n/N, model) followed by every message, thought, tool call, tool result, world event, and outbox entry. Interactive traces go to `data/local/traces/` (untracked). `--real-home` uses `data/local/home.json`.
+A scenario run writes `traces/<id>-run<n>-<timestamp>.json` and a `.md` with the same name. The `.md` is an episode in the submission format (`bus_agent/episode.py`): Initial Inputs (the scenario's resources, user requests and world events), Trajectory (every message, thought, tool call, tool result, world event and outbox entry, with the acting agent), Policy Connection, Expected Outcome (including what must be rejected), then Observed Outcome (your note from `traces/notes.json` plus the automatic checks). The policy connection and expected outcome come from the scenario's `episode` block. Interactive traces go to `data/local/traces/` (untracked). `--real-home` uses `data/local/home.json`.
 
-A scenario (`scenarios/*.json`) has a start time, uploads, and a timeline of events: `user` (a message, with optional scripted answers to `ask_user`), `delay`, `alert`, `gps`, `board`, `reply`, and `arrive`. Any event can include `notify`, which sends a system notice to the Concierge. Nothing is really sent. Messages and shares go to the world's outbox.
+A scenario (`scenarios/*.json`) has a start time, uploads, and a timeline of events: `user` (a message, with optional scripted answers to `ask_user`), `delay`, `alert`, `gps`, `board`, `reply`, and `arrive`. Any event can include `notify`, which sends a system notice to the Concierge. Its `episode` block (receiving agents, resources, policies with a note each, expected outcome, what must be prevented) fills the episode's Policy Connection and Expected Outcome. Nothing is really sent. Messages and shares go to the world's outbox.
 
 After each run, `bus_agent/checks.py` scores the trace against SR2, SR3, SR5, SR7, SR11, SR12 and SR17 and stores the result in the header. `python -m bus_agent.checks traces/*.json` prints the violation table.
 
@@ -99,9 +99,9 @@ Results: [bench/README.md](bench/README.md).
 
 | Path | Contents |
 |---|---|
-| `bus_agent/` | `web.py` + `static/index.html` web app; `llm.py` Ollama client; `gtfs.py` feed loading; `routing.py` deterministic route search; `agent.py` tool-calling loop; `agents.py` prompts; `tools.py`; `bus.py` hub; `world.py` simulated world and outbox; `trace.py`; `checks.py`; `main.py` CLI |
+| `bus_agent/` | `episode.py` episode Markdown and export; `web.py` + `static/index.html` web app; `llm.py` Ollama client; `gtfs.py` feed loading; `routing.py` deterministic route search; `agent.py` tool-calling loop; `agents.py` prompts; `tools.py`; `bus.py` hub; `world.py` simulated world and outbox; `trace.py`; `checks.py`; `main.py` CLI |
 | `scenarios/` | Scenario timelines (T1 plan my day, T2 running late, T3 share with Mom) |
-| `traces/` | Phase 1 traces (JSON) and their README; the Markdown versions are the episodes in `../bus-agent/episodes/` |
+| `traces/` | Phase 1 traces (JSON), `notes.json` (a note on what happened in each run) and the README; the episodes exported from them are in `../bus-agent/episodes/` |
 | `data/gtfs/` | Trimmed GTFS feeds (Culver CityBus, LA Metro bus and rail, Big Blue Bus) |
 | `data/mock/` | UCLA buildings, saved places (placeholder Home), contacts |
 | `data/samples/` | A generated fake schedule, as image and text |
