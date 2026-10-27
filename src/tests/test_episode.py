@@ -24,10 +24,28 @@ def test_fields_come_from_the_scenario():
     assert "- P15 (SR17 hidden routes): **violated**: showed 1 of 8" in md
 
 
-def test_trajectory_names_the_acting_agent_and_escapes_cells():
+def test_trajectory_is_numbered_steps_naming_the_acting_agent():
     md = render(HEADER, EVENTS)
-    assert "| 09:40 | route | tool_call | `plan_routes({})` |" in md
-    assert "Get me there \\| fast" in md
+    assert "**1.** `09:40` **User → Concierge**\n\n> Get me there | fast" in md
+    assert "**2.** `09:40` **Route+ETA → `plan_routes`**()" in md
+
+
+def test_tool_results_are_summarized_and_hub_echoes_dropped():
+    events = [
+        {"t": "08:55", "agent": "concierge", "kind": "thought", "data": "The bus is late."},
+        {"t": "08:55", "agent": "concierge", "kind": "tool_call", "data": {"name": "ask_route_agent", "arguments": {"request": "ETA?"}}},
+        {"t": "08:55", "agent": "concierge", "kind": "message", "data": {"to": "route", "text": "ETA?"}},
+        {"t": "08:55", "agent": "route", "kind": "tool_call", "data": {"name": "compute_eta", "arguments": {"route_id": "CC6R:A>B"}}},
+        {"t": "08:55", "agent": "route", "kind": "tool_result", "data": {"name": "compute_eta", "result": {
+            "route_id": "CC6R:A>B", "depart": "08:54", "eta": "09:19", "delay_min": 8}}},
+        {"t": "08:55", "agent": "route", "kind": "message", "data": {"to": "concierge", "text": "09:19\n\nRaw tool results:\n[...]"}},
+        {"t": "08:55", "agent": "concierge", "kind": "tool_result", "data": {"name": "ask_route_agent", "result": "09:19 …"}},
+    ]
+    md = render(HEADER, events)
+    assert "<details><summary>Concierge's reasoning</summary>\n\n> The bus is late." in md
+    assert "**2.** `08:55` **Route+ETA → `compute_eta`**(route_id: CC6R:A>B) → ETA **09:19** (departs 08:54, delay 8 min)" in md
+    assert "ask_route_agent" not in md and "Raw tool results" not in md
+    assert "**3.** `08:55` **Route+ETA → Concierge**" in md and "**4.**" not in md
 
 
 def test_live_session_uses_the_users_messages():

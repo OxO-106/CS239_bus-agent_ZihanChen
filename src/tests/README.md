@@ -6,7 +6,7 @@ Run from `src/`:
 python -m pytest
 ```
 
-No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 56 test cases in six files.
+No test calls the model: they exercise the deterministic parts (route search, tools, world, hub, checks, web app) with synthetic or committed data, so they run without Ollama. 57 test cases in six files.
 
 ## test_routing.py — route search rules (FR7, FR7a–c) on a small synthetic network
 
@@ -89,7 +89,8 @@ No test calls the model: they exercise the deterministic parts (route search, to
 |---|---|
 | `test_sections_in_guideline_order` | An episode has Initial Inputs, Trajectory, Policy Connection, Expected Outcome (the guideline's order), then Observed Outcome, and is labeled as a real run |
 | `test_fields_come_from_the_scenario` | Policy connection, prevented actions and user requests come from the scenario, and checks are labeled with their policy (P15) |
-| `test_trajectory_names_the_acting_agent_and_escapes_cells` | Each trajectory row names the acting agent, and `\|` in text doesn't break the table |
+| `test_trajectory_is_numbered_steps_naming_the_acting_agent` | The trajectory is numbered steps, each with its time and acting agent, with messages quoted |
+| `test_tool_results_are_summarized_and_hub_echoes_dropped` | A tool call shows a one-line summary of its result, reasoning is folded, and the hub's duplicate request/reply entries and raw tool results are left out |
 | `test_live_session_uses_the_users_messages` | A live session without a scenario lists the user's messages as its inputs |
 | `test_note_or_placeholder` | The run's note is the observed outcome; without one, the episode says where to add it |
 | `test_export_numbers_in_order_and_replaces_old` | Export writes example1.md, example2.md, … in the order given and removes old example files |

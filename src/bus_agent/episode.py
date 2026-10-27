@@ -19,10 +19,13 @@ NOTES = ROOT / "traces" / "notes.json"
 # each automatic check (named by its safety requirement) and the policy it scores
 CHECK_POLICY = {"SR2": "P3", "SR3": "P5", "SR5": "P7", "SR7": "P13", "SR11": "P14", "SR12": "P8", "SR17": "P15"}
 
-TRAJECTORY_INTRO = ("Every step of the run in order. *Agent* is the acting agent (`user` is the user, `world` and "
-                    "`system` the simulated environment). Kinds: `message` (to another agent or the user), `thought` "
-                    "(the agent's reasoning), `tool_call`, `tool_result`, `outbox` (anything sent outside the app) and "
-                    "world events. Long tool results are cut, with their full length in brackets.")
+TRAJECTORY_INTRO = ("Each step starts with the simulated time and the acting agent. Messages between agents are quoted; "
+                    "a tool call is shown with a one-line summary of its result; each agent's reasoning is folded "
+                    "above the step it led to. The complete log, with every full tool result, is the JSON trace.")
+
+NAMES = {"user": "User", "concierge": "Concierge", "schedule": "Schedule", "transit": "Transit", "route": "Route+ETA",
+         "share": "Share", "system": "System", "world": "World"}
+HUB_TOOLS = {"ask_user", "ask_schedule_agent", "ask_transit_agent", "ask_route_agent", "ask_share_agent"}
 
 
 def scenario_for(header):
@@ -45,8 +48,7 @@ def render(header, events, stem=None, title=None, note=None):
         note = load_notes().get(stem)
     lines = [title or f"# Episode {header.get('scenario', '')}: {header.get('title', '')}", "", _label(header, sc, stem), ""]
     lines += ["## Initial Inputs", ""] + _inputs(header, events, sc, ep) + [""]
-    lines += ["## Trajectory", "", TRAJECTORY_INTRO, "", "| Time | Agent | Kind | Detail |", "|---|---|---|---|"]
-    lines += [f"| {e['t']} | {e['agent']} | {e['kind']} | {cell(e)} |" for e in events]
+    lines += ["## Trajectory", "", TRAJECTORY_INTRO, ""] + trajectory(events)
     lines += ["", "## Policy Connection", ""]
     lines += [f"- **{p['id']}:** {p['note']}" for p in ep.get("policies", [])] or ["- None recorded for this run."]
     lines += ["", "## Expected Outcome", ""]
@@ -94,19 +96,90 @@ def _inputs(header, events, sc, ep):
     return out
 
 
-def cell(e):
-    d = e["data"]
-    if e["kind"] == "tool_call":
-        text = f"`{d['name']}({json.dumps(d['arguments'], ensure_ascii=False)})`"
-    elif e["kind"] == "tool_result":
-        text = f"`{d['name']}` → {_short(d['result'])}"
-    elif e["kind"] == "message":
-        text = f"**→ {d['to']}:** {d['text']}"
-    elif isinstance(d, str):
-        text = d
-    else:
-        text = json.dumps(d, ensure_ascii=False)
-    return text.replace("|", "\\|").replace("\n", "<br>")
+def trajectory(events):
+    """Numbered steps: messages, tool calls with their results summarized, world events and outbox entries."""
+    out, n, i = [], 0, 0
+    while i < len(events):
+        e, d = events[i], events[i]["data"]
+        who = NAMES.get(e["agent"], e["agent"])
+        if e["kind"] == "thought":
+            out += [f"<details><summary>{who}'s reasoning</summary>", "", _quote(d), "", "</details>", ""]
+            i += 1
+            continue
+        if e["kind"] in ("tool_call", "tool_result") and d["name"] in HUB_TOOLS:
+            i += 1  # the hub's messages below already show the request and the reply
+            continue
+        n += 1
+        head = f"**{n}.** `{e['t']}` "
+        if e["kind"] == "message":
+            text = d["text"].split("\n\nRaw tool results:")[0].strip()
+            out += [head + f"**{who} → {NAMES.get(d['to'], d['to'])}**", "", _quote(text)]
+        elif e["kind"] == "tool_call":
+            # a tool may send to the outbox before its own result is logged: show the result with the call
+            j = i + 1
+            while j < len(events) and events[j]["agent"] == "world":
+                j += 1
+            res = events[j] if j < len(events) and events[j]["kind"] == "tool_result" else None
+            args = ", ".join(f"{k}: {v if isinstance(v, str) else json.dumps(v)}" for k, v in d["arguments"].items())
+            line = head + f"**{who} → `{d['name']}`**({args})"
+            if res:
+                line += " → " + summarize(d["name"], res["data"]["result"])
+                events = events[:j] + events[j + 1:]  # local copy: the result is shown, drop it from the steps
+            out.append(line)
+        elif e["kind"] == "outbox":
+            body = {k: v for k, v in d.items() if k not in ("at", "kind", "to")}
+            out.append(head + f"**Outbox: {d['kind'].replace('_', ' ')} to {d.get('to')}** {json.dumps(body, ensure_ascii=False)}")
+        elif e["kind"] == "event":
+            body = {k: v for k, v in d.items() if k not in ("at", "type", "notify")}
+            out.append(head + f"**World: {d['type']}** {json.dumps(body, ensure_ascii=False)}")
+        else:
+            out.append(head + f"**{who}: {e['kind']}** {_short(d, 300)}")
+        out.append("")
+        i += 1
+    return out
+
+
+def summarize(tool, r):
+    """One line for a tool result; the full result stays in the JSON trace."""
+    if isinstance(r, dict) and r.get("error"):
+        return f"error: {r['error']}"
+    if tool == "plan_routes":
+        def one(route):
+            dep = (route.get("next_departures") or [{}])[0]
+            late = "" if dep.get("on_time_for_class", True) else " (late)"
+            return f"{'+'.join(route['lines'])} {dep.get('depart', '?')}→{dep.get('arrive', '?')}{late}"
+        excluded = f"; {len(r.get('excluded', []))} excluded" if r.get("excluded") else ""
+        return f"**{r['count']} routes** {r['origin']} → {r['destination']}: " + ", ".join(map(one, r["routes"])) + excluded
+    if tool == "compute_eta":
+        delay = f", delay {r['delay_min']} min" if r.get("delay_min") else ""
+        return f"ETA **{r['eta']}** (departs {r['depart']}{delay})"
+    if tool in ("get_schedule", "get_realtime_arrivals"):
+        delay = f", delay {r['delay_min']} min" if r.get("delay_min") else ""
+        return f"{r['line']} at {r['stop']}: " + ", ".join(r["departures"]) + delay
+    if tool == "get_service_alerts":
+        return f"{len(r['alerts'])} alerts; delays: " + (", ".join(f"{x['line']} +{x['delay_min']} min" for x in r["delays"]) or "none")
+    if tool.startswith("extract_schedule"):
+        cls = [f"{c['course']} {'/'.join(c['days'])} {c['start']}–{c['end']} ({c['confidence']})" for c in r.get("classes", [])]
+        return f"**{len(cls)} classes**: " + "; ".join(cls)
+    if tool == "create_share":
+        fields = ", ".join(k for k, v in r["fields"].items() if v) or "none"
+        until = "until arrival" if r.get("stop_on_arrival") else f"until {r.get('expires_at')}"
+        return f"share **{r['share_id']}** to {r['recipient']}: {fields}, {until}"
+    if tool == "update_share":
+        sent = r.get("sent") or {}
+        return f"update sent to {sent.get('to')}" + (f", ETA **{sent['eta']}**" if sent.get("eta") else "") + f" (share {r.get('share_status')})"
+    if tool == "revoke_share":
+        return f"share {r['share_id']} {r['status']}"
+    if tool == "compare_options":
+        kinds = {}
+        for c in r.get("changes", []):
+            kinds[c.get("status", "?")] = kinds.get(c.get("status", "?"), 0) + 1
+        return ", ".join(f"{v} {k}" for k, v in kinds.items()) or "no changes"
+    return _short(r, 200)
+
+
+def _quote(text):
+    return "\n".join("> " + line if line.strip() else ">" for line in str(text).strip().splitlines())
 
 
 def _short(value, limit=600):
