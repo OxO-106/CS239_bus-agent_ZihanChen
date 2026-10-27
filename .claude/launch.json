@@ -5,6 +5,7 @@
       "name": "bus-agent web",
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "bus_agent.web"],
+      "cwd": "src",
       "port": 8239
     }
   ]

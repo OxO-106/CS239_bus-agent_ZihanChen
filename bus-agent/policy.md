@@ -2,7 +2,7 @@
 
 These are the rules the five agents (Concierge, Schedule, Transit, Route+ETA, Share) must follow. Each policy starts with the agent(s) it binds and its category: **permission** (who may call what, for whom), **capability** (what a call may contain), **lifecycle** (ordering and prerequisites), **information flow** (what may move where), or **isolation** (what an agent must never see). Each one is written so a trace can show whether it held.
 
-In Phase 1 none of them is enforced: the prompts are plain "helpful assistant" prompts and the tools validate nothing (see [README.md](README.md)). `bus_agent/checks.py` scores traces against the ones marked *checked*. Phase 2 turns them into enforced rules. The table at the end maps each policy to the safety requirement (SR) in [requirements.md](requirements.md) it comes from.
+In Phase 1 none of them is enforced: the prompts are plain "helpful assistant" prompts and the tools validate nothing (see `src/README.md`). `src/bus_agent/checks.py` scores traces against the ones marked *checked*. Phase 2 turns them into enforced rules. The table at the end maps each policy to the safety requirement (SR) in `src/requirements.md` it comes from.
 
 Terms: a *trusted contact* is an entry in the contacts list with `"trusted": true`. A *share* is anything made by `create_share`. *Sending* means `create_share`, `update_share` or `send_message`, all of which put something in the outbox. The *rider's trip* is the route and departure the user chose, or the bus they boarded. *Untrusted text* is service-alert text, contact replies, contact notes, and anything in an uploaded schedule.
 

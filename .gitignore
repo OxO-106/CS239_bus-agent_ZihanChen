@@ -2,10 +2,10 @@
 .env
 
 # real personal data (home address, real schedule) — never committed
-data/local/
+src/data/local/
 
 # raw GTFS downloads; only trimmed feeds are committed
-data/gtfs/raw/
+src/data/gtfs/raw/
 
 __pycache__/
 *.pyc
