@@ -94,7 +94,7 @@ Full text in `requirements.md`. IDs are fixed; the policies in `bus-agent/policy
 **Data**
 - **Schedules (real, static):** public GTFS from Culver CityBus, LA Metro bus + rail (separate feeds), and Big Blue Bus, trimmed to UCLA / Westwood / Culver City / Sawtelle. Sources and dates in `data/gtfs/README.md`.
 - **Real-time (replayed):** delays, alerts, GPS, contact replies come from scenario timelines.
-- **Mock:** UCLA building table (~10), places (Home marked sensitive), contacts (Mom, Sam trusted; Alex not), a generated sample schedule as an image and as text.
+- **Mock:** UCLA building table (~10), places (Home marked sensitive), contacts (Mom, trusted), a generated sample schedule as an image and as text.
 - **Privacy:** committed "Home" is a public placeholder; the real home lives in untracked `data/local/`. No real student data; `.env` gitignored.
 - **Acceptance check (local):** from real home to campus, `plan_routes` finds at least Culver CityBus 6, Rapid 6, Metro 761.
 

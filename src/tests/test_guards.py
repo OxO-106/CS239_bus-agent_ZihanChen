@@ -321,6 +321,7 @@ def test_second_share_to_the_same_recipient_is_blocked(world):
     result = call(share_t, "create_share", recipient="Mom", eta=True, eta_time="09:11")
     assert "error" in result and first["share_id"] in result["error"] and len(world.shares) == 1
     assert blocked(world)[0]["policy"] == "P4"
+    world.contacts["sam"] = {"name": "Sam", "trusted": True, "channel": "sms:+1-555-0101"}  # a second trusted contact
     assert "error" not in call(share_t, "create_share", recipient="sam", eta=True, eta_time="09:11")
     call(share_t, "revoke_share", share_id=first["share_id"])
     assert "error" not in call(share_t, "create_share", recipient="mom", eta=True, eta_time="09:11")

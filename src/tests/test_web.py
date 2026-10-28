@@ -69,6 +69,7 @@ def test_share_sheet_lifecycle(router):
     trip = next(r for r in s.world.plans[-1]["result"]["routes"] if r["lines"] == ["CC6R"])
     opts = {"recipient": "mom", "fields": {"eta": True, "live_location": True, "route": False}, "precision": "exact",
             "duration": "arrive", "channel": "text", "trip": {"route_id": trip["route_id"], "depart": "08:46"}}
+    s.world.contacts["alex"] = {"name": "Alex", "trusted": False, "channel": "sms:+1-555-0102"}  # untrusted, test-only
     assert "error" in s.share({**opts, "recipient": "alex"})           # not a trusted contact
     out = s.share(opts)
     first = s.world.outbox[-1]
@@ -91,7 +92,8 @@ def test_share_sheet_lifecycle(router):
 
 def test_stop_share_and_link_share(router):
     s = Session(router, ROOT / "scenarios/t1_plan_my_day.json")  # Tuesday 08:00
-    base = {"recipient": "sam", "fields": {"eta": False, "live_location": True, "route": False}, "precision": "area",
+    s.world.contacts["alex"] = {"name": "Alex", "trusted": False, "channel": "sms:+1-555-0102"}  # untrusted, test-only
+    base = {"recipient": "mom", "fields": {"eta": False, "live_location": True, "route": False}, "precision": "area",
             "duration": "30", "trip": None}
     link = s.share({**base, "channel": "link"})
     text = s.share({**base, "channel": "text"})
@@ -143,7 +145,7 @@ def test_remove_all_data(router, tmp_path):
     (traces / "T1-run1-20261027-120000.json").write_text("{}")      # a CLI trace stays
     app = App(router)
     s = app.session
-    out = s.share({"recipient": "sam", "fields": {"eta": False, "live_location": True, "route": False},
+    out = s.share({"recipient": "mom", "fields": {"eta": False, "live_location": True, "route": False},
                    "precision": "area", "duration": "30", "channel": "text", "trip": None})
     res = app.remove_all_data(uploads, traces)
     assert res == {"ok": True, "shares_stopped": 1, "files_deleted": 2}
