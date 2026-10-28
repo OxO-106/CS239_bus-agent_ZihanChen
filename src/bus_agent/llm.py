@@ -33,13 +33,16 @@ def encode_image(path):
     return base64.b64encode(Path(path).read_bytes()).decode()
 
 
-def chat(messages, tools=None, format=None, agent=None, timeout=300):
-    """POST /api/chat and return the full response dict (message, eval_count, durations)."""
+def chat(messages, tools=None, format=None, agent=None, timeout=300, think=None):
+    """POST /api/chat and return the full response dict (message, eval_count, durations).
+    think overrides the THINK setting when given."""
+    if think is None:
+        think = _setting("THINK", agent, "false").lower() == "true"
     body = {
         "model": _setting("MODEL", agent, "gemma4:12b"),
         "messages": messages,
         "stream": False,
-        "think": _setting("THINK", agent, "false").lower() == "true",
+        "think": think,
         "keep_alive": os.environ.get("OLLAMA_KEEP_ALIVE", "30m"),
         "options": {"num_ctx": int(os.environ.get("OLLAMA_NUM_CTX", "16384")), "temperature": 0},
     }

@@ -78,7 +78,12 @@ def schedule_tools(w):
             msg = {"role": "user", "content": EXTRACT_PROMPT_WITH_NOTES, "images": [encode_image(ROOT / upload["image"])]}
         else:
             msg = {"role": "user", "content": EXTRACT_PROMPT_WITH_NOTES + "\n\nSchedule:\n" + upload["text"]}
-        w.schedule = json.loads(chat([msg], format="json", agent="schedule")["message"]["content"])
+        # No thinking: on a schedule image it can fill the whole context and leave no JSON in content.
+        resp = chat([msg], format="json", agent="schedule", think=False)
+        content = resp["message"].get("content", "").strip()
+        if not content:
+            return {"error": f"the extractor returned no JSON (done_reason: {resp.get('done_reason')})"}
+        w.schedule = json.loads(content)
         return w.schedule
 
     def extract_schedule_image(upload_id):
