@@ -1,5 +1,7 @@
 # Traces
 
+> **Phase 2:** this folder also holds the JSONL trajectories (`*.jsonl`) for all 9 test scenarios (T1–T9). T4–T9 were recorded on 2026-11-16, and T1–T3 are the Phase 1 runs below, converted to JSONL. The [root README](../../README.md#phase-2-branch-phase2) explains how to run and read them, and [test_cases.json](../../test_cases.json) records which policies each run followed or violated. The rest of this page describes the Phase 1 submission.
+
 Three traces, one per scenario, each a complete run: every user message, agent thought, inter-agent message, tool call, tool result, world event, outbox entry and guard event, in order. Each run writes `<scenario>-run<n>-<timestamp>.json` here, plus a `.md` with the same name. The `.md` is an episode, and the submitted episodes are exported to [bus-agent/episodes/](../../bus-agent/episodes):
 
 | Episode | Trace | Scenario |
