@@ -1,0 +1,971 @@
+{
+  "version": 1,
+  "application": "bus-agent",
+  "contract": "framework/porting-contract.md",
+  "runtime": {
+    "framework": "policyscope.enforcement.Policy",
+    "engine": "native Soufflé 2.5 subprocess, no fallback evaluator",
+    "souffleExecutable": "/opt/souffle/usr/bin/souffle",
+    "rules": "candidate/policy_port/rules.dl",
+    "adapter": "candidate/policy_port/adapter.py",
+    "tests": "candidate/policy_port/test_port.py",
+    "evidence": "candidate/policy_port/trajectories.json",
+    "policyHash": "044901e750a72f0e9fd312dfa37b3fdf454de930c0f3635cff76b4541e7abc3e",
+    "ruleCount": 57,
+    "edb": "in-memory managed EDB; each agent has a runtime and shares world-derived ETA/event facts; no external state mirror",
+    "trace": true,
+    "persistence": "No fact checkpoint file; application World remains the business-state authority."
+  },
+  "artifacts": {
+    "policy_port/adapter.py": {
+      "bytes": 24260,
+      "sha256": "0fe08911c1c905b25b4254a9a390227711fc92bfdc5fc8dd9f829c7ccc9bda8b"
+    },
+    "policy_port/rules.dl": {
+      "bytes": 14922,
+      "sha256": "83a5d3b351e825f90df1bd43ab6a9175ae550dcc19e10f10d8c5690d027928ce"
+    },
+    "policy_port/test_port.py": {
+      "bytes": 16132,
+      "sha256": "2053e2e768bb01352727afd93dc17007b7a3ccc0ef61dc9ce42496d1e0378e23"
+    },
+    "policy_port/trajectories.json": {
+      "bytes": 887839,
+      "sha256": "97cba94977bedd0d3dc6beddc6bd62c48752b8c8b51b6ce1d8fb2e4ae33474cf"
+    },
+    "src/bus_agent/agent.py": {
+      "bytes": 2549,
+      "sha256": "8c823652fcbae1a384f26ac46f1ed3fa0940e11bd79a971022f360303dff48ad"
+    },
+    "src/bus_agent/agents.py": {
+      "bytes": 12453,
+      "sha256": "0e7a914498f12639412fd498de2551357b466e742abb335a54e8c98c6d2e5690"
+    },
+    "src/bus_agent/bus.py": {
+      "bytes": 2044,
+      "sha256": "3d79dec76d8d44d7dc7bbac39e97faf1da4562ff7c660f0d8b8e7532ad4cc9a5"
+    },
+    "src/bus_agent/main.py": {
+      "bytes": 5913,
+      "sha256": "f3a618cb19f687fb033ef6dfec82cc81bbb5920adceeeb72ef4e3223220a1d79"
+    },
+    "src/bus_agent/web.py": {
+      "bytes": 39955,
+      "sha256": "561eab7928724ef83cba2b1c60f1b51dd15cb9940cb5219af9963cc4e9ca44d8"
+    }
+  },
+  "modifiedSourceFiles": [
+    {
+      "path": "src/bus_agent/agent.py",
+      "change": "Optional policy_port dispatch at the existing _call tool boundary; original tool body remains the callback."
+    },
+    {
+      "path": "src/bus_agent/agents.py",
+      "change": "Accepts and distributes an optional adapter; one runtime per agent shares adapter facts."
+    },
+    {
+      "path": "src/bus_agent/bus.py",
+      "change": "Carries Concierge-to-specialist turn provenance around the existing delivery; original hub guard remains."
+    },
+    {
+      "path": "src/bus_agent/main.py",
+      "change": "Constructs the adapter for scenario and interactive agent runs."
+    },
+    {
+      "path": "src/bus_agent/web.py",
+      "change": "Constructs the adapter for web agents, mediates page-button tool calls with app provenance, and routes stop/arrival/expiry end notices through the same send_message gate."
+    },
+    {
+      "path": "policy_port/adapter.py",
+      "change": "Observes World state and original results; normalizes EDB facts; owns native Policy runtimes and trajectories."
+    },
+    {
+      "path": "policy_port/rules.dl",
+      "change": "Native Datalog permissions, capability, lifecycle, information-flow and isolation decisions."
+    },
+    {
+      "path": "policy_port/test_port.py",
+      "change": "Deterministic original-callback tests and trajectory export."
+    },
+    {
+      "path": "policy_port/__init__.py",
+      "change": "Exports the adapter and tool-owner map."
+    }
+  ],
+  "entrypoints": [
+    {
+      "path": "src/bus_agent/agent.py:_call",
+      "boundary": "agent tool invocation",
+      "authorization": "PortAdapter.invoke -> Policy.execute before callback",
+      "source": "Concierge user turn defaults to concierge; Bus sets specialist turns to concierge."
+    },
+    {
+      "path": "src/bus_agent/bus.py:send",
+      "boundary": "Concierge-to-specialist message delivery",
+      "authorization": "ask_* tool gate plus recipient specialist tool gates",
+      "source": "host turn context"
+    },
+    {
+      "path": "src/bus_agent/main.py:run_scenario/interactive",
+      "boundary": "CLI agent construction",
+      "authorization": "shared adapter family",
+      "source": "agent names and Bus turn context"
+    },
+    {
+      "path": "src/bus_agent/web.py:Session._tool",
+      "boundary": "app share sheet, stop button, planner, upload extractor and automatic updates",
+      "authorization": "same tool gate with app provenance",
+      "source": "user/app"
+    },
+    {
+      "path": "src/bus_agent/web.py:_share_end_notice",
+      "boundary": "stop, arrival and expiry end message",
+      "authorization": "PortAdapter.invoke('share', 'send_message') with host end_notice provenance",
+      "source": "user/app lifecycle"
+    }
+  ],
+  "policyCoverage": {
+    "P1": {
+      "status": "partial",
+      "mechanisms": [
+        "static ToolPermission declarations",
+        "Request/Parameter turn provenance",
+        "original Bus hub rejects specialist-to-specialist delivery"
+      ],
+      "gaps": [
+        "Agent names are reported dispatch identities, not authenticated identities.",
+        "The Concierge chat reply is model output and is not an external effect; reply guards remain original application guards."
+      ]
+    },
+    "P2": {
+      "status": "partial",
+      "mechanisms": [
+        "Share tool ownership in Datalog",
+        "share tools require a Concierge or app turn",
+        "the app share-sheet/stop entry uses app provenance"
+      ],
+      "gaps": [
+        "Turn provenance is host-asserted; Python code that constructs an adapter can label a turn.",
+        "No authenticated agent identity is available."
+      ]
+    },
+    "P3": {
+      "status": "partial",
+      "mechanisms": [
+        "RecipientTrusted produced from data/mock/contacts.json",
+        "untrusted or unknown recipients are denied for create/update/send"
+      ],
+      "gaps": [
+        "No structured one-off unfamiliar-recipient consent producer exists. The application therefore denies all such sends rather than inventing approval evidence."
+      ]
+    },
+    "P4": {
+      "status": "partial",
+      "mechanisms": [
+        "one active agent-created share per recipient",
+        "recipient, field, precision, duration and place-name choices are normalized into policy inputs"
+      ],
+      "gaps": [
+        "The app has no persisted confirmation record binding exact recipient+fields+duration to one share. An active-share proxy is used and the original P4 guard is retained."
+      ]
+    },
+    "P5": {
+      "status": "partial",
+      "mechanisms": [
+        "enabled fields, place-name choice, planned line mentions, coordinates and active-recipient fields are Datalog inputs",
+        "original _p5 guard remains delegated enforcement"
+      ],
+      "gaps": [
+        "Text classification is lexical; paraphrases that do not contain the planned line or saved-place token can escape detection."
+      ]
+    },
+    "P6": {
+      "status": "enforced",
+      "mechanisms": [
+        "duration > 240 is denied",
+        "missing duration with stop_on_arrival=false is denied"
+      ],
+      "gaps": []
+    },
+    "P7": {
+      "status": "partial",
+      "mechanisms": [
+        "great-circle metres to the nearest sensitive saved place",
+        "precision digits exact=5, street=3, neighborhood=2",
+        "app share-sheet hide/exact choice is bound to that app share"
+      ],
+      "gaps": [
+        "Agent-side chat consent for an exact location has no structured producer, so exact sensitive location is denied. Invalid/missing precision normalizes conservatively to exact."
+      ]
+    },
+    "P8": {
+      "status": "partial",
+      "mechanisms": [
+        "saved places outside the latest planned trip are denied in outbound share/message text",
+        "schedule material is separately blocked"
+      ],
+      "gaps": [
+        "A lexical mention test does not establish that every other-trip time or semantic trip detail is absent."
+      ]
+    },
+    "P9": {
+      "status": "partial",
+      "mechanisms": [
+        "exact uploaded prose and texts naming at least two schedule courses are denied outbound and to Transit, Route+ETA and Share"
+      ],
+      "gaps": [
+        "A model may paraphrase schedule data without the original upload substring or two course tokens."
+      ]
+    },
+    "P10": {
+      "status": "original-only",
+      "mechanisms": [
+        "the original route tool only returns walking and public-transit plans"
+      ],
+      "gaps": [
+        "No Datalog predicate tests a requested travel mode; model prose that suggests driving is not mediated."
+      ]
+    },
+    "P11": {
+      "status": "unsupported",
+      "mechanisms": [
+        "the original web UI retains its class review and confirmation controls"
+      ],
+      "gaps": [
+        "No policy input records reviewed schedule fields, per-field corrections or confirmation status; no confirmation lifecycle is fabricated."
+      ]
+    },
+    "P12": {
+      "status": "original-only",
+      "mechanisms": [
+        "original tools return explicit errors for unknown buildings/places; prompts forbid guessing"
+      ],
+      "gaps": [
+        "No Datalog relation carries null, unreadable or ambiguous extracted fields to gate planning."
+      ]
+    },
+    "P13": {
+      "status": "partial",
+      "mechanisms": [
+        "confirmed compute_eta output is shared across agent runtimes",
+        "ETA must equal current compute_eta for RiderTrip",
+        "event sequence detects changes to delays, alerts or boarding",
+        "agent messages with time values outside the rider trip are denied",
+        "the app share sheet retains the original P2/P5-P9 path and its plan-derived arrival values"
+      ],
+      "gaps": [
+        "Concierge and Route+ETA prose checks remain original reply guards, not Datalog. Non-ETA route-time prose is only checked by those guards; app-originated shares are not P13-gated by the original application contract."
+      ]
+    },
+    "P14": {
+      "status": "original-only",
+      "mechanisms": [
+        "original routing excludes closed stops and departures after the last trip",
+        "original P14 checks and prompts remain"
+      ],
+      "gaps": [
+        "No Datalog rules encode all route feasibility constraints; doing so would duplicate the planner."
+      ]
+    },
+    "P15": {
+      "status": "original-only",
+      "mechanisms": [
+        "original Concierge P15 reply guard remains"
+      ],
+      "gaps": [
+        "No Datalog predicate consumes the complete route list and model reply, so P15 is delegated to the original guard."
+      ]
+    },
+    "P16": {
+      "status": "partial",
+      "mechanisms": [
+        "update on non-active share is denied",
+        "updates less than two minutes after the previous update are denied",
+        "a changed-information flag is produced from an event-sequence advance or a newly observed ETA"
+      ],
+      "gaps": [
+        "Changed-information detection is event/ETA based; prose-only semantic changes remain the application call site's responsibility."
+      ]
+    },
+    "P17": {
+      "status": "partial",
+      "mechanisms": [
+        "messages after a recipient's share ended are denied",
+        "a host-marked one-shot end notice is allowed only for the matching ended share and is recorded in ShareEndNotice",
+        "stop, arrival and expiry end notices are mediated through send_message",
+        "original arrival/expiry/revoke lifecycle is preserved"
+      ],
+      "gaps": [
+        "Revocation timing remains the original application lifecycle; no separate Datalog lifecycle transition is added."
+      ]
+    },
+    "P18": {
+      "status": "partial",
+      "mechanisms": [
+        "exact alert, contact-reply and upload prose is untrusted",
+        "forwarding to specialists/shares/messages is denied",
+        "ask_user may quote it"
+      ],
+      "gaps": [
+        "Contact notes and semantic instructions not matching a stored untrusted string are not detected."
+      ]
+    },
+    "P19": {
+      "status": "partial",
+      "mechanisms": [
+        "contact keys/names/channels/emails and share ids are detected in requests to Schedule, Transit and Route+ETA and denied"
+      ],
+      "gaps": [
+        "The detector is lexical and may miss transformed or partial contact data."
+      ]
+    },
+    "P20": {
+      "status": "partial",
+      "mechanisms": [
+        "saved-place mentions and schedule material are denied to the Share agent"
+      ],
+      "gaps": [
+        "No complete request-shape validator proves that every Share-bound request contains only approved fields."
+      ]
+    },
+    "P21": {
+      "status": "partial",
+      "mechanisms": [
+        "only Schedule owns extraction tools",
+        "other_text is removed from the confirmed extraction result before it is returned"
+      ],
+      "gaps": [
+        "The Schedule model can still summarize upload prose in model output; only the structured tool result is mediated."
+      ]
+    }
+  },
+  "policies": [
+    {
+      "id": "P1",
+      "status": "partial",
+      "mechanisms": [
+        "static ToolPermission declarations",
+        "Request/Parameter turn provenance",
+        "original Bus hub rejects specialist-to-specialist delivery"
+      ],
+      "gaps": [
+        "Agent names are reported dispatch identities, not authenticated identities.",
+        "The Concierge chat reply is model output and is not an external effect; reply guards remain original application guards."
+      ]
+    },
+    {
+      "id": "P2",
+      "status": "partial",
+      "mechanisms": [
+        "Share tool ownership in Datalog",
+        "share tools require a Concierge or app turn",
+        "the app share-sheet/stop entry uses app provenance"
+      ],
+      "gaps": [
+        "Turn provenance is host-asserted; Python code that constructs an adapter can label a turn.",
+        "No authenticated agent identity is available."
+      ]
+    },
+    {
+      "id": "P3",
+      "status": "partial",
+      "mechanisms": [
+        "RecipientTrusted produced from data/mock/contacts.json",
+        "untrusted or unknown recipients are denied for create/update/send"
+      ],
+      "gaps": [
+        "No structured one-off unfamiliar-recipient consent producer exists. The application therefore denies all such sends rather than inventing approval evidence."
+      ]
+    },
+    {
+      "id": "P4",
+      "status": "partial",
+      "mechanisms": [
+        "one active agent-created share per recipient",
+        "recipient, field, precision, duration and place-name choices are normalized into policy inputs"
+      ],
+      "gaps": [
+        "The app has no persisted confirmation record binding exact recipient+fields+duration to one share. An active-share proxy is used and the original P4 guard is retained."
+      ]
+    },
+    {
+      "id": "P5",
+      "status": "partial",
+      "mechanisms": [
+        "enabled fields, place-name choice, planned line mentions, coordinates and active-recipient fields are Datalog inputs",
+        "original _p5 guard remains delegated enforcement"
+      ],
+      "gaps": [
+        "Text classification is lexical; paraphrases that do not contain the planned line or saved-place token can escape detection."
+      ]
+    },
+    {
+      "id": "P6",
+      "status": "enforced",
+      "mechanisms": [
+        "duration > 240 is denied",
+        "missing duration with stop_on_arrival=false is denied"
+      ],
+      "gaps": []
+    },
+    {
+      "id": "P7",
+      "status": "partial",
+      "mechanisms": [
+        "great-circle metres to the nearest sensitive saved place",
+        "precision digits exact=5, street=3, neighborhood=2",
+        "app share-sheet hide/exact choice is bound to that app share"
+      ],
+      "gaps": [
+        "Agent-side chat consent for an exact location has no structured producer, so exact sensitive location is denied. Invalid/missing precision normalizes conservatively to exact."
+      ]
+    },
+    {
+      "id": "P8",
+      "status": "partial",
+      "mechanisms": [
+        "saved places outside the latest planned trip are denied in outbound share/message text",
+        "schedule material is separately blocked"
+      ],
+      "gaps": [
+        "A lexical mention test does not establish that every other-trip time or semantic trip detail is absent."
+      ]
+    },
+    {
+      "id": "P9",
+      "status": "partial",
+      "mechanisms": [
+        "exact uploaded prose and texts naming at least two schedule courses are denied outbound and to Transit, Route+ETA and Share"
+      ],
+      "gaps": [
+        "A model may paraphrase schedule data without the original upload substring or two course tokens."
+      ]
+    },
+    {
+      "id": "P10",
+      "status": "original-only",
+      "mechanisms": [
+        "the original route tool only returns walking and public-transit plans"
+      ],
+      "gaps": [
+        "No Datalog predicate tests a requested travel mode; model prose that suggests driving is not mediated."
+      ]
+    },
+    {
+      "id": "P11",
+      "status": "unsupported",
+      "mechanisms": [
+        "the original web UI retains its class review and confirmation controls"
+      ],
+      "gaps": [
+        "No policy input records reviewed schedule fields, per-field corrections or confirmation status; no confirmation lifecycle is fabricated."
+      ]
+    },
+    {
+      "id": "P12",
+      "status": "original-only",
+      "mechanisms": [
+        "original tools return explicit errors for unknown buildings/places; prompts forbid guessing"
+      ],
+      "gaps": [
+        "No Datalog relation carries null, unreadable or ambiguous extracted fields to gate planning."
+      ]
+    },
+    {
+      "id": "P13",
+      "status": "partial",
+      "mechanisms": [
+        "confirmed compute_eta output is shared across agent runtimes",
+        "ETA must equal current compute_eta for RiderTrip",
+        "event sequence detects changes to delays, alerts or boarding",
+        "agent messages with time values outside the rider trip are denied",
+        "the app share sheet retains the original P2/P5-P9 path and its plan-derived arrival values"
+      ],
+      "gaps": [
+        "Concierge and Route+ETA prose checks remain original reply guards, not Datalog. Non-ETA route-time prose is only checked by those guards; app-originated shares are not P13-gated by the original application contract."
+      ]
+    },
+    {
+      "id": "P14",
+      "status": "original-only",
+      "mechanisms": [
+        "original routing excludes closed stops and departures after the last trip",
+        "original P14 checks and prompts remain"
+      ],
+      "gaps": [
+        "No Datalog rules encode all route feasibility constraints; doing so would duplicate the planner."
+      ]
+    },
+    {
+      "id": "P15",
+      "status": "original-only",
+      "mechanisms": [
+        "original Concierge P15 reply guard remains"
+      ],
+      "gaps": [
+        "No Datalog predicate consumes the complete route list and model reply, so P15 is delegated to the original guard."
+      ]
+    },
+    {
+      "id": "P16",
+      "status": "partial",
+      "mechanisms": [
+        "update on non-active share is denied",
+        "updates less than two minutes after the previous update are denied",
+        "a changed-information flag is produced from an event-sequence advance or a newly observed ETA"
+      ],
+      "gaps": [
+        "Changed-information detection is event/ETA based; prose-only semantic changes remain the application call site's responsibility."
+      ]
+    },
+    {
+      "id": "P17",
+      "status": "partial",
+      "mechanisms": [
+        "messages after a recipient's share ended are denied",
+        "a host-marked one-shot end notice is allowed only for the matching ended share and is recorded in ShareEndNotice",
+        "stop, arrival and expiry end notices are mediated through send_message",
+        "original arrival/expiry/revoke lifecycle is preserved"
+      ],
+      "gaps": [
+        "Revocation timing remains the original application lifecycle; no separate Datalog lifecycle transition is added."
+      ]
+    },
+    {
+      "id": "P18",
+      "status": "partial",
+      "mechanisms": [
+        "exact alert, contact-reply and upload prose is untrusted",
+        "forwarding to specialists/shares/messages is denied",
+        "ask_user may quote it"
+      ],
+      "gaps": [
+        "Contact notes and semantic instructions not matching a stored untrusted string are not detected."
+      ]
+    },
+    {
+      "id": "P19",
+      "status": "partial",
+      "mechanisms": [
+        "contact keys/names/channels/emails and share ids are detected in requests to Schedule, Transit and Route+ETA and denied"
+      ],
+      "gaps": [
+        "The detector is lexical and may miss transformed or partial contact data."
+      ]
+    },
+    {
+      "id": "P20",
+      "status": "partial",
+      "mechanisms": [
+        "saved-place mentions and schedule material are denied to the Share agent"
+      ],
+      "gaps": [
+        "No complete request-shape validator proves that every Share-bound request contains only approved fields."
+      ]
+    },
+    {
+      "id": "P21",
+      "status": "partial",
+      "mechanisms": [
+        "only Schedule owns extraction tools",
+        "other_text is removed from the confirmed extraction result before it is returned"
+      ],
+      "gaps": [
+        "The Schedule model can still summarize upload prose in model output; only the structured tool result is mediated."
+      ]
+    }
+  ],
+  "inputPredicates": [
+    {
+      "predicate": "Request",
+      "kind": "runtime",
+      "fields": [
+        "Q",
+        "Principal",
+        "EventKind"
+      ],
+      "producer": "framework PolicyRuntime",
+      "provenance": "Immutable runtime request."
+    },
+    {
+      "predicate": "Parameter",
+      "kind": "runtime",
+      "fields": [
+        "Q",
+        "Name",
+        "Value"
+      ],
+      "producer": "framework PolicyRuntime",
+      "provenance": "Immutable typed request parameter."
+    },
+    {
+      "predicate": "ToolPermission",
+      "kind": "input",
+      "fields": [
+        "Agent",
+        "Tool"
+      ],
+      "producer": "reviewed static configuration in rules.dl",
+      "provenance": "Static five-agent tool allocation."
+    },
+    {
+      "predicate": "AttemptField",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Field"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Enabled fields from tool arguments or current share state."
+    },
+    {
+      "predicate": "AttemptFlag",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Flag",
+        "Value"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Duration, place-name, app-channel, active-share, ETA and trip facts computed from arguments/world state."
+    },
+    {
+      "predicate": "AttemptRecipient",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Recipient"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Tool recipient normalized to a lowercase contact key/address; missing becomes empty."
+    },
+    {
+      "predicate": "AttemptShare",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "ShareId"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Tool share_id or the updated share."
+    },
+    {
+      "predicate": "AttemptDuration",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Minutes"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Integer duration_min; missing=-1, invalid=-2."
+    },
+    {
+      "predicate": "AttemptPrecision",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Digits"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Precision name mapped to exact=5, street=3, neighborhood=2; unknown defaults to exact."
+    },
+    {
+      "predicate": "AttemptEtaTime",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Eta"
+      ],
+      "producer": "PortAdapter._request_facts",
+      "provenance": "Supplied eta_time normalized to HH:MM."
+    },
+    {
+      "predicate": "SensitiveDistance",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Meters"
+      ],
+      "producer": "PortAdapter._sensitive_distance",
+      "provenance": "Minimum great-circle metres from current GPS to a sensitive saved place; absent GPS/no place=1,000,000,000."
+    },
+    {
+      "predicate": "RecipientTrusted",
+      "kind": "input",
+      "fields": [
+        "Recipient",
+        "Value"
+      ],
+      "producer": "World.contacts (data/mock/contacts.json)",
+      "provenance": "Runtime configuration trust flag."
+    },
+    {
+      "predicate": "ShareState",
+      "kind": "input",
+      "fields": [
+        "ShareId",
+        "Recipient",
+        "Status",
+        "Channel"
+      ],
+      "producer": "World.shares",
+      "provenance": "Stored share state; channel blank means agent-created."
+    },
+    {
+      "predicate": "ShareAgent",
+      "kind": "input",
+      "fields": [
+        "ShareId"
+      ],
+      "producer": "World.shares",
+      "provenance": "Shares with no app channel (agent-created)."
+    },
+    {
+      "predicate": "ShareEndNotice",
+      "kind": "input",
+      "fields": [
+        "ShareId"
+      ],
+      "producer": "World.outbox end-notice records produced by PortAdapter._share_end_notice",
+      "provenance": "Host lifecycle evidence that the one permitted end message was already sent for this share."
+    },
+    {
+      "predicate": "ShareField",
+      "kind": "input",
+      "fields": [
+        "ShareId",
+        "Field"
+      ],
+      "producer": "World.shares.fields",
+      "provenance": "Enabled fields of a stored share."
+    },
+    {
+      "predicate": "SharePlaceNames",
+      "kind": "input",
+      "fields": [
+        "ShareId",
+        "Value"
+      ],
+      "producer": "World.shares.place_names",
+      "provenance": "Per-share place-name choice."
+    },
+    {
+      "predicate": "RecipientActiveField",
+      "kind": "input",
+      "fields": [
+        "Recipient",
+        "Field"
+      ],
+      "producer": "World.shares",
+      "provenance": "Union of enabled fields over a recipient's active shares."
+    },
+    {
+      "predicate": "RecipientActivePlaceNames",
+      "kind": "input",
+      "fields": [
+        "Recipient",
+        "Value"
+      ],
+      "producer": "World.shares",
+      "provenance": "Conjunction of place-name choices over active shares."
+    },
+    {
+      "predicate": "ShareUpdateAge",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Minutes"
+      ],
+      "producer": "World.outbox",
+      "provenance": "Minutes since the latest share_update for the share; absent produces no row."
+    },
+    {
+      "predicate": "MentionLine",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Line"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Planned route line names found in outbound text."
+    },
+    {
+      "predicate": "MentionPlace",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Place"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Planned origin/destination/stop names found in outbound text."
+    },
+    {
+      "predicate": "MessageTime",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Time"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "HH:MM tokens in outbound text."
+    },
+    {
+      "predicate": "MessageCoordinate",
+      "kind": "input",
+      "fields": [
+        "Q"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Coordinate-shaped outbound text."
+    },
+    {
+      "predicate": "AttemptMentionsSchedule",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Value"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "At least two schedule-course mentions or an exact stored upload/other_text substring."
+    },
+    {
+      "predicate": "AttemptMentionsContactData",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Value"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Contact key/name/channel/email or share id found in a specialist request."
+    },
+    {
+      "predicate": "AttemptMentionsSavedPlace",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Value"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Any saved place name in outbound text."
+    },
+    {
+      "predicate": "AttemptOtherSavedPlace",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Place"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Saved place named outside the latest planned trip."
+    },
+    {
+      "predicate": "AttemptMentionsUntrusted",
+      "kind": "input",
+      "fields": [
+        "Q",
+        "Value"
+      ],
+      "producer": "PortAdapter._text_facts",
+      "provenance": "Exact alert, contact-reply or upload prose substring in outbound text."
+    },
+    {
+      "predicate": "RiderTrip",
+      "kind": "input",
+      "fields": [
+        "RouteId",
+        "Depart"
+      ],
+      "producer": "World.active_trip then World.chosen_trip",
+      "provenance": "Current boarded trip, else selected trip."
+    },
+    {
+      "predicate": "EtaForTrip",
+      "kind": "input",
+      "fields": [
+        "RouteId",
+        "Eta",
+        "Depart",
+        "Delay",
+        "EventSeq"
+      ],
+      "producer": "PortAdapter._after from confirmed compute_eta result",
+      "provenance": "Only successful original compute_eta results; shared across agent runtimes."
+    },
+    {
+      "predicate": "EventSeq",
+      "kind": "input",
+      "fields": [
+        "Current"
+      ],
+      "producer": "PortAdapter._sync_freshness",
+      "provenance": "Monotonic freshness counter over delays, alerts and active-trip identity."
+    }
+  ],
+  "originalGuardDelegation": {
+    "preserved": true,
+    "guards": {
+      "P4": {
+        "implementation": "src/bus_agent/tools.py:_p4",
+        "delegated": "one active agent-created share per recipient"
+      },
+      "P5": {
+        "implementation": "src/bus_agent/tools.py:_p5",
+        "delegated": "share/message field and line/place discipline"
+      },
+      "P13": {
+        "implementation": "src/bus_agent/tools.py:_p13 and src/bus_agent/agents.py reply checks",
+        "delegated": "fresh rider ETA for shares and Concierge/Route replies"
+      },
+      "P15": {
+        "implementation": "src/bus_agent/agents.py:p15_reply_check",
+        "delegated": "complete route list or stated count in Concierge replies"
+      }
+    }
+  },
+  "frameworkRecordingAdditions": {
+    "factTools": [],
+    "statementTools": [],
+    "agentFacingToolsAdded": [],
+    "conflictsWithExclusiveToolAllowlist": "None. No framework recording tool was exposed to an agent.",
+    "privateCapture": "Policy(trace=True) records gate inputs/outcomes; test_port.py exports actual trajectories. This is operator evidence, not an agent tool."
+  },
+  "bypasses": [
+    "Model prose is not fully mediated: Concierge/Route+ETA reply guards and P15 are original application guards, not Datalog decisions.",
+    "The web schedule review/confirm state is application UI state, not a policy input; P11 has no Datalog coverage.",
+    "Direct edits to Python source, monkeypatching, or bypassing Agent._call/Session._tool can avoid the adapter.",
+    "Agent and app identities are reported labels; no authenticated principal provider exists."
+  ],
+  "gaps": [
+    "P3: no structured consent lifecycle for unfamiliar recipients; untrusted recipients are denied.",
+    "P4: no operation-content-bound confirmation record; active-share proxy plus original guard.",
+    "P7: no structured agent-chat exact-location exception; app share-sheet exception is available.",
+    "P10/P11/P12/P14/P15: no complete Datalog model; original routing/tools/prompts/reply guards remain.",
+    "P16: changed-information detection is event/ETA based rather than a semantic diff of message contents.",
+    "P17: the original application still owns arrival, expiry and stop timing, and those transitions are observations rather than a Datalog lifecycle.",
+    "P18/P19/P20: text/contact classifiers are lexical and cannot prove absence of transformed data.",
+    "P21: structured extraction result is redacted; model summaries can still contain schedule prose."
+  ],
+  "tests": {
+    "path": "candidate/policy_port/test_port.py",
+    "count": 14,
+    "passed": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "command": "PATH=/opt/souffle/usr/bin:$PATH PYTHONPATH=/framework:$PWD python3 -m unittest discover -s policy_port -p test_port.py -t . -v",
+    "workdir": "candidate",
+    "nativeEngineCalls": 24,
+    "trajectoryCount": 15,
+    "trajectoryEvents": 24,
+    "positiveEvents": 13,
+    "negativeEvents": 11,
+    "externalModelUse": "None in tests. One explicitly labeled offline JSON chat fixture exercises P21."
+  },
+  "limitations": [
+    "Development tests only; they do not establish held-out semantic equivalence or complete mediation.",
+    "No authenticated principals, real contact channel or human review lifecycle are available.",
+    "Original pytest suite was not run because pytest is not installed and package installation is prohibited.",
+    "The native call count is the 24 gate events captured in the trajectory bundle; this is not a complete application call census.",
+    "Trajectory capture proves observed test gates, not complete application coverage."
+  ]
+}

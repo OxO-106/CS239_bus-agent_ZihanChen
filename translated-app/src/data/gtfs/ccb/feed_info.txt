@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,feed_contact_email
+Culver CityBus,https://www.culvercity.gov/City-Hall/City-Departments/IT/Download-GIS-Data,en,20260713,20261213,S1000254_2026.08.05,transportation.data@culvercity.gov

@@ -1,0 +1,17 @@
+route_id,route_short_name,route_long_name,route_type
+4098,1,Main St & Santa Monica Blvd/UCLA,3
+4099,2,Wilshire Blvd/UCLA,3
+4100,3,Lincoln Blvd/LAX,3
+4102,5,Olympic Blvd,3
+4104,7,Pico Blvd,3
+4105,8,Ocean Park Blvd & Westwood Bl/UCLA,3
+4107,R10,Downtown LA Freeway Express,3
+4108,R12,Venice/Westwood Sta/UCLA Rapid,3
+4109,14,Bundy Dr & Centinela Ave,3
+4110,15,Barrington Ave,3
+4111,16,Wilshire Bl/Bundy Dr-Playa del Rey,3
+4112,17,Culver City Sta - UCLA,3
+4113,18,UCLA - Marina del Rey,3
+4115,41,SMC- 17th St Station- Montana,3
+4117,43,26th Street,3
+4118,44,17th St Sta - SMC Bundy Campus,3

@@ -1,0 +1,12 @@
+{
+  "Boelter Hall": {"lat": 34.0692, "lon": -118.4430},
+  "Engineering VI": {"lat": 34.0688, "lon": -118.4436},
+  "Mathematical Sciences": {"lat": 34.0697, "lon": -118.4419},
+  "Geology Building": {"lat": 34.0693, "lon": -118.4407},
+  "Knudsen Hall": {"lat": 34.0707, "lon": -118.4413},
+  "Young Hall": {"lat": 34.0682, "lon": -118.4418},
+  "Royce Hall": {"lat": 34.0729, "lon": -118.4422},
+  "Haines Hall": {"lat": 34.0730, "lon": -118.4413},
+  "Bunche Hall": {"lat": 34.0743, "lon": -118.4398},
+  "Ackerman Union": {"lat": 34.0705, "lon": -118.4441}
+}

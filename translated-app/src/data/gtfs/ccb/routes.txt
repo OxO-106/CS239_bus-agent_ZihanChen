@@ -1,0 +1,12 @@
+route_id,route_short_name,route_long_name,route_type
+1,1,Washington Boulevard,3
+1C1,1C1,Culver City Downtown Circulator,3
+2,2,Inglewood Boulevard,3
+3,3,Crosstown,3
+4,4,Jefferson Boulevard,3
+5,5,Braddock Drive,3
+5C1,5C1,Arts District/Clarksdale,3
+5C2,5C2,Overland/Fox Hills,3
+6,6,Sepulveda Boulevard,3
+6R,Rapid 6,Sepulveda Boulevard,3
+7,7,Culver Boulevard,3

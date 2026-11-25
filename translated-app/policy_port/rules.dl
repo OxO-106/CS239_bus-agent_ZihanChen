@@ -1,0 +1,314 @@
+// bus-agent executable port. The adapter supplies observed/normalized app state;
+// all authorization and capability decisions remain in this Datalog program.
+
+.decl ToolPermission(Agent:symbol, Tool:symbol)
+.input ToolPermission
+
+.decl AttemptField(Q:symbol, Field:symbol)
+.input AttemptField
+.key AttemptField(Q, Field)
+
+.decl AttemptFlag(Q:symbol, Flag:symbol, Value:symbol)
+.input AttemptFlag
+.key AttemptFlag(Q, Flag)
+
+.decl AttemptRecipient(Q:symbol, Recipient:symbol)
+.input AttemptRecipient
+.key AttemptRecipient(Q)
+
+.decl AttemptShare(Q:symbol, ShareId:symbol)
+.input AttemptShare
+.key AttemptShare(Q)
+
+.decl AttemptDuration(Q:symbol, Minutes:number)
+.input AttemptDuration
+.key AttemptDuration(Q)
+
+.decl AttemptPrecision(Q:symbol, Digits:number)
+.input AttemptPrecision
+.key AttemptPrecision(Q)
+
+.decl AttemptEtaTime(Q:symbol, Eta:symbol)
+.input AttemptEtaTime
+.key AttemptEtaTime(Q)
+
+.decl SensitiveDistance(Q:symbol, Meters:number)
+.input SensitiveDistance
+.key SensitiveDistance(Q)
+
+.decl RecipientTrusted(Recipient:symbol, Value:symbol)
+.input RecipientTrusted
+.key RecipientTrusted(Recipient)
+
+.decl ShareState(ShareId:symbol, Recipient:symbol, Status:symbol, Channel:symbol)
+.input ShareState
+.key ShareState(ShareId)
+
+.decl ShareAgent(ShareId:symbol)
+.input ShareAgent
+.key ShareAgent(ShareId)
+
+.decl ShareEndNotice(ShareId:symbol)
+.input ShareEndNotice
+.key ShareEndNotice(ShareId)
+
+.decl ShareField(ShareId:symbol, Field:symbol)
+.input ShareField
+.key ShareField(ShareId, Field)
+
+.decl SharePlaceNames(ShareId:symbol, Value:symbol)
+.input SharePlaceNames
+.key SharePlaceNames(ShareId)
+
+.decl RecipientActiveField(Recipient:symbol, Field:symbol)
+.input RecipientActiveField
+.key RecipientActiveField(Recipient, Field)
+
+.decl RecipientActivePlaceNames(Recipient:symbol, Value:symbol)
+.input RecipientActivePlaceNames
+.key RecipientActivePlaceNames(Recipient)
+
+.decl ShareUpdateAge(Q:symbol, Minutes:number)
+.input ShareUpdateAge
+.key ShareUpdateAge(Q)
+
+.decl MentionLine(Q:symbol, Line:symbol)
+.input MentionLine
+.key MentionLine(Q, Line)
+
+.decl MentionPlace(Q:symbol, Place:symbol)
+.input MentionPlace
+.key MentionPlace(Q, Place)
+
+.decl MessageTime(Q:symbol, Time:symbol)
+.input MessageTime
+.key MessageTime(Q, Time)
+
+.decl MessageCoordinate(Q:symbol)
+.input MessageCoordinate
+.key MessageCoordinate(Q)
+
+.decl AttemptMentionsSchedule(Q:symbol, Value:symbol)
+.input AttemptMentionsSchedule
+.key AttemptMentionsSchedule(Q)
+
+.decl AttemptMentionsContactData(Q:symbol, Value:symbol)
+.input AttemptMentionsContactData
+.key AttemptMentionsContactData(Q)
+
+.decl AttemptMentionsSavedPlace(Q:symbol, Value:symbol)
+.input AttemptMentionsSavedPlace
+.key AttemptMentionsSavedPlace(Q)
+
+.decl AttemptOtherSavedPlace(Q:symbol, Place:symbol)
+.input AttemptOtherSavedPlace
+.key AttemptOtherSavedPlace(Q, Place)
+
+.decl AttemptMentionsUntrusted(Q:symbol, Value:symbol)
+.input AttemptMentionsUntrusted
+.key AttemptMentionsUntrusted(Q)
+
+.decl RiderTrip(RouteId:symbol, Depart:symbol)
+.input RiderTrip
+.key RiderTrip(RouteId)
+
+.decl EtaForTrip(RouteId:symbol, Eta:symbol, Depart:symbol, Delay:symbol, EventSeq:number)
+.input EtaForTrip
+.key EtaForTrip(RouteId)
+
+.decl EventSeq(Current:number)
+.input EventSeq
+.key EventSeq()
+
+.decl FreshEtaForTrip(RouteId:symbol)
+.decl TripTime(RouteId:symbol, Time:symbol)
+.decl RedactOtherText(Q:symbol)
+.decl EndNoticeValid(Q:symbol)
+.decl EndedShare(ShareId:symbol, Recipient:symbol)
+
+// Tool ownership (P1/P2 and the original five-agent tool allocation).
+ToolPermission("concierge", "ask_user").
+ToolPermission("concierge", "ask_schedule_agent").
+ToolPermission("concierge", "ask_transit_agent").
+ToolPermission("concierge", "ask_route_agent").
+ToolPermission("concierge", "ask_share_agent").
+ToolPermission("schedule", "extract_schedule_image").
+ToolPermission("schedule", "extract_schedule_text").
+ToolPermission("schedule", "lookup_building").
+ToolPermission("schedule", "get_classes").
+ToolPermission("transit", "list_routes").
+ToolPermission("transit", "get_schedule").
+ToolPermission("transit", "get_realtime_arrivals").
+ToolPermission("transit", "get_service_alerts").
+ToolPermission("route", "list_places").
+ToolPermission("route", "geocode").
+ToolPermission("route", "walk_time").
+ToolPermission("route", "plan_routes").
+ToolPermission("route", "compare_options").
+ToolPermission("route", "compute_eta").
+ToolPermission("share", "get_contacts").
+ToolPermission("share", "create_share").
+ToolPermission("share", "update_share").
+ToolPermission("share", "revoke_share").
+ToolPermission("share", "send_message").
+ToolPermission("share", "read_replies").
+
+// A specialist may act only in a turn started by the Concierge. The Share tools
+// additionally accept the user's own app share-sheet/stop context.
+Allow(Q) :- Request(Q, "concierge", T), ToolPermission("concierge", T), Parameter(Q, "portTurn", Source).
+Allow(Q) :- Request(Q, P, T), ToolPermission(P, T), P != "share", P != "concierge", Parameter(Q, "portTurn", "concierge").
+Allow(Q) :- Request(Q, "share", T), ToolPermission("share", T), Parameter(Q, "portTurn", "concierge").
+Allow(Q) :- Request(Q, "share", T), ToolPermission("share", T), Parameter(Q, "portTurn", "app").
+Allow(Q) :- Request(Q, "route", T), ToolPermission("route", T), Parameter(Q, "portTurn", "app").
+Allow(Q) :- Request(Q, "schedule", T), ToolPermission("schedule", T), Parameter(Q, "portTurn", "app").
+
+Deny(Q, "policy: this agent does not own that tool") :-
+    Request(Q, P, T), ToolPermission(Other, T), not ToolPermission(P, T).
+
+// P3: this port has no structured unfamiliar-recipient consent producer.
+Deny(Q, "P3: recipient is not a trusted contact; structured consent is unavailable") :-
+    Request(Q, P, "create_share"), AttemptRecipient(Q, R), not RecipientTrusted(R, "true").
+Deny(Q, "P3: recipient is not a trusted contact; structured consent is unavailable") :-
+    Request(Q, P, "send_message"), AttemptRecipient(Q, R), not RecipientTrusted(R, "true").
+Deny(Q, "P3: recipient is not a trusted contact; structured consent is unavailable") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S), ShareState(S, R, St, C),
+    not RecipientTrusted(R, "true").
+
+// P4: one active agent-created share per recipient is the original guard's
+// confirmation proxy; exact confirmation contents have no producer here.
+Deny(Q, "P4: recipient already has an active share from the agents") :-
+    Request(Q, P, "create_share"), AttemptFlag(Q, "agent_share", "true"), AttemptRecipient(Q, R),
+    ShareAgent(S), ShareState(S, R, "active", C).
+
+// P5: payload/message field discipline.
+Deny(Q, "P5: message names a line without the route field") :-
+    Request(Q, P, "create_share"), MentionLine(Q, L), not AttemptField(Q, "route").
+Deny(Q, "P5: message names a place while place names are off") :-
+    Request(Q, P, "create_share"), AttemptFlag(Q, "place_names", "false"), MentionPlace(Q, Pl).
+Deny(Q, "P5: message carries coordinates without the live-location field") :-
+    Request(Q, P, "create_share"), MessageCoordinate(Q), not AttemptField(Q, "live_location").
+Deny(Q, "P5: message names a line without the route field") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S), MentionLine(Q, L), not ShareField(S, "route").
+Deny(Q, "P5: message names a place while place names are off") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S), SharePlaceNames(S, "false"), MentionPlace(Q, Pl).
+Deny(Q, "P5: message carries coordinates without the live-location field") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S), MessageCoordinate(Q), not ShareField(S, "live_location").
+Deny(Q, "P5: message names a line without an active route share") :-
+    Request(Q, P, "send_message"), AttemptRecipient(Q, R), MentionLine(Q, L), not RecipientActiveField(R, "route").
+Deny(Q, "P5: message names a place with no active place-names-enabled share") :-
+    Request(Q, P, "send_message"), AttemptRecipient(Q, R), AttemptFlag(Q, "no_active_share", "true"), MentionPlace(Q, Pl),
+    not EndNoticeValid(Q).
+Deny(Q, "P5: message names a place with no active place-names-enabled share") :-
+    Request(Q, P, "send_message"), AttemptRecipient(Q, R), RecipientActivePlaceNames(R, "false"), MentionPlace(Q, Pl),
+    not EndNoticeValid(Q).
+
+// P6: bounded sharing.
+Deny(Q, "P6: duration exceeds 240 minutes") :-
+    Request(Q, P, "create_share"), AttemptDuration(Q, D), D > 240.
+Deny(Q, "P6: no stop_on_arrival and no bounded duration") :-
+    Request(Q, P, "create_share"), AttemptDuration(Q, D), D < 0,
+    AttemptFlag(Q, "stop_on_arrival", "false").
+
+// P7: sensitive-place precision. Rounds to <=2 decimals when near (strictly
+// within 300 m), unless the app share sheet's explicit exact-location choice
+// or its hide-location toggle is present.
+Deny(Q, "P7: precise location within 300 m of a sensitive place") :-
+    Request(Q, P, "create_share"), AttemptField(Q, "live_location"), AttemptPrecision(Q, D),
+    SensitiveDistance(Q, M), D > 2, M < 300, not AttemptFlag(Q, "exact_sensitive_choice", "true"),
+    not AttemptFlag(Q, "sensitive_rounding", "true").
+Deny(Q, "P7: precise location within 300 m of a sensitive place") :-
+    Request(Q, P, "update_share"), AttemptField(Q, "live_location"), AttemptPrecision(Q, D),
+    SensitiveDistance(Q, M), D > 2, M < 300, not AttemptFlag(Q, "exact_sensitive_choice", "true"),
+    not AttemptFlag(Q, "sensitive_rounding", "true").
+
+// P8: a share/message covers only its current trip, never other saved places.
+Deny(Q, "P8: outbound text names another saved place") :-
+    Request(Q, P, "create_share"), AttemptOtherSavedPlace(Q, Place).
+Deny(Q, "P8: outbound text names another saved place") :-
+    Request(Q, P, "update_share"), AttemptOtherSavedPlace(Q, Place).
+Deny(Q, "P8: outbound text names another saved place") :-
+    Request(Q, P, "send_message"), AttemptOtherSavedPlace(Q, Place).
+
+// P9/P20/P21: schedule material never reaches the Share boundary or a contact.
+Deny(Q, "P9: schedule material may not leave the app") :-
+    Request(Q, P, "create_share"), AttemptMentionsSchedule(Q, V).
+Deny(Q, "P9: schedule material may not leave the app") :-
+    Request(Q, P, "update_share"), AttemptMentionsSchedule(Q, V).
+Deny(Q, "P9: schedule material may not leave the app") :-
+    Request(Q, P, "send_message"), AttemptMentionsSchedule(Q, V).
+Deny(Q, "P9: schedule material may not be sent to this specialist") :-
+    Request(Q, P, "ask_transit_agent"), AttemptMentionsSchedule(Q, V).
+Deny(Q, "P9: schedule material may not be sent to this specialist") :-
+    Request(Q, P, "ask_route_agent"), AttemptMentionsSchedule(Q, V).
+Deny(Q, "P9/P20: schedule material may not reach the Share agent") :-
+    Request(Q, P, "ask_share_agent"), AttemptMentionsSchedule(Q, V).
+
+// P13: every shared ETA is fresh compute_eta output for the rider's trip, and
+// every time in a share/message is one of that trip's known times.
+FreshEtaForTrip(R) :- EtaForTrip(R, E, Dp, Delay, Seq), EventSeq(N), Seq >= N.
+TripTime(R, D) :- RiderTrip(R, D).
+TripTime(R, E) :- EtaForTrip(R, E, Dp, Delay, Seq).
+TripTime(R, Dp) :- EtaForTrip(R, E, Dp, Delay, Seq).
+
+Deny(Q, "P13: no rider's trip for this ETA share") :-
+    Request(Q, P, T), AttemptFlag(Q, "agent_share", "true"), AttemptFlag(Q, "eta_field", "true"),
+    AttemptFlag(Q, "no_rider_trip", "true").
+Deny(Q, "P13: ETA is stale relative to the latest delay/alert/boarding") :-
+    Request(Q, P, T), AttemptFlag(Q, "agent_share", "true"), AttemptFlag(Q, "eta_field", "true"), RiderTrip(R, D),
+    EtaForTrip(R, E, Dp, Delay, Seq), EventSeq(N), Seq < N.
+Deny(Q, "P13: no current compute_eta result for the rider's trip") :-
+    Request(Q, P, T), AttemptFlag(Q, "agent_share", "true"), AttemptFlag(Q, "eta_field", "true"), RiderTrip(R, D),
+    not FreshEtaForTrip(R).
+Deny(Q, "P13: supplied ETA differs from compute_eta for the rider's trip") :-
+    Request(Q, P, T), AttemptFlag(Q, "agent_share", "true"), AttemptFlag(Q, "eta_field", "true"), AttemptEtaTime(Q, X),
+    RiderTrip(R, D), EtaForTrip(R, E, Dp, Delay, Seq), X != E.
+Deny(Q, "P13: message names a time outside the rider's trip") :-
+    Request(Q, P, T), AttemptFlag(Q, "agent_share", "true"), RiderTrip(R, D), MessageTime(Q, X),
+    not TripTime(R, X).
+
+// P16: updates only on active shares, at most once per two minutes.
+Deny(Q, "P16: update_share on a non-active share") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S), ShareState(S, R, Status, C),
+    Status != "active".
+Deny(Q, "P16: update_share within two minutes of the previous update") :-
+    Request(Q, P, "update_share"), ShareUpdateAge(Q, A), A < 2.
+Deny(Q, "P16: update_share carries no changed shared information") :-
+    Request(Q, P, "update_share"), AttemptShare(Q, S),
+    not AttemptFlag(Q, "share_info_changed", "true").
+
+// P17: a plain message cannot carry trip details after sharing ended.
+EndedShare(S, R) :- ShareState(S, R, Status, C), Status != "active".
+EndNoticeValid(Q) :-
+    Request(Q, P, "send_message"), AttemptFlag(Q, "end_notice", "true"),
+    AttemptShare(Q, S), AttemptRecipient(Q, R), ShareState(S, R, Status, C),
+    Status != "active", not ShareEndNotice(S).
+Deny(Q, "P17: no further message may be sent after sharing ended") :-
+    Request(Q, P, "send_message"), AttemptFlag(Q, "no_active_share", "true"),
+    AttemptRecipient(Q, R), EndedShare(S, R), not EndNoticeValid(Q).
+Deny(Q, "P17: nothing more may be sent to this recipient about the ended trip") :-
+    Request(Q, P, "send_message"), AttemptFlag(Q, "no_active_share", "true"), MentionLine(Q, L),
+    not EndNoticeValid(Q).
+Deny(Q, "P17: nothing more may be sent to this recipient about the ended trip") :-
+    Request(Q, P, "send_message"), AttemptFlag(Q, "no_active_share", "true"), MessageTime(Q, X),
+    not EndNoticeValid(Q).
+
+// P18: untrusted text cannot travel onward as an instruction to a specialist or
+// out through a share/message. ask_user may quote it back to the user.
+Deny(Q, "P18: untrusted text may not be forwarded as a request or sent out") :-
+    Request(Q, P, T), AttemptMentionsUntrusted(Q, V), T != "ask_user".
+
+// P19: transit/route/schedule requests never receive contact-bearing material.
+Deny(Q, "P19: contact material may not reach this specialist") :-
+    Request(Q, P, "ask_schedule_agent"), AttemptMentionsContactData(Q, V).
+Deny(Q, "P19: contact material may not reach this specialist") :-
+    Request(Q, P, "ask_transit_agent"), AttemptMentionsContactData(Q, V).
+Deny(Q, "P19: contact material may not reach this specialist") :-
+    Request(Q, P, "ask_route_agent"), AttemptMentionsContactData(Q, V).
+
+// P20: the Share agent receives no saved-place list.
+Deny(Q, "P20: saved places may not be sent to the Share agent") :-
+    Request(Q, P, "ask_share_agent"), AttemptMentionsSavedPlace(Q, V).
+
+// P21: extraction results expose only structured classes, not upload prose.
+RedactOtherText(Q) :- Request(Q, "schedule", "extract_schedule_image").
+RedactOtherText(Q) :- Request(Q, "schedule", "extract_schedule_text").
