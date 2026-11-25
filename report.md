@@ -1,4 +1,4 @@
-- [ ] I consent to my responses being used for research purposes.
+- [x] I consent to my responses being used for research purposes.
 
 # Phase 2 report: bus-agent on PolicyWeave
 
