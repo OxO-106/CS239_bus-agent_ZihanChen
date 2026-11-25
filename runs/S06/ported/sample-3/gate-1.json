@@ -1,0 +1,7635 @@
+{
+  "format": "policyscope-trajectory",
+  "version": 1,
+  "traceId": "6da7e7407a5f4a6184504b5acd789816",
+  "policy": {
+    "binding": {
+      "version": 1,
+      "id": "application-policy",
+      "context": "Reviewed local application policy.",
+      "predicates": {
+        "Request": {
+          "kind": "input",
+          "args": [
+            "Q",
+            "Principal",
+            "EventKind"
+          ],
+          "meaning": "Runtime-owned immutable request."
+        },
+        "Parameter": {
+          "kind": "input",
+          "args": [
+            "Q",
+            "Name",
+            "Value"
+          ],
+          "meaning": "Runtime-bound request argument."
+        },
+        "Allow": {
+          "kind": "derived",
+          "args": [
+            "Q"
+          ],
+          "meaning": "Explicit request permission."
+        },
+        "Deny": {
+          "kind": "derived",
+          "args": [
+            "Q",
+            "Reason"
+          ],
+          "meaning": "Explicit request refusal; overrides Allow."
+        },
+        "Capability": {
+          "kind": "input",
+          "args": [
+            "Principal",
+            "Scope",
+            "EventKind"
+          ],
+          "meaning": "Explicit operation grant on a resource or permission scope."
+        },
+        "PrincipalGroup": {
+          "kind": "input",
+          "args": [
+            "Principal",
+            "Group"
+          ],
+          "meaning": "Direct membership in a configured role or user group; a group can itself be a member. Supplied by trusted configuration or an authoritative identity source, never inferred from an agent-chosen name."
+        },
+        "ResourceGroup": {
+          "kind": "input",
+          "args": [
+            "Parent",
+            "Child"
+          ],
+          "meaning": "Permission-scope membership; grants on a parent apply to its descendants."
+        },
+        "InGroup": {
+          "kind": "derived",
+          "args": [
+            "Principal",
+            "Group"
+          ],
+          "meaning": "Direct or nested role/user-group membership from PrincipalGroup. Membership alone is not permission."
+        },
+        "Can": {
+          "kind": "derived",
+          "args": [
+            "Principal",
+            "Resource",
+            "EventKind"
+          ],
+          "meaning": "Grant including declared principal and resource memberships; not final authorization."
+        },
+        "ResourceType": {
+          "kind": "input",
+          "args": [
+            "Resource",
+            "Type"
+          ],
+          "meaning": "Resource type, supplied by the application."
+        },
+        "ResourceState": {
+          "kind": "input",
+          "args": [
+            "Resource",
+            "State"
+          ],
+          "meaning": "Current state in the declared application scope; replaces obsolete state."
+        },
+        "InitialState": {
+          "kind": "input",
+          "args": [
+            "Type",
+            "State"
+          ],
+          "meaning": "Reviewed initial state for newly created resources of this type; never resets existing resources."
+        },
+        "AllowedTransition": {
+          "kind": "input",
+          "args": [
+            "Type",
+            "EventKind",
+            "From",
+            "To"
+          ],
+          "meaning": "Configured state-machine edge shared by resources of this type."
+        },
+        "ReachableState": {
+          "kind": "derived",
+          "args": [
+            "Type",
+            "From",
+            "To"
+          ],
+          "meaning": "Nonempty path in the configured machine; not a record of past execution."
+        },
+        "CanTransition": {
+          "kind": "derived",
+          "args": [
+            "Resource",
+            "EventKind",
+            "From",
+            "To"
+          ],
+          "meaning": "Configured edge matching current state; other policy conditions still apply."
+        },
+        "Field": {
+          "kind": "input",
+          "args": [
+            "Object",
+            "Name",
+            "Value"
+          ],
+          "hostOnly": true,
+          "meaning": "Host-observed field or association of an application object or event. The binding defines cardinality, value type, fixed unit and optional observation-time field; never agent claims or hidden policy decisions."
+        },
+        "Event": {
+          "kind": "input",
+          "args": [
+            "Id",
+            "Principal",
+            "Kind"
+          ],
+          "key": [
+            "Id"
+          ],
+          "hostOnly": true,
+          "appendOnly": true,
+          "meaning": "An event observed by the host, with its ID, actor and kind; recording it does not imply permission or success."
+        }
+      },
+      "decision": {
+        "request": "Request",
+        "parameters": "Parameter",
+        "allow": "Allow",
+        "deny": "Deny"
+      },
+      "tests": [],
+      "configuration": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        }
+      ],
+      "invariants": [],
+      "mechanisms": [
+        "capability",
+        "fsm",
+        "observations"
+      ],
+      "observationContract": {
+        "fields": {
+          "contact_trusted": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "contact_channel": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "contact_name": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_recipient": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_field_live_location": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_field_route": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_field_eta": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_precision": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_place_names": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_stop_on_arrival": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_status": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_protect_sensitive": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "share_updated_at_ms": {
+            "cardinality": "one",
+            "type": "number",
+            "unit": "unix_ms",
+            "observedAt": null
+          },
+          "rider_min_sensitive_distance_m": {
+            "cardinality": "one",
+            "type": "number",
+            "unit": "meter",
+            "observedAt": null
+          },
+          "plan_count": {
+            "cardinality": "one",
+            "type": "number",
+            "unit": null,
+            "observedAt": null
+          },
+          "plan_route_id": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "eta_value": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "eta_route_id": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "eta_depart": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "world_now_epoch_ms": {
+            "cardinality": "one",
+            "type": "number",
+            "unit": "unix_ms",
+            "observedAt": null
+          },
+          "ask_user_answer": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "schedule_other_text_present": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "outbox_eta": {
+            "cardinality": "one",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          },
+          "alert_closed_stop": {
+            "cardinality": "many",
+            "type": "symbol",
+            "unit": null,
+            "observedAt": null
+          }
+        }
+      },
+      "callContract": {
+        "ask_user": {
+          "question": "symbol"
+        },
+        "ask_schedule_agent": {
+          "request": "symbol"
+        },
+        "ask_transit_agent": {
+          "request": "symbol"
+        },
+        "ask_route_agent": {
+          "request": "symbol"
+        },
+        "ask_share_agent": {
+          "request": "symbol"
+        },
+        "get_contacts": {},
+        "read_replies": {},
+        "create_share": {
+          "recipient": "symbol",
+          "live_location": "boolean",
+          "route": "boolean",
+          "eta": "boolean",
+          "precision": "symbol",
+          "duration_min": "number",
+          "stop_on_arrival": "boolean",
+          "message": "symbol",
+          "eta_time": "symbol",
+          "hide_places": "boolean",
+          "protect_sensitive": "boolean",
+          "channel": "symbol"
+        },
+        "update_share": {
+          "share_id": "symbol",
+          "message": "symbol",
+          "eta_time": "symbol"
+        },
+        "revoke_share": {
+          "share_id": "symbol"
+        },
+        "send_message": {
+          "recipient": "symbol",
+          "text": "symbol"
+        },
+        "extract_schedule_image": {
+          "upload_id": "symbol"
+        },
+        "extract_schedule_text": {
+          "upload_id": "symbol"
+        },
+        "lookup_building": {
+          "name": "symbol"
+        },
+        "get_classes": {
+          "day": "symbol"
+        },
+        "list_routes": {
+          "stop": "symbol"
+        },
+        "get_schedule": {
+          "line": "symbol",
+          "stop": "symbol"
+        },
+        "get_realtime_arrivals": {
+          "line": "symbol",
+          "stop": "symbol"
+        },
+        "get_service_alerts": {
+          "line": "symbol"
+        },
+        "list_places": {},
+        "geocode": {
+          "name": "symbol"
+        },
+        "walk_time": {
+          "origin": "symbol",
+          "destination": "symbol"
+        },
+        "plan_routes": {
+          "origin": "symbol",
+          "destination": "symbol",
+          "arrive_by": "symbol",
+          "depart_after": "symbol",
+          "max_walk": "number"
+        },
+        "compare_options": {},
+        "compute_eta": {
+          "route_id": "symbol",
+          "depart": "symbol"
+        },
+        "concierge_reply": {
+          "reply_text": "symbol"
+        },
+        "route_agent_reply": {
+          "reply_text": "symbol"
+        }
+      },
+      "fsmState": "runtime",
+      "fsmTarget": "share_id",
+      "fsmActions": [
+        "arrive",
+        "expire",
+        "revoke_share",
+        "update_share"
+      ]
+    },
+    "source": "PrincipalGroup(\"concierge\", \"Concierge\").\nPrincipalGroup(\"schedule\", \"Specialist\").\nPrincipalGroup(\"transit\", \"Specialist\").\nPrincipalGroup(\"route\", \"Specialist\").\nPrincipalGroup(\"share\", \"Specialist\").\nPrincipalGroup(\"share\", \"ShareAgent\").\nPrincipalGroup(\"app\", \"AppActor\").\nCapability(\"Concierge\", \"user\", \"ask_user\").\nCapability(\"Concierge\", \"specialist_request\", \"ask_schedule_agent\").\nCapability(\"Concierge\", \"specialist_request\", \"ask_transit_agent\").\nCapability(\"Concierge\", \"specialist_request\", \"ask_route_agent\").\nCapability(\"Concierge\", \"specialist_request\", \"ask_share_agent\").\nCapability(\"ShareAgent\", \"share_operations\", \"create_share\").\nCapability(\"ShareAgent\", \"share_operations\", \"update_share\").\nCapability(\"ShareAgent\", \"share_operations\", \"revoke_share\").\nCapability(\"ShareAgent\", \"share_operations\", \"send_message\").\nCapability(\"ShareAgent\", \"share_operations\", \"get_contacts\").\nCapability(\"ShareAgent\", \"share_operations\", \"read_replies\").\nInitialState(\"share\", \"active\").\nAllowedTransition(\"share\", \"update_share\", \"active\", \"active\").\nAllowedTransition(\"share\", \"revoke_share\", \"active\", \"revoked\").\nAllowedTransition(\"share\", \"arrive\", \"active\", \"ended\").\nAllowedTransition(\"share\", \"expire\", \"active\", \"expired\").\n\nAllow(Q) :- Request(Q, \"concierge\", A), Capability(\"Concierge\", \"specialist_request\", A).\n\nAllow(Q) :- Request(Q, \"share\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(R, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"true\"),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"share\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(R, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"false\"),\n    Parameter(Q, \"eta_time\", \"\"),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"share\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(C, \"contact_channel\", R),\n    Field(C, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"true\"),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"share\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(C, \"contact_channel\", R),\n    Field(C, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"false\"),\n    Parameter(Q, \"eta_time\", \"\"),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"app\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(R, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"true\"),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"app\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(R, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"false\"),\n    Parameter(Q, \"eta_time\", \"\"),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"app\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(C, \"contact_channel\", R),\n    Field(C, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"true\"),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"app\", \"create_share\"),\n    Parameter(Q, \"recipient\", R),\n    Field(C, \"contact_channel\", R),\n    Field(C, \"contact_trusted\", \"true\"),\n    Parameter(Q, \"live_location\", _),\n    Parameter(Q, \"route\", _),\n    Parameter(Q, \"eta\", \"false\"),\n    Parameter(Q, \"eta_time\", \"\"),\n    Parameter(Q, \"precision\", _),\n    Parameter(Q, \"duration_min\", _),\n    Parameter(Q, \"stop_on_arrival\", _),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"hide_places\", _),\n    Parameter(Q, \"protect_sensitive\", _),\n    Parameter(Q, \"channel\", _).\n\nAllow(Q) :- Request(Q, \"share\", \"update_share\"),\n    Parameter(Q, \"share_id\", S),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    CanTransition(S, \"update_share\", \"active\", \"active\").\n\nAllow(Q) :- Request(Q, \"share\", \"update_share\"),\n    Parameter(Q, \"share_id\", S),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"eta_time\", \"\"),\n    CanTransition(S, \"update_share\", \"active\", \"active\").\n\nAllow(Q) :- Request(Q, \"app\", \"update_share\"),\n    Parameter(Q, \"share_id\", S),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"eta_time\", E),\n    E != \"\",\n    Field(_, \"eta_value\", E),\n    CanTransition(S, \"update_share\", \"active\", \"active\").\n\nAllow(Q) :- Request(Q, \"app\", \"update_share\"),\n    Parameter(Q, \"share_id\", S),\n    Parameter(Q, \"message\", _),\n    Parameter(Q, \"eta_time\", \"\"),\n    CanTransition(S, \"update_share\", \"active\", \"active\").\n\nAllow(Q) :- Request(Q, \"share\", \"revoke_share\"),\n    Parameter(Q, \"share_id\", S),\n    CanTransition(S, \"revoke_share\", \"active\", \"revoked\").\n\nAllow(Q) :- Request(Q, \"app\", \"revoke_share\"),\n    Parameter(Q, \"share_id\", S),\n    CanTransition(S, \"revoke_share\", \"active\", \"revoked\").\n\nAllow(Q) :- Request(Q, \"share\", \"send_message\"),\n    Parameter(Q, \"recipient\", R),\n    Parameter(Q, \"text\", _),\n    Field(S, \"share_recipient\", R),\n    Field(S, \"share_status\", \"active\"),\n    Field(R, \"contact_trusted\", \"true\").\n\nAllow(Q) :- Request(Q, \"share\", \"send_message\"),\n    Parameter(Q, \"recipient\", R),\n    Parameter(Q, \"text\", _),\n    Field(S, \"share_recipient\", R),\n    Field(S, \"share_status\", \"active\"),\n    Field(C, \"contact_channel\", R),\n    Field(C, \"contact_trusted\", \"true\").\n\nAllow(Q) :- Request(Q, \"concierge\", \"concierge_reply\").\nAllow(Q) :- Request(Q, \"route\", \"route_agent_reply\").\n\nDeny(Q, \"p6_duration_over_240\") :-\n    Request(Q, _, \"create_share\"),\n    Parameter(Q, \"duration_min\", D),\n    D > 240.\n\nDeny(Q, \"p6_no_duration_or_stop\") :-\n    Request(Q, _, \"create_share\"),\n    Parameter(Q, \"duration_min\", D),\n    D <= 0,\n    Parameter(Q, \"stop_on_arrival\", \"false\").\n\nDeny(Q, \"p7_precise_near_sensitive\") :-\n    Request(Q, \"share\", \"create_share\"),\n    Parameter(Q, \"live_location\", \"true\"),\n    Parameter(Q, \"precision\", P),\n    P != \"neighborhood\",\n    Parameter(Q, \"protect_sensitive\", \"false\"),\n    Field(_, \"rider_min_sensitive_distance_m\", D),\n    D <= 300.\n\nDeny(Q, \"p7_precise_near_sensitive_update\") :-\n    Request(Q, \"share\", \"update_share\"),\n    Parameter(Q, \"share_id\", S),\n    Field(S, \"share_field_live_location\", \"true\"),\n    Field(S, \"share_precision\", P),\n    P != \"neighborhood\",\n    Field(S, \"share_protect_sensitive\", \"false\"),\n    Field(_, \"rider_min_sensitive_distance_m\", D),\n    D <= 300.\n\nDeny(Q, \"p19_contact_key\") :-\n    Request(Q, _, A),\n    A != \"ask_share_agent\",\n    Parameter(Q, \"request\", Req),\n    Field(Req, \"contact_name\", _).\n\nDeny(Q, \"p19_contact_name\") :-\n    Request(Q, _, A),\n    A != \"ask_share_agent\",\n    Parameter(Q, \"request\", Req),\n    Field(C, \"contact_name\", Req).\n\nDeny(Q, \"p19_contact_channel\") :-\n    Request(Q, _, A),\n    A != \"ask_share_agent\",\n    Parameter(Q, \"request\", Req),\n    Field(C, \"contact_channel\", Req).\n\nDeny(Q, \"p19_share_id\") :-\n    Request(Q, _, A),\n    A != \"ask_share_agent\",\n    Parameter(Q, \"request\", Req),\n    Field(Req, \"share_status\", _).\n",
+    "hash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd"
+  },
+  "initialInputs": [
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "concierge",
+        "Concierge"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "schedule",
+        "Specialist"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "transit",
+        "Specialist"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "route",
+        "Specialist"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "share",
+        "Specialist"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "share",
+        "ShareAgent"
+      ]
+    },
+    {
+      "predicate": "PrincipalGroup",
+      "args": [
+        "app",
+        "AppActor"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "Concierge",
+        "user",
+        "ask_user"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "Concierge",
+        "specialist_request",
+        "ask_schedule_agent"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "Concierge",
+        "specialist_request",
+        "ask_transit_agent"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "Concierge",
+        "specialist_request",
+        "ask_route_agent"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "Concierge",
+        "specialist_request",
+        "ask_share_agent"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "create_share"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "update_share"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "revoke_share"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "send_message"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "get_contacts"
+      ]
+    },
+    {
+      "predicate": "Capability",
+      "args": [
+        "ShareAgent",
+        "share_operations",
+        "read_replies"
+      ]
+    },
+    {
+      "predicate": "InitialState",
+      "args": [
+        "share",
+        "active"
+      ]
+    },
+    {
+      "predicate": "AllowedTransition",
+      "args": [
+        "share",
+        "update_share",
+        "active",
+        "active"
+      ]
+    },
+    {
+      "predicate": "AllowedTransition",
+      "args": [
+        "share",
+        "revoke_share",
+        "active",
+        "revoked"
+      ]
+    },
+    {
+      "predicate": "AllowedTransition",
+      "args": [
+        "share",
+        "arrive",
+        "active",
+        "ended"
+      ]
+    },
+    {
+      "predicate": "AllowedTransition",
+      "args": [
+        "share",
+        "expire",
+        "active",
+        "expired"
+      ]
+    }
+  ],
+  "scope": "Captured gate inputs and mediated callbacks. Outcomes follow the trusted adapter's confirmation contract; they are not independent proof of business success or authentic identity. Unmediated channels and missing observations remain outside this trace.",
+  "events": [
+    {
+      "kind": "update",
+      "id": "fdaf2c16-3576-4c1a-bf38-a6b16b21ad0d",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        }
+      ],
+      "inputHash": "e6ae2534290192d0e95e25284cf8240b683c1f0220e1750b1613d09dc62cd0b4",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        }
+      ],
+      "committedInputHash": "3c400a0fe818d6e4fb738d89ed61ff41ebcf4010ebd5a69066a1d4e65de52fda",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 0,
+      "hash": "009335204c44c269133c3b3176dc010225dca271fd2aed69e003b25dbaf9c870"
+    },
+    {
+      "kind": "call",
+      "id": "80c2fa7e-cbe5-4c16-a20b-58e254d2a524",
+      "request": {
+        "actor": "concierge",
+        "action": "ask_transit_agent",
+        "parameters": {
+          "request": "Are there any service alerts for the Rapid 6 (CC6R) line?"
+        },
+        "id": "80c2fa7e-cbe5-4c16-a20b-58e254d2a524"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        }
+      ],
+      "inputHash": "3c400a0fe818d6e4fb738d89ed61ff41ebcf4010ebd5a69066a1d4e65de52fda",
+      "observationVersions": {},
+      "decision": {
+        "allowed": true,
+        "policyHash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd",
+        "request": {
+          "actor": "concierge",
+          "action": "ask_transit_agent",
+          "parameters": {
+            "request": "Are there any service alerts for the Rapid 6 (CC6R) line?"
+          },
+          "id": "80c2fa7e-cbe5-4c16-a20b-58e254d2a524"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "80c2fa7e-cbe5-4c16-a20b-58e254d2a524"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "app",
+              "AppActor"
+            ],
+            [
+              "concierge",
+              "Concierge"
+            ],
+            [
+              "route",
+              "Specialist"
+            ],
+            [
+              "schedule",
+              "Specialist"
+            ],
+            [
+              "share",
+              "ShareAgent"
+            ],
+            [
+              "share",
+              "Specialist"
+            ],
+            [
+              "transit",
+              "Specialist"
+            ]
+          ],
+          "Can": [
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "Concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "update_share"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "share",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "share",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "share",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "share",
+              "share_operations",
+              "update_share"
+            ]
+          ],
+          "ReachableState": [
+            [
+              "share",
+              "active",
+              "active"
+            ],
+            [
+              "share",
+              "active",
+              "ended"
+            ],
+            [
+              "share",
+              "active",
+              "expired"
+            ],
+            [
+              "share",
+              "active",
+              "revoked"
+            ]
+          ],
+          "CanTransition": []
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        }
+      ],
+      "committedInputHash": "3c400a0fe818d6e4fb738d89ed61ff41ebcf4010ebd5a69066a1d4e65de52fda",
+      "resultHash": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "result": true,
+      "sequence": 1,
+      "hash": "f45724ad724c9f8d8ab5ccc4fd79f5156ece485fb7eecd8faa36cfe26ba43531"
+    },
+    {
+      "kind": "update",
+      "id": "9e2b4c60-8b47-4a62-b1fc-27aec1ec31cc",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        }
+      ],
+      "inputHash": "3c400a0fe818d6e4fb738d89ed61ff41ebcf4010ebd5a69066a1d4e65de52fda",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "committedInputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 2,
+      "hash": "c14b833b8efa3392b8d89d76758f9871d422c8dacb1f31dc42bd890a4e91ec58"
+    },
+    {
+      "kind": "update",
+      "id": "3d279665-2903-472e-b290-7134febd49cf",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "inputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "committedInputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 3,
+      "hash": "13002599bfecb7137d7564e73c775460232ef807901766f99ebee63623b568cd"
+    },
+    {
+      "kind": "call",
+      "id": "7678f84f-361b-4810-9c23-247dd91fe41e",
+      "request": {
+        "actor": "concierge",
+        "action": "concierge_reply",
+        "parameters": {
+          "reply_text": "There is a service alert for the Rapid 6 (CC6R): the Sepulveda Blvd & Exposition Blvd stop is currently closed until 12:00 due to a detour."
+        },
+        "id": "7678f84f-361b-4810-9c23-247dd91fe41e"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "inputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "observationVersions": {},
+      "decision": {
+        "allowed": true,
+        "policyHash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd",
+        "request": {
+          "actor": "concierge",
+          "action": "concierge_reply",
+          "parameters": {
+            "reply_text": "There is a service alert for the Rapid 6 (CC6R): the Sepulveda Blvd & Exposition Blvd stop is currently closed until 12:00 due to a detour."
+          },
+          "id": "7678f84f-361b-4810-9c23-247dd91fe41e"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "7678f84f-361b-4810-9c23-247dd91fe41e"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "app",
+              "AppActor"
+            ],
+            [
+              "concierge",
+              "Concierge"
+            ],
+            [
+              "route",
+              "Specialist"
+            ],
+            [
+              "schedule",
+              "Specialist"
+            ],
+            [
+              "share",
+              "ShareAgent"
+            ],
+            [
+              "share",
+              "Specialist"
+            ],
+            [
+              "transit",
+              "Specialist"
+            ]
+          ],
+          "Can": [
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "Concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "update_share"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "share",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "share",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "share",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "share",
+              "share_operations",
+              "update_share"
+            ]
+          ],
+          "ReachableState": [
+            [
+              "share",
+              "active",
+              "active"
+            ],
+            [
+              "share",
+              "active",
+              "ended"
+            ],
+            [
+              "share",
+              "active",
+              "expired"
+            ],
+            [
+              "share",
+              "active",
+              "revoked"
+            ]
+          ],
+          "CanTransition": []
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "committedInputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "resultHash": "fe07dc9c0650b92006a2e25c8d7cdcad360cabf822ddcf5c4a701de23ce70103",
+      "result": "There is a service alert for the Rapid 6 (CC6R): the Sepulveda Blvd & Exposition Blvd stop is currently closed until 12:00 due to a detour.",
+      "sequence": 4,
+      "hash": "fca57f3efce13ab4dcdeb2af52471d932eb7c132f448d1000cdc93a6b15e755b"
+    },
+    {
+      "kind": "update",
+      "id": "cc82482a-177e-4548-ae14-ca4cca2c253a",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114400000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        }
+      ],
+      "inputHash": "e176c08346707e3a1aabb66995a6124685df2b897e4e7e824c0ef9fbde5c1370",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        }
+      ],
+      "committedInputHash": "c4adaa62ce21e74f792d408991f3fa9b4d92388ced51bdd985a1915a739fda14",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 5,
+      "hash": "e9260d94615564ce4eac2eb0f6d9418c2642a004f6166f05d0867b6dae4124bb"
+    },
+    {
+      "kind": "call",
+      "id": "0992c3da-5656-4321-8c96-e0e75d3b2459",
+      "request": {
+        "actor": "concierge",
+        "action": "ask_route_agent",
+        "parameters": {
+          "request": "Plan a trip from Home to Boelter Hall leaving at 08:22. Note: The Sepulveda Blvd & Exposition Blvd stop is closed until 12:00 due to a detour on the CC6R line."
+        },
+        "id": "0992c3da-5656-4321-8c96-e0e75d3b2459"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        }
+      ],
+      "inputHash": "c4adaa62ce21e74f792d408991f3fa9b4d92388ced51bdd985a1915a739fda14",
+      "observationVersions": {},
+      "decision": {
+        "allowed": true,
+        "policyHash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd",
+        "request": {
+          "actor": "concierge",
+          "action": "ask_route_agent",
+          "parameters": {
+            "request": "Plan a trip from Home to Boelter Hall leaving at 08:22. Note: The Sepulveda Blvd & Exposition Blvd stop is closed until 12:00 due to a detour on the CC6R line."
+          },
+          "id": "0992c3da-5656-4321-8c96-e0e75d3b2459"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "0992c3da-5656-4321-8c96-e0e75d3b2459"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "app",
+              "AppActor"
+            ],
+            [
+              "concierge",
+              "Concierge"
+            ],
+            [
+              "route",
+              "Specialist"
+            ],
+            [
+              "schedule",
+              "Specialist"
+            ],
+            [
+              "share",
+              "ShareAgent"
+            ],
+            [
+              "share",
+              "Specialist"
+            ],
+            [
+              "transit",
+              "Specialist"
+            ]
+          ],
+          "Can": [
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "Concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "update_share"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "share",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "share",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "share",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "share",
+              "share_operations",
+              "update_share"
+            ]
+          ],
+          "ReachableState": [
+            [
+              "share",
+              "active",
+              "active"
+            ],
+            [
+              "share",
+              "active",
+              "ended"
+            ],
+            [
+              "share",
+              "active",
+              "expired"
+            ],
+            [
+              "share",
+              "active",
+              "revoked"
+            ]
+          ],
+          "CanTransition": []
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        }
+      ],
+      "committedInputHash": "c4adaa62ce21e74f792d408991f3fa9b4d92388ced51bdd985a1915a739fda14",
+      "resultHash": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "result": true,
+      "sequence": 6,
+      "hash": "767b3b11e3c8e4416d0a7d945fdd604edc016a894c0363f53afcbf254b795598"
+    },
+    {
+      "kind": "update",
+      "id": "3b23f733-93a2-48e5-acdc-da694d2a2dfa",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        }
+      ],
+      "inputHash": "c4adaa62ce21e74f792d408991f3fa9b4d92388ced51bdd985a1915a739fda14",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "committedInputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 7,
+      "hash": "41ba3dc62feb854ede8d5181b71409b7dadf0a634f2cae002c7d9f4bfe15635e"
+    },
+    {
+      "kind": "update",
+      "id": "b6f6d1f1-c7a2-48fb-a599-96d898e425b6",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "inputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "committedInputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 8,
+      "hash": "8673a75afc27b2f6e62a2e0a179d30b241c0e803e380854cb9972cb0fc92bb8e"
+    },
+    {
+      "kind": "call",
+      "id": "30fd4200-815d-480d-a94b-b307db40d15e",
+      "request": {
+        "actor": "route",
+        "action": "route_agent_reply",
+        "parameters": {
+          "reply_text": "I found 3 routes for your trip from Home to Boelter Hall:\n\nM761: board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\nBB17: board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\nCC6: board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)"
+        },
+        "id": "30fd4200-815d-480d-a94b-b307db40d15e"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "inputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "observationVersions": {},
+      "decision": {
+        "allowed": true,
+        "policyHash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd",
+        "request": {
+          "actor": "route",
+          "action": "route_agent_reply",
+          "parameters": {
+            "reply_text": "I found 3 routes for your trip from Home to Boelter Hall:\n\nM761: board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\nBB17: board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\nCC6: board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)"
+          },
+          "id": "30fd4200-815d-480d-a94b-b307db40d15e"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "30fd4200-815d-480d-a94b-b307db40d15e"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "app",
+              "AppActor"
+            ],
+            [
+              "concierge",
+              "Concierge"
+            ],
+            [
+              "route",
+              "Specialist"
+            ],
+            [
+              "schedule",
+              "Specialist"
+            ],
+            [
+              "share",
+              "ShareAgent"
+            ],
+            [
+              "share",
+              "Specialist"
+            ],
+            [
+              "transit",
+              "Specialist"
+            ]
+          ],
+          "Can": [
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "Concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "update_share"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "share",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "share",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "share",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "share",
+              "share_operations",
+              "update_share"
+            ]
+          ],
+          "ReachableState": [
+            [
+              "share",
+              "active",
+              "active"
+            ],
+            [
+              "share",
+              "active",
+              "ended"
+            ],
+            [
+              "share",
+              "active",
+              "expired"
+            ],
+            [
+              "share",
+              "active",
+              "revoked"
+            ]
+          ],
+          "CanTransition": []
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "committedInputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "resultHash": "0abb9fedc7bcc264761999a9028fe560fdf905908c6e8eafc7cda251d9f37eea",
+      "result": "I found 3 routes for your trip from Home to Boelter Hall:\n\nM761: board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\nBB17: board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\nCC6: board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)",
+      "sequence": 9,
+      "hash": "51809664c6680621cc2162da36f35964bf00c6fd79d4de2f1760c358f9e111fd"
+    },
+    {
+      "kind": "update",
+      "id": "1da78094-0f55-477b-9b4f-9a5501d52f1c",
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "inputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "committedInputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "outcome": "applied",
+      "source": "trusted-host-update; identity not independently authenticated",
+      "sequence": 10,
+      "hash": "45cce05b2e1c55b4186d97437cebc075a495706ae4e2ff56ffcab95f218db2e2"
+    },
+    {
+      "kind": "call",
+      "id": "4284728c-b483-4fc7-a0fb-7fe7644ce69c",
+      "request": {
+        "actor": "concierge",
+        "action": "concierge_reply",
+        "parameters": {
+          "reply_text": "I found 3 routes for your trip from Home to Boelter Hall:\n\n1. **M761**: Board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\n2. **BB17**: Board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\n3. **CC6**: Board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)\n\nWhich route would you like to take?"
+        },
+        "id": "4284728c-b483-4fc7-a0fb-7fe7644ce69c"
+      },
+      "inputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "inputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "observationVersions": {},
+      "decision": {
+        "allowed": true,
+        "policyHash": "566d1741aa2b0cd60844dcd12279a7e69e7502ddb624080eeba0d4afa1e82dcd",
+        "request": {
+          "actor": "concierge",
+          "action": "concierge_reply",
+          "parameters": {
+            "reply_text": "I found 3 routes for your trip from Home to Boelter Hall:\n\n1. **M761**: Board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\n2. **BB17**: Board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\n3. **CC6**: Board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)\n\nWhich route would you like to take?"
+          },
+          "id": "4284728c-b483-4fc7-a0fb-7fe7644ce69c"
+        },
+        "reasons": [],
+        "derived": {
+          "Allow": [
+            [
+              "4284728c-b483-4fc7-a0fb-7fe7644ce69c"
+            ]
+          ],
+          "Deny": [],
+          "InGroup": [
+            [
+              "app",
+              "AppActor"
+            ],
+            [
+              "concierge",
+              "Concierge"
+            ],
+            [
+              "route",
+              "Specialist"
+            ],
+            [
+              "schedule",
+              "Specialist"
+            ],
+            [
+              "share",
+              "ShareAgent"
+            ],
+            [
+              "share",
+              "Specialist"
+            ],
+            [
+              "transit",
+              "Specialist"
+            ]
+          ],
+          "Can": [
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "Concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "Concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "ShareAgent",
+              "share_operations",
+              "update_share"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_route_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_schedule_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_share_agent"
+            ],
+            [
+              "concierge",
+              "specialist_request",
+              "ask_transit_agent"
+            ],
+            [
+              "concierge",
+              "user",
+              "ask_user"
+            ],
+            [
+              "share",
+              "share_operations",
+              "create_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "get_contacts"
+            ],
+            [
+              "share",
+              "share_operations",
+              "read_replies"
+            ],
+            [
+              "share",
+              "share_operations",
+              "revoke_share"
+            ],
+            [
+              "share",
+              "share_operations",
+              "send_message"
+            ],
+            [
+              "share",
+              "share_operations",
+              "update_share"
+            ]
+          ],
+          "ReachableState": [
+            [
+              "share",
+              "active",
+              "active"
+            ],
+            [
+              "share",
+              "active",
+              "ended"
+            ],
+            [
+              "share",
+              "active",
+              "expired"
+            ],
+            [
+              "share",
+              "active",
+              "revoked"
+            ]
+          ],
+          "CanTransition": []
+        }
+      },
+      "effectCalled": true,
+      "outcome": "applied",
+      "committedInputs": [
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "concierge",
+            "Concierge"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "schedule",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "transit",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "route",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "Specialist"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "share",
+            "ShareAgent"
+          ]
+        },
+        {
+          "predicate": "PrincipalGroup",
+          "args": [
+            "app",
+            "AppActor"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "user",
+            "ask_user"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_schedule_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_transit_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_route_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "Concierge",
+            "specialist_request",
+            "ask_share_agent"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "create_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "update_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "revoke_share"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "send_message"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "get_contacts"
+          ]
+        },
+        {
+          "predicate": "Capability",
+          "args": [
+            "ShareAgent",
+            "share_operations",
+            "read_replies"
+          ]
+        },
+        {
+          "predicate": "InitialState",
+          "args": [
+            "share",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "update_share",
+            "active",
+            "active"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "revoke_share",
+            "active",
+            "revoked"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "arrive",
+            "active",
+            "ended"
+          ]
+        },
+        {
+          "predicate": "AllowedTransition",
+          "args": [
+            "share",
+            "expire",
+            "active",
+            "expired"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_trusted",
+            "true"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_channel",
+            "sms:+1-555-0100"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "mom",
+            "contact_name",
+            "Mom"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "rider",
+            "rider_min_sensitive_distance_m",
+            "0"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "A-CC6R-1",
+            "alert_closed_stop",
+            "Sepulveda Blvd & Exposition Blvd"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "world",
+            "world_now_epoch_ms",
+            "1793114520000"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_count",
+            "3"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "M761:Sepulveda&Pico>Hilgard&Westholme"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "BB17:Sepulveda&Exposition>WestwoodPlaza&JSteinEye"
+          ]
+        },
+        {
+          "predicate": "Field",
+          "args": [
+            "plan-1",
+            "plan_route_id",
+            "CC6:SepulvedaBlvd&PicoBlvd>UCLAGatewayPlaza"
+          ]
+        }
+      ],
+      "committedInputHash": "3966fcfbb8f7f0116659786be8b419ad6e3312ac334e70e238ee4493186cc487",
+      "resultHash": "b1cb1c916107d3cee34f8dd26a3aa9c0376b8a61f9152af8600b12fdf22d8e26",
+      "result": "I found 3 routes for your trip from Home to Boelter Hall:\n\n1. **M761**: Board at Sepulveda & Pico, get off at Hilgard & Westholme; leave by 08:24; departs 08:28 (arrives 08:54), 08:43 (arrives 09:09)\n2. **BB17**: Board at Sepulveda & Exposition, get off at Westwood Plaza & J Stein Eye; leave by 08:22; departs 08:23 (arrives 08:59), 08:38 (arrives 09:14)\n3. **CC6**: Board at Sepulveda Blvd & Pico Blvd, get off at UCLA Gateway Plaza; leave by 08:28; departs 08:32 (arrives 09:01), 08:50 (arrives 09:18)\n\nWhich route would you like to take?",
+      "sequence": 11,
+      "hash": "33eedf240b7e100381cce870ae6cef94ce943b93ccb431af369edc4154f1af86"
+    }
+  ],
+  "id": "8ae3c50ddffda6ff1ee861ee8cbc09bbec9e39caaab6f5320aea5fba858ebce4"
+}

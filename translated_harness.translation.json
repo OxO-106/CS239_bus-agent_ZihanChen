@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "inputHash": "c819863fa91b815266352e8c9dcc0a18e7209b67affd396a50b5ada596907970",
+  "outputHash": "0b64734d811206225da4eb4a8d794c7281ca39e98ce78522481035e064de26a5",
+  "cases": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06",
+    "S07",
+    "S08",
+    "S09",
+    "S10"
+  ],
+  "limitations": [
+    "The app's LLM calls go to the Ollama server configured in each app's src/.env; runs are not deterministic.",
+    "run_sample is retained unchanged but unused; the shared runner writes result.json instead."
+  ],
+  "validation": "Syntax, retained helper definitions and assertions; no execution or semantic equivalence claim."
+}

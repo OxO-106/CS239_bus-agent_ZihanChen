@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "side": "ported",
+  "case": "S05",
+  "sample": 8,
+  "executionStatus": "completed",
+  "taskCompleteness": true,
+  "trajectories": [
+    "trajectory.jsonl",
+    "trajectory.json",
+    "gate-1.json"
+  ]
+}

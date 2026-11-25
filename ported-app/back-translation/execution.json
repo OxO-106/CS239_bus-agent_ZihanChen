@@ -1,0 +1,855 @@
+{
+  "version": 1,
+  "procedures": [
+    {
+      "id": "concierge-specialist-requests",
+      "title": "Concierge requests to specialist agents",
+      "summary": "Records: When the Concierge sends a message to the schedule, transit, route or share agent, the gate sees the sender name, the action ask_<agent>_agent and the whole message text as the request. Contacts, rider distance and known share statuses are refreshed from the app just before the decision.",
+      "ruleIds": [
+        "rule1"
+      ],
+      "reads": [
+        {
+          "text": "Sender name and target agent from the Bus.send call; action is ask_<recipient>_agent, parameter request = the whole message text.",
+          "sources": [
+            "tool call",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "Capability rows for Concierge/specialist_request are fixed facts in the reviewed rule file.",
+          "sources": [
+            "static configuration",
+            "rule constant"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: The request is allowed only when the sender is the Concierge and the action is one of the four specialist requests listed as Concierge capabilities. A refusal from the identifier check below overrides this. A refused message is not delivered and the specialist does not run; the Concierge gets a not-delivered notice."
+        },
+        {
+          "indent": 0,
+          "text": "Messages from any other sender are not gated. The Concierge's ask_user tool and the specialists' replies (including raw tool results passed back) are not checked."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "action = f\"ask_{recipient}_agent\""
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if sender != \"concierge\" or action not in CALLS:"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "verdict = session.policy.call(sender, action, {\"request\": str(text)}, deliver)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "reply = original(self, sender, recipient, text, images)"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"concierge\", A), Capability(\"Concierge\", \"specialist_request\", A)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Capability(\"Concierge\", \"specialist_request\", \"ask_route_agent\")."
+        },
+        {
+          "file": "source/src/bus_agent/bus.py",
+          "quote": "@_policy_message"
+        },
+        {
+          "file": "framework/policyweave/core/policy.py",
+          "quote": "allowed = not reasons and any(f[\"predicate\"] == gate[\"allow\"] for f in evidence)"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "specialist-request-contact-reference",
+      "title": "Bare contact or share identifiers kept from non-share specialists",
+      "summary": "Records: Uses the message text of a Concierge request to the schedule, transit or route agent, plus contact keys, names and channels refreshed from the app's contacts and get_contacts results, and share ids recorded when the share agent created a share.",
+      "ruleIds": [
+        "rule24",
+        "rule25",
+        "rule26",
+        "rule27"
+      ],
+      "reads": [
+        {
+          "text": "Whole request text of a Concierge-to-specialist message (parameter request).",
+          "sources": [
+            "tool call"
+          ]
+        },
+        {
+          "text": "Contact keys, names and channels refreshed from the world's contacts before the gate and also published from get_contacts results; share ids with a share_status field from earlier gated share creation.",
+          "sources": [
+            "application state",
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: An explicit Deny refuses the message when its entire text is exactly a contact key, a contact name, a contact channel or a recorded share id. Requests to the share agent are never refused by this check."
+        },
+        {
+          "indent": 0,
+          "text": "The match is whole-text equality only: a normal sentence that mentions a contact's name, phone channel or a share id is delivered. Ids of shares made in the app's share sheet are not recorded, and removed contacts keep their old records."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"p19_contact_key\") :-"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "A != \"ask_share_agent\","
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(Req, \"contact_name\", _)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(C, \"contact_name\", Req)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(C, \"contact_channel\", Req)."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(Req, \"share_status\", _)."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "self._replace(facts, rows, key, \"contact_name\", contact[\"name\"])"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if share_id in known:"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-create-trusted-recipient",
+      "title": "Trusted recipient for share agent create_share",
+      "summary": "Records: Before the share agent's create_share runs, the gate reads the recipient argument and each contact's trusted flag and channel, refreshed from the app's contacts just before the decision. After a confirmed success it records the new share as active with its recipient, fields, precision, stop-on-arrival and protect-sensitive settings.",
+      "ruleIds": [
+        "rule2",
+        "rule3",
+        "rule4",
+        "rule5"
+      ],
+      "reads": [
+        {
+          "text": "create_share recipient argument, projected to a string; caller name of the Agent instance (share).",
+          "sources": [
+            "tool call",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "contact_trusted and contact_channel per contact key, refreshed from world contacts immediately before the gate and also from get_contacts results.",
+          "sources": [
+            "application state",
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Allow requires the caller to be the share agent and the recipient to be either a trusted contact's key (such as mom) or the channel of a trusted contact. A display name, email or untrusted contact has no Allow, so the call is refused and no share is created."
+        },
+        {
+          "indent": 0,
+          "text": "The ETA condition below must also hold. Errors from the tool's own checks are passed through and nothing is recorded. The app's share sheet creates shares without this gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "GATED_TOOLS = (\"create_share\", \"update_share\", \"revoke_share\", \"send_message\")"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "result = session.policy.call(self.name, name, params, lambda: original(self, name, args))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "self._replace(facts, rows, key, \"contact_trusted\", _flag(contact.get(\"trusted\")))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "rows.append((key, \"contact_trusted\", _flag(contact.get(\"trusted\"))))"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(R, \"contact_trusted\", \"true\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(C, \"contact_channel\", R),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "policy.put(\"ResourceState\", sid, \"active\")"
+        },
+        {
+          "file": "source/src/bus_agent/agent.py",
+          "quote": "@_policy_tool_dispatch"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-create-eta-evidence",
+      "title": "ETA in a new share matches a computed ETA",
+      "summary": "Records: Reads the create_share eta flag and eta_time (empty when not given). Each successful compute_eta result returned to an agent is recorded as an ETA value when it returns and is kept for the whole session.",
+      "ruleIds": [
+        "rule2",
+        "rule3",
+        "rule4",
+        "rule5"
+      ],
+      "reads": [
+        {
+          "text": "create_share eta flag and eta_time argument (None becomes empty).",
+          "sources": [
+            "tool call"
+          ]
+        },
+        {
+          "text": "eta_value facts: one new object per successful compute_eta result returned through an agent's tool dispatch; kept for the whole session.",
+          "sources": [
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: With eta on, eta_time must be non-empty and exactly equal one recorded compute_eta value; with eta off, eta_time must be empty. Otherwise there is no Allow and the share is refused."
+        },
+        {
+          "indent": 0,
+          "text": "Any ETA computed earlier in the session matches, even a stale one or one for a different route or trip."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"eta\", \"true\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(_, \"eta_value\", E),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"eta_time\", \"\"),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "elif tool == \"compute_eta\" and result.get(\"eta\"):"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "rows += [(obj, \"eta_value\", result[\"eta\"]), (obj, \"eta_route_id\", result.get(\"route_id\", \"\")),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "\"eta_time\": \"\" if a[\"eta_time\"] is None else str(a[\"eta_time\"]),"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-create-duration-limit",
+      "title": "Shares must stop on arrival or last at most 240 minutes",
+      "summary": "Records: Reads the create_share duration in minutes (missing or 0 is treated as 0, meaning no expiry) and the stop-on-arrival flag from the call.",
+      "ruleIds": [
+        "rule20",
+        "rule21"
+      ],
+      "reads": [
+        {
+          "text": "create_share duration_min (integer minutes; missing or 0 encoded as 0, which the tool treats as no expiry) and stop_on_arrival flag (default true).",
+          "sources": [
+            "tool call"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: An explicit Deny refuses any share with a duration of more than 240 minutes, whether or not it stops on arrival. A second explicit Deny refuses a share with no duration and stop-on-arrival false. Both override any Allow."
+        },
+        {
+          "indent": 0,
+          "text": "A share of 1 to 240 minutes, or one with no duration that stops on arrival, is not refused by this check. Ending the share on arrival or at expiry is done by the app, not by the gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"p6_duration_over_240\") :-"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "D > 240."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"p6_no_duration_or_stop\") :-"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "D <= 0,"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"stop_on_arrival\", \"false\")."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "\"duration_min\": int(a[\"duration_min\"]) if a[\"duration_min\"] else 0,"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-create-exact-near-sensitive",
+      "title": "Share-agent live location near a sensitive place",
+      "summary": "Records: Reads the create_share live-location flag, precision and protect-sensitive flag (default false, not offered to the agents; when true the app rounds the location near sensitive places). Just before the decision it records the rider's whole-meter distance from current GPS to the nearest place marked sensitive, such as Home.",
+      "ruleIds": [
+        "rule22"
+      ],
+      "reads": [
+        {
+          "text": "create_share live_location, precision and protect_sensitive arguments (protect_sensitive defaults to false and is not in the agents' tool schema; with it true the app rounds the payload near sensitive places).",
+          "sources": [
+            "tool call"
+          ]
+        },
+        {
+          "text": "rider_min_sensitive_distance_m: integer meters from current GPS to the nearest place marked sensitive, recomputed just before the gate.",
+          "sources": [
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: For the share agent, an explicit Deny refuses a share with live location on, any precision other than neighborhood (exact or street), protect-sensitive false, and the rider within 300 meters of a sensitive place. Neighborhood precision passes."
+        },
+        {
+          "indent": 0,
+          "text": "The app's share sheet, where the user can turn off Hide where I live, is not covered by this refusal. A user's chat request to show the exact location is not recorded, so the agent path refuses it too. If GPS or sensitive places are missing, no new distance is recorded and an older one stays in use."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"p7_precise_near_sensitive\") :-"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "P != \"neighborhood\","
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"protect_sensitive\", \"false\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "D <= 300."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "self._replace(facts, rows, \"rider\", \"rider_min_sensitive_distance_m\", distance)"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "return int(min(meters(gps[\"lat\"], gps[\"lon\"], p[\"lat\"], p[\"lon\"]) for p in places))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "\"protect_sensitive\": bool(a[\"protect_sensitive\"]),"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-update-lifecycle",
+      "title": "update_share only on an active share",
+      "summary": "Records: Reads the update_share share id and message. Uses the share's lifecycle state, set to active after a share-agent create_share succeeds and moved to ended or expired when the app reports that the share ended on arrival or expired (checked just before each decision). After a successful update it records the update time and the sent ETA.",
+      "ruleIds": [
+        "rule10",
+        "rule11"
+      ],
+      "reads": [
+        {
+          "text": "update_share share_id and message (message always supplied, possibly empty).",
+          "sources": [
+            "tool call",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "Runtime lifecycle rows (type share, state active) written only after a gated share-agent create_share succeeded; changed only by gated transitions.",
+          "sources": [
+            "application state"
+          ]
+        },
+        {
+          "text": "Allowed transitions are fixed facts in the rule file.",
+          "sources": [
+            "static configuration"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Allow requires the caller to be the share agent and the share to be in the active state with an active-to-active update move available. An unknown, app-made, revoked, ended or expired share gets an invalid-transition refusal."
+        },
+        {
+          "indent": 0,
+          "text": "The ETA condition below must also hold. The recorded update time is not used, so there is no limit on how often updates are sent."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "AllowedTransition(\"share\", \"update_share\", \"active\", \"active\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "CanTransition(S, \"update_share\", \"active\", \"active\")."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "self.policy = make_policy(target=\"share_id\", completed=self._completed,"
+        },
+        {
+          "file": "framework/policyweave/core/policy.py",
+          "quote": "encoded_fact(fact(gate[\"deny\"], request[\"id\"], \"invalid_transition\"))"
+        },
+        {
+          "file": "source/src/bus_agent/world.py",
+          "quote": "share[\"status\"] = \"ended\""
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "replace(params[\"share_id\"], \"share_updated_at_ms\", int(w.now.timestamp() * 1000))"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "if state is not None and state[1] == \"active\" and share[\"status\"] in (\"ended\", \"expired\"):"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "facts.put(\"ResourceState\", share_id, share[\"status\"])"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-update-eta-evidence",
+      "title": "ETA in a share update matches a computed ETA",
+      "summary": "Records: Reads the update_share eta_time (empty when not given) and the compute_eta values recorded when that tool returned to an agent.",
+      "ruleIds": [
+        "rule10",
+        "rule11"
+      ],
+      "reads": [
+        {
+          "text": "update_share eta_time argument (None becomes empty).",
+          "sources": [
+            "tool call"
+          ]
+        },
+        {
+          "text": "eta_value facts from earlier compute_eta tool results in the session.",
+          "sources": [
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: An empty eta_time is accepted. A non-empty eta_time must exactly equal one recorded compute_eta value; otherwise there is no Allow and the update is refused."
+        },
+        {
+          "indent": 0,
+          "text": "Any earlier computed ETA matches, regardless of share, route or age, and the share's own ETA setting is not checked."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"share\", \"update_share\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Parameter(Q, \"eta_time\", E),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "\"eta_time\": \"\" if a[\"eta_time\"] is None else str(a[\"eta_time\"])}"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-update-exact-near-sensitive",
+      "title": "Share-agent updates to precise live-location shares near a sensitive place",
+      "summary": "Records: Uses the live-location flag, precision and protect-sensitive setting recorded when the share was created, and the rider's distance to the nearest sensitive place recorded just before the decision.",
+      "ruleIds": [
+        "rule23"
+      ],
+      "reads": [
+        {
+          "text": "share_field_live_location, share_precision and share_protect_sensitive recorded for the share at creation.",
+          "sources": [
+            "application state"
+          ]
+        },
+        {
+          "text": "rider_min_sensitive_distance_m recomputed just before the gate.",
+          "sources": [
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: For the share agent, an explicit Deny refuses update_share when the share includes live location, its precision is not neighborhood, its protect-sensitive setting is false, and the rider is within 300 meters of a sensitive place."
+        },
+        {
+          "indent": 0,
+          "text": "This catches an exact share made away from Home whose rider later comes near Home. Updates made by the app itself are not covered."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Deny(Q, \"p7_precise_near_sensitive_update\") :-"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(S, \"share_field_live_location\", \"true\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(S, \"share_protect_sensitive\", \"false\"),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "_flag(value.get(\"protect_sensitive\", params.get(\"protect_sensitive\") == \"true\")))):"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-revoke-active",
+      "title": "revoke_share only on an active share",
+      "summary": "Records: Reads the revoke_share share id and the share's lifecycle state. After a confirmed revoke the state moves to revoked and the share status is recorded as revoked.",
+      "ruleIds": [
+        "rule14"
+      ],
+      "reads": [
+        {
+          "text": "revoke_share share_id; caller name share.",
+          "sources": [
+            "tool call",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "Runtime lifecycle state of the share.",
+          "sources": [
+            "application state"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Allow requires the caller to be the share agent and the share to be active with an active-to-revoked move available. Unknown, app-made, already revoked, ended or expired shares get an invalid-transition refusal."
+        },
+        {
+          "indent": 0,
+          "text": "The app's Stop button and Remove-all-data revoke without the gate."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "AllowedTransition(\"share\", \"revoke_share\", \"active\", \"revoked\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "CanTransition(S, \"revoke_share\", \"active\", \"revoked\")."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "replace(params[\"share_id\"], \"share_status\", value.get(\"status\", \"revoked\"))"
+        },
+        {
+          "file": "source/src/bus_agent/web.py",
+          "quote": "self._tool(\"revoke_share\", share_id=share_id)"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "share-message-active-recipient",
+      "title": "Messages only to trusted recipients with an active share",
+      "summary": "Records: Reads the send_message recipient and text. Uses the recipient recorded when a share-agent share was created, the share status recorded at creation and revoke and refreshed from the app before the decision, and contact trust records.",
+      "ruleIds": [
+        "rule16",
+        "rule17"
+      ],
+      "reads": [
+        {
+          "text": "send_message recipient and text; caller name share.",
+          "sources": [
+            "tool call",
+            "runtime identity"
+          ]
+        },
+        {
+          "text": "share_recipient recorded at gated creation; share_status recorded at creation/revoke and refreshed from the world's shares (known ids only) before the gate.",
+          "sources": [
+            "application state"
+          ]
+        },
+        {
+          "text": "Contact trust/channel facts as for share creation.",
+          "sources": [
+            "application state",
+            "tool result"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: Allow requires the caller to be the share agent, some share whose recorded recipient is exactly this recipient with status active, and the recipient to be a trusted contact's key or a trusted contact's channel. Otherwise there is no Allow and the message is refused."
+        },
+        {
+          "indent": 0,
+          "text": "The message text is not checked by these rules. Shares from the app's share sheet are not recorded and cannot authorize a message; key and channel spellings must match the one used at creation."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"share\", \"send_message\"),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(S, \"share_recipient\", R),"
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Field(S, \"share_status\", \"active\"),"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "self._replace(facts, rows, share_id, \"share_status\", share[\"status\"])"
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "(\"share_recipient\", value[\"recipient\"]),"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "final-replies",
+      "title": "Final replies from Concierge and Route agent",
+      "summary": "Records: After the Concierge or the Route+ETA agent finishes a turn, including the app's own reply rewrites, the gate sees the final reply text and the agent name.",
+      "ruleIds": [
+        "rule18",
+        "rule19"
+      ],
+      "reads": [
+        {
+          "text": "Final reply text after the app's own reply guards; agent name concierge or route.",
+          "sources": [
+            "agent statement",
+            "runtime identity"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: These replies are always allowed and no explicit Deny applies, so the reply is delivered unchanged. Other agents' replies are not gated."
+        },
+        {
+          "indent": 0,
+          "text": "The added rules place no restriction on what a reply to the student or the Concierge says."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"concierge\", \"concierge_reply\")."
+        },
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"route\", \"route_agent_reply\")."
+        },
+        {
+          "file": "source/policy_port/adapter.py",
+          "quote": "verdict = session.policy.call(self.name, action, {\"reply_text\": str(reply)}, lambda: reply)"
+        },
+        {
+          "file": "source/src/bus_agent/agents.py",
+          "quote": "@_policy_reply"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "app-create-share",
+      "title": "App share-sheet create_share (no gate)",
+      "summary": "Records: Nothing is recorded: the app's share sheet calls create_share directly, so no request from the app is ever made and no share records or lifecycle state are written.",
+      "ruleIds": [
+        "rule6",
+        "rule7",
+        "rule8",
+        "rule9"
+      ],
+      "reads": [
+        {
+          "text": "Would read the same create_share arguments and contact facts as the share-agent path; no producer supplies principal app.",
+          "sources": [
+            "tool call",
+            "unknown"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: The installed app permissions would mirror the share agent's trusted-recipient and ETA conditions, but they are never evaluated. The duration and sensitive-place refusals are not applied to share-sheet shares; only the sheet's own trusted-contact and duration choices apply."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"app\", \"create_share\"),"
+        },
+        {
+          "file": "source/src/bus_agent/web.py",
+          "quote": "result = self.tools[name][1](**args)"
+        },
+        {
+          "file": "source/src/bus_agent/web.py",
+          "quote": "result = self._tool(\"create_share\", recipient=opts[\"recipient\"], live_location=bool(f.get(\"live_location\")),"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "app-update-share",
+      "title": "App update_share (no gate)",
+      "summary": "Records: Nothing is recorded: automatic ETA updates for app-made shares after boarding or delay events call update_share directly.",
+      "ruleIds": [
+        "rule12",
+        "rule13"
+      ],
+      "reads": [
+        {
+          "text": "Would read update_share arguments, ETA facts and lifecycle; no producer supplies principal app.",
+          "sources": [
+            "tool call",
+            "unknown"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: The installed app permissions would mirror the share agent's active-share and ETA conditions, but no app request reaches the gate, so these updates are unchecked."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"app\", \"update_share\"),"
+        },
+        {
+          "file": "source/src/bus_agent/web.py",
+          "quote": "self._tool(\"update_share\", share_id=share[\"share_id\"], message=text, eta_time=eta)"
+        }
+      ],
+      "examples": []
+    },
+    {
+      "id": "app-revoke-share",
+      "title": "App revoke_share (no gate)",
+      "summary": "Records: Nothing is recorded by the gate: the Stop button and Remove-all-data call revoke_share directly. A revoked agent share's status is picked up only at the next refresh before another gated call, and its lifecycle stays active.",
+      "ruleIds": [
+        "rule15"
+      ],
+      "reads": [
+        {
+          "text": "Would read revoke_share share_id and lifecycle; no producer supplies principal app.",
+          "sources": [
+            "tool call",
+            "unknown"
+          ]
+        }
+      ],
+      "steps": [
+        {
+          "indent": 0,
+          "text": "Rules: The installed app permission would require an active share, but no app request reaches the gate, so app revokes are unchecked."
+        }
+      ],
+      "evidence": [
+        {
+          "file": "source/policy_port/rules.dl",
+          "quote": "Allow(Q) :- Request(Q, \"app\", \"revoke_share\"),"
+        },
+        {
+          "file": "source/src/bus_agent/web.py",
+          "quote": "s.share_stop(sid)  # recipients get \"stopped sharing\", as with the Stop button"
+        }
+      ],
+      "examples": []
+    }
+  ],
+  "limitations": [
+    "Only four tools are gated (create_share, update_share, revoke_share, send_message); every other agent tool, including get_contacts, read_replies and ask_user, runs unchanged.",
+    "PrincipalGroup facts and the ShareAgent share_operations capabilities are installed but no Allow rule consumes them; share permissions name the principal string share directly.",
+    "Principals are the Agent instance names (concierge, share, route), fixed at construction, not independently authenticated.",
+    "The lifecycle's arrive and expire edges are not executed by a gated call; the adapter writes the ended/expired state when it observes the world's share status before a gate.",
+    "Policy state is one in-memory session per Trace object; host observations are refreshed by the adapter immediately before each gate and are never removed, only inserted or replaced.",
+    "If an argument set cannot be bound or coerced, the adapter skips the gate and the original tool runs (and fails before an effect).",
+    "An agent may pass hidden create_share arguments (channel, trip, protect_sensitive); a non-empty channel makes the original tool skip its own P4/P5/P13 checks, and the policy does not restrict channel.",
+    "The application's own P4/P5/P13/P15 guards depend on the GUARDS environment setting and are not part of the added enforcement."
+  ],
+  "candidateHash": "50cc13fe916a691ee74412fe5aa728dae5bc1ec8ba6b77978c2c5595db3de219",
+  "validation": "structure-and-source-quotes-only"
+}

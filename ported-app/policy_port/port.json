@@ -1,0 +1,313 @@
+{
+ "version": 1,
+ "summary": "Additive decorators on four original boundaries; every authorization condition is in rules.dl.",
+ "modifiedSourceFiles": {
+  "src/bus_agent/agent.py": "import + @_policy_tool_dispatch on Agent._call, @_policy_model_context on Agent.run",
+  "src/bus_agent/bus.py": "import + @_policy_message on Bus.send",
+  "src/bus_agent/agents.py": "import + @_policy_reply on Guarded.run"
+ },
+ "boundaries": {
+  "agent_tool_dispatch": "Agent._call: create_share/update_share/revoke_share/send_message are gated with the original callback as the effect; other tools run unchanged and are observed producers.",
+  "inter_agent_message": "Bus.send: Concierge->specialist requests are gated (ask_<agent>_agent) before the specialist runs; the specialist's own run happens outside the gate so its tools are gated separately (the runtime forbids re-entering a policy session).",
+  "final_reply_delivery": "Guarded.run: the Concierge / Route+ETA reply, after the original reply guards, is gated (concierge_reply / route_agent_reply) before it is returned.",
+  "model_context_assembly": "Agent.run: observes the visible model reply and ask_user answers placed in the context.",
+  "world_event_application": "Not instrumented (no planned calls). Arrival/expiry share endings are observed before later gates: share_status is refreshed and ResourceState moves along the arrive/expire edges.",
+  "outbox_effect": "Not instrumented; outbox writes happen inside gated share callbacks."
+ },
+ "inputs": {
+  "Request/Parameter": "Runtime intent from the four gates (frozen call contract).",
+  "PrincipalGroup/Capability/InitialState/AllowedTransition": "Static configuration in rules.dl.",
+  "ResourceType/ResourceState": "Written with create_share's confirmed result; transitions by the runtime FSM (target parameter share_id); ended/expired observed from w.shares before gates.",
+  "Field contact_*": "w.contacts before every gate, and get_contacts results.",
+  "Field world_now_epoch_ms": "w.now before every gate.",
+  "Field rider_min_sensitive_distance_m": "min distance from w.gps to sensitive saved places (app's meters helper), before every gate.",
+  "Field share_*": "create_share confirmed result; share_status refreshed from w.shares before gates and on revoke; share_updated_at_ms on update_share.",
+  "Field eta_value/eta_route_id/eta_depart": "compute_eta results.",
+  "Field plan_count/plan_route_id": "plan_routes results.",
+  "Field schedule_other_text_present": "extract_schedule_* results.",
+  "Field alert_closed_stop": "get_service_alerts results.",
+  "Field ask_user_answer": "ask_user results observed in Agent.run.",
+  "Field outbox_eta": "share_update outbox entry with an ETA."
+ },
+ "argumentEncoding": {
+  "create_share.duration_min": "None and 0 both mean no expiry in the original; both encode as 0.",
+  "eta_time / message / channel": "None encodes as the empty string.",
+  "booleans": "The original's own coercion (bool(), and hide_places' false-like set).",
+  "unbindable calls": "If the model's arguments do not bind to the tool signature, the original runs and raises its own error before any effect."
+ },
+ "originalGuardDelegation": "The original P4/P5/P13 tool guards and P13/P15 reply guards run unchanged inside the callbacks; a guard refusal is NotApplied (no facts published).",
+ "refusalMapping": {
+  "share tools": "{\"error\": \"Blocked by policy (...)\"} - the app's existing tool error shape; explicit_deny shows the rule code, no_explicit_allow says no rule permits the call.",
+  "ask_<agent>_agent": "The reply string '(not delivered) Blocked by policy ...' returned to the Concierge.",
+  "*_reply": "'(reply withheld) Blocked by policy ...' (the rules allow every reply, so this path is not reached).",
+  "logging": "Each block is also logged in the app trace as a guard event with policy 'PolicyWeave'."
+ },
+ "recording": "telemetry: trace.operation around every tool dispatch, trace.message for gated Concierge<->specialist messages (sent/blocked), trace.model_output for each agent's visible reply, participants declared from their roles (agents, user, environment).",
+ "bypasses": [
+  "The app share sheet (web.py) calls create_share directly; it is not instrumented (principal 'app' unused).",
+  "World.apply (arrive) and app expiry change share status without a gate; the change is observed at the next gate.",
+  "Specialist replies, including pass-through raw tool results, are not gated (only the request is).",
+  "Schedule extraction's inner model call and ask_user questions are not gated."
+ ],
+ "coverage": [
+  {
+   "policy": "p1",
+   "disposition": "supported",
+   "gateActions": [],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The original application already enforces this complete condition: `Bus.send` rejects any specialist-to-specialist send, specialist toolsets do not contain `ask_user`, and only the Concierge's toolset includes `ask_*` specialist dispatch and `ask_user`. No new gate is required; retained behavior will be regression-tested rather than decorated."
+  },
+  {
+   "policy": "p2",
+   "disposition": "partial",
+   "gateActions": [
+    "ask_share_agent",
+    "create_share",
+    "update_share",
+    "revoke_share",
+    "send_message",
+    "get_contacts",
+    "read_replies"
+   ],
+   "implemented": "Capability facts limit share tools (create/update/revoke/send_message) to the Share agent principal; ask_share_agent is the only specialist request that may carry contact names, channels or share ids.",
+   "gap": "The Share toolset is registered only on the Share agent, so other agents cannot call these tools. App-originated share-sheet/Stop/automatic-update effects are identified by caller_context `app` and remain separately subject to P5-P9. The current-turn Concierge-request condition cannot be reconstructed with existing Datalog state: the synchronous `ask_share_agent` request gives only coarse session context, not an authenticated turn token. Thus the exclusive-tool portion is retained and observable, while current-turn provenance remains a gap."
+  },
+  {
+   "policy": "p3",
+   "disposition": "partial",
+   "gateActions": [
+    "ask_user",
+    "get_contacts",
+    "create_share",
+    "send_message"
+   ],
+   "implemented": "create_share and send_message require a recipient that is a trusted saved contact (by key or by channel), observed from the app's contacts before each gate.",
+   "gap": "Trusted-contact detection is feasible using `contact_trusted`, `contact_channel`, and `contact_name` plus the create_share/send_message `recipient` parameter. A new gate can require a preceding `ask_user_answer` for recipients not exactly matching a trusted contact key/channel. However the exact `ask_user` warning text and one-yes-to-one-recipient binding cannot be fully checked in Datalog because the warning and recipient are free model text; the one-time yes can be modeled as a consumed observation, but exact natural-language verification and re-use prevention across indistinguishable messages remain unsupported."
+  },
+  {
+   "policy": "p4",
+   "disposition": "partial",
+   "gateActions": [
+    "ask_user",
+    "create_share"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The original `_p4` guard already prevents a second active share to the same recipient and requires revoke before widening. The new gate can require all create_share leaf parameters to be present as in the original signature. What remains unsupported is verifying that the user message or ask_user answer actually stated recipient, fields, and duration; those are free text and not structured confirmation facts. Consequently the exact missing-field ask_user requirement and proof of new confirmation for widening are only partially observable."
+  },
+  {
+   "policy": "p5",
+   "disposition": "partial",
+   "gateActions": [
+    "create_share",
+    "update_share",
+    "send_message"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "For the fields supplied to `create_share`, `update_share`, and `send_message`, the original `_p5` guard and share payload construction already enforce no coordinates without live location, no line without route, place-name off behavior, and plain-message active-share scope. The new gates can expose those same field choices to Datalog. The remaining gap is that `user approved` is not a structured runtime fact on the agent path; Datalog can see what the Share request asks for but cannot verify against the user's own words without content analysis."
+  },
+  {
+   "policy": "p6",
+   "disposition": "supported",
+   "gateActions": [
+    "create_share"
+   ],
+   "implemented": "create_share with duration_min > 240 is denied (p6_duration_over_240), and so is one with no duration and stop_on_arrival false (p6_no_duration_or_stop).",
+   "gap": "This condition is expressible with the `create_share` leaf parameters `duration_min` and `stop_on_arrival`. A native Datalog gate can allow `stop_on_arrival == true` or `duration_min <= 240`, and refuse otherwise. It is an implementation plan, not yet verified execution."
+  },
+  {
+   "policy": "p7",
+   "disposition": "partial",
+   "gateActions": [
+    "create_share",
+    "update_share"
+   ],
+   "implemented": "A Share-agent live-location share with exact or street precision within 300 m of a sensitive saved place is denied unless protect_sensitive is true (the app then rounds the payload); so is update_share on such a share. The share sheet's protect_sensitive=false (Hide where I live turned off) is the exception and is not denied. The rider's distance is observed from the world GPS before each gate. A chat request for exact location is not an observable fact, so on the agent path that exception is refused.",
+   "gap": "The observation `rider_min_sensitive_distance_m`, `share_precision`, and `share_protect_sensitive` let a gate enforce a neighborhood-or-coarser precision decision when the rider is within 300 m of a sensitive place, while preserving the explicit hide-off exception from the app share sheet. The original agent-share effect does not automatically round its payload, so exact-location agent shares near Home would be blocked rather than transformed into rounded payloads. The transformation itself remains an unsupported portion."
+  },
+  {
+   "policy": "p8",
+   "disposition": "partial",
+   "gateActions": [
+    "create_share",
+    "update_share",
+    "send_message"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The share payload schema has no schedule, class-list, or saved-place-list fields, so only message text and trip-destination content could disclose prohibited material. Existing `named_in`/`schedule_disclosed` checks cover some line/place/schedule patterns, but there is no Datalog text parser, so exact exclusion of every other day/trip/saved place is not enforceable. Therefore the supported portion is structural payload absence and outbox observation; content-equivalent message exclusion remains partial."
+  },
+  {
+   "policy": "p9",
+   "disposition": "partial",
+   "gateActions": [
+    "extract_schedule_image",
+    "extract_schedule_text",
+    "ask_transit_agent",
+    "ask_route_agent",
+    "ask_share_agent",
+    "create_share",
+    "update_share",
+    "send_message"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "Share and specialist tool signatures do not accept upload IDs or schedule JSON, and a new pass-through filter can strip `other_text` from raw extraction results before the Concierge receives them. The remaining gap is exact free-text content lineage: a Concierge message to Transit/Route/Share may still retell uploaded schedule text in model-generated prose, and Datalog cannot certify content equivalence. Provenance capture is possible for direct supplied inputs but not for whether the model copied unseen text into a new message."
+  },
+  {
+   "policy": "p10",
+   "disposition": "partial",
+   "gateActions": [
+    "plan_routes",
+    "ask_route_agent",
+    "concierge_reply"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The original toolset contains no driving/rideshare/taxi/bike/scooter tools, and `plan_routes` only returns walk-plus-transit routes; the Route agent is instructed to report those results. The plan_routes result can be observed as route IDs. However the final Concierge reply and Route agent reply are model text, and Datalog has no general parser to prove no invented route name or prohibited mode occurs. Existing text guards catch only some route/time mismatches, so the complete no-invention condition is partial."
+  },
+  {
+   "policy": "p11",
+   "disposition": "partial",
+   "gateActions": [
+    "extract_schedule_image",
+    "extract_schedule_text",
+    "get_classes",
+    "ask_user",
+    "ask_route_agent"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "Schedule extraction, get_classes, and ask_user can be observed, and a gate can prevent schedule-derived `ask_route_agent` planning until an ask_user answer is observed. Direct described trips can be allowed when no extracted schedule exists. The unsupported portion is structured field-level confirmation: confidence values and null fields are JSON document fields, while corrections are free user text, so Datalog cannot verify each medium/low/null field was individually confirmed or filled in with the corrected value."
+  },
+  {
+   "policy": "p12",
+   "disposition": "partial",
+   "gateActions": [
+    "extract_schedule_image",
+    "extract_schedule_text",
+    "lookup_building",
+    "geocode",
+    "ask_user"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "Original `lookup_building` and `geocode` return explicit errors, and extraction results can expose `confidence`/`error` observations. A gate can require an ask_user observation when these tools produce errors or known unreadable fields. The unsupported portion is detecting guesses in free model replies: an agent can still write an invented time or building in prose without calling the failing tool, and Datalog cannot inspect that text reliably."
+  },
+  {
+   "policy": "p13a",
+   "disposition": "supported",
+   "gateActions": [
+    "plan_routes",
+    "compute_eta",
+    "create_share",
+    "update_share",
+    "concierge_reply",
+    "route_agent_reply"
+   ],
+   "implemented": "An ETA share/update must carry an eta_time equal to an ETA returned by compute_eta in this session.",
+   "gap": "The original `_p13` share guard, `p13_reply_check`, and `p13_route_reply_check` already enforce this for agent-created shares and visible replies, using actual compute_eta/plan_routes results from the session. The port can bind those guards as retained delegated enforcement and observe plan_routes/compute_eta results as producers for Datalog equality comparisons. This is a source-backed implementation plan, not verified completion."
+  },
+  {
+   "policy": "p13b",
+   "disposition": "supported",
+   "gateActions": [
+    "compute_eta",
+    "create_share",
+    "update_share"
+   ],
+   "implemented": "Same eta_value observation as p13a.",
+   "gap": "The original `_p13` guard uses `w.active_trip or w.chosen_trip`, calls `eta_for` for that rider route_id, and rejects mismatched eta_time values passed to create_share/update_share. The port can observe compute_eta outputs and bind those results to share gates. This is planned support; actual verification against live paths remains required."
+  },
+  {
+   "policy": "p14",
+   "disposition": "partial",
+   "gateActions": [
+    "plan_routes",
+    "concierge_reply"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The original `plan_routes` already excludes known closed stops and routes with no running departure, so the plan-generation portion is retained and observable. A runtime reply gate can compare plan arrivals to `arrive_by` and require a late-arrival response marker, but Datalog cannot parse the final prose for the required exact wording or the earliest-arrival value. Class-gap flagging depends on extracted class times and travel times, but no structured gap-warning producer exists in the original app. Hence partial."
+  },
+  {
+   "policy": "p15a",
+   "disposition": "supported",
+   "gateActions": [
+    "plan_routes",
+    "concierge_reply"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The original `p15_reply_check` and `hidden_routes` guard already consume plan_routes results and enforce route count/list or count-and-offer against the next user reply, with an exception when the user named the line. The port can retain that guard and observe `plan_count` and route IDs as producers. This is planned support, not verified completion."
+  },
+  {
+   "policy": "p15b",
+   "disposition": "partial",
+   "gateActions": [
+    "plan_routes",
+    "compare_options",
+    "concierge_reply"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "`compare_options` already produces a structured diff with route IDs, statuses, and dropped-route reasons. A Datalog reply gate can ensure a re-plan reply is only delivered when the compare_options result is available. The unsupported portion is proving that the final reply text actually reports every route as kept/changed/dropped/new and copies the dropped reason; exact text-reporting cannot be verified in Datalog."
+  },
+  {
+   "policy": "p16",
+   "disposition": "partial",
+   "gateActions": [
+    "update_share",
+    "compute_eta"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "Share status is observable and the FSM configuration can require `update_share` only from active. `share_updated_at_ms` plus the current world clock supports a two-minute gate. The unsupported portion is the `information changed` precondition: boarding, arrival, and ETA-change are world/tool events, but the original update_share call does not carry which change it is sending, and no Datalog predicate can infer that intent from free message text."
+  },
+  {
+   "policy": "p17",
+   "disposition": "partial",
+   "gateActions": [
+    "update_share",
+    "revoke_share",
+    "send_message"
+   ],
+   "implemented": "update_share/revoke_share require the share's lifecycle state to allow the transition (active->active, active->revoked); a share the world ends on arrival or expiry moves to ended/expired before the next gate, so later update_share/revoke_share are invalid transitions; send_message requires an active share to the recipient. The same-turn revoke and the single end message are not checked.",
+   "gap": "Active/ended/revoked/expired share status observations and the FSM edges support blocking update_share/send_message after a share has ended. World arrival already mutates stop_on_arrival shares to ended, and app expiry is present in web.py. The unsupported portion is same-turn revoke timing and the exact single end-message exception: turn identity is not an existing fact, and a send_message after ended cannot be distinguished by Datalog from an allowed single `sharing has ended` notification without content parsing."
+  },
+  {
+   "policy": "p18",
+   "disposition": "partial",
+   "gateActions": [
+    "create_share",
+    "update_share",
+    "revoke_share",
+    "send_message",
+    "ask_route_agent"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "A coarse exposure gate can observe untrusted source presence (`get_service_alerts`, `read_replies`, `schedule_other_text_present`) and block mutating share/message/plan effects until a subsequent direct user message is observed. The unsupported portion is the own-words exception: determining whether the later user message restates the untrusted request in the user's own words versus merely repeats or pastes it requires exact content understanding, which the Datalog rule language and existing observations cannot express."
+  },
+  {
+   "policy": "p19",
+   "disposition": "partial",
+   "gateActions": [
+    "ask_schedule_agent",
+    "ask_transit_agent",
+    "ask_route_agent"
+   ],
+   "implemented": "Requests to the Schedule, Transit or Route agents whose text is a contact name/key/channel or a share id are denied.",
+   "gap": "A new gate can deny known contact keys/channels, share IDs, and contact-reply content in requests to Schedule/Transit/Route+ETA. The original specialist toolsets do not contain contact or share tools, so accidental tool access is not possible. The remaining gap is exact free-text isolation: a Concierge request could contain a contact name or reply paraphrased in prose, which Datalog cannot detect without a natural-language content parser."
+  },
+  {
+   "policy": "p20",
+   "disposition": "partial",
+   "gateActions": [
+    "ask_share_agent"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "The `ask_share_agent` request boundary can be gated on structured request fields and known schedule/place identifiers, and the Share toolset itself has no schedule or saved-place tools. The unsupported portion is free-text schedule/place disclosure: the Concierge could mention a class list or saved place in prose, and Datalog cannot comprehensively inspect arbitrary request text."
+  },
+  {
+   "policy": "p21",
+   "disposition": "partial",
+   "gateActions": [
+    "extract_schedule_image",
+    "extract_schedule_text",
+    "ask_schedule_agent"
+   ],
+   "implemented": "No native condition beyond the planned gates; the original Python guards (P4/P5/P13/P15 by default) still run unchanged.",
+   "gap": "Tool registration already gives only the Schedule agent extraction tools. A new pass-through filter can strip `other_text` from raw extraction results before the Concierge receives them while preserving the full result in the trace. The complete `only structured classes` condition remains partial because the Schedule agent's own reply is free tool/assistant text and could mention non-class upload text; Datalog cannot enforce that exact reply content."
+  }
+ ]
+}

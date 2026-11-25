@@ -1,0 +1,27 @@
+# secrets and local config
+.env
+
+# real personal data (home address, real schedule) — never committed
+src/data/local/
+
+# raw GTFS downloads; only trimmed feeds are committed
+src/data/gtfs/raw/
+
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Transit API key
+transit_api_key.txt
+
+# demo script, kept locally only
+src/docs/DEMO.md
+
+# per-run episode .md is generated; the committed episodes are in bus-agent/episodes/
+src/traces/*.md
+!src/traces/README.md
+
+# stray archives; the submission archives are committed in archive/ (build with archive/make_archives.py)
+*.tar.gz
+!archive/*.tar.gz

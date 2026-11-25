@@ -1,0 +1,265 @@
+PrincipalGroup("concierge", "Concierge").
+PrincipalGroup("schedule", "Specialist").
+PrincipalGroup("transit", "Specialist").
+PrincipalGroup("route", "Specialist").
+PrincipalGroup("share", "Specialist").
+PrincipalGroup("share", "ShareAgent").
+PrincipalGroup("app", "AppActor").
+Capability("Concierge", "user", "ask_user").
+Capability("Concierge", "specialist_request", "ask_schedule_agent").
+Capability("Concierge", "specialist_request", "ask_transit_agent").
+Capability("Concierge", "specialist_request", "ask_route_agent").
+Capability("Concierge", "specialist_request", "ask_share_agent").
+Capability("ShareAgent", "share_operations", "create_share").
+Capability("ShareAgent", "share_operations", "update_share").
+Capability("ShareAgent", "share_operations", "revoke_share").
+Capability("ShareAgent", "share_operations", "send_message").
+Capability("ShareAgent", "share_operations", "get_contacts").
+Capability("ShareAgent", "share_operations", "read_replies").
+InitialState("share", "active").
+AllowedTransition("share", "update_share", "active", "active").
+AllowedTransition("share", "revoke_share", "active", "revoked").
+AllowedTransition("share", "arrive", "active", "ended").
+AllowedTransition("share", "expire", "active", "expired").
+
+Allow(Q) :- Request(Q, "concierge", A), Capability("Concierge", "specialist_request", A).
+
+Allow(Q) :- Request(Q, "share", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(R, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "true"),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "share", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(R, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "false"),
+    Parameter(Q, "eta_time", ""),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "share", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(C, "contact_channel", R),
+    Field(C, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "true"),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "share", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(C, "contact_channel", R),
+    Field(C, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "false"),
+    Parameter(Q, "eta_time", ""),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "app", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(R, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "true"),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "app", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(R, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "false"),
+    Parameter(Q, "eta_time", ""),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "app", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(C, "contact_channel", R),
+    Field(C, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "true"),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "app", "create_share"),
+    Parameter(Q, "recipient", R),
+    Field(C, "contact_channel", R),
+    Field(C, "contact_trusted", "true"),
+    Parameter(Q, "live_location", _),
+    Parameter(Q, "route", _),
+    Parameter(Q, "eta", "false"),
+    Parameter(Q, "eta_time", ""),
+    Parameter(Q, "precision", _),
+    Parameter(Q, "duration_min", _),
+    Parameter(Q, "stop_on_arrival", _),
+    Parameter(Q, "message", _),
+    Parameter(Q, "hide_places", _),
+    Parameter(Q, "protect_sensitive", _),
+    Parameter(Q, "channel", _).
+
+Allow(Q) :- Request(Q, "share", "update_share"),
+    Parameter(Q, "share_id", S),
+    Parameter(Q, "message", _),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    CanTransition(S, "update_share", "active", "active").
+
+Allow(Q) :- Request(Q, "share", "update_share"),
+    Parameter(Q, "share_id", S),
+    Parameter(Q, "message", _),
+    Parameter(Q, "eta_time", ""),
+    CanTransition(S, "update_share", "active", "active").
+
+Allow(Q) :- Request(Q, "app", "update_share"),
+    Parameter(Q, "share_id", S),
+    Parameter(Q, "message", _),
+    Parameter(Q, "eta_time", E),
+    E != "",
+    Field(_, "eta_value", E),
+    CanTransition(S, "update_share", "active", "active").
+
+Allow(Q) :- Request(Q, "app", "update_share"),
+    Parameter(Q, "share_id", S),
+    Parameter(Q, "message", _),
+    Parameter(Q, "eta_time", ""),
+    CanTransition(S, "update_share", "active", "active").
+
+Allow(Q) :- Request(Q, "share", "revoke_share"),
+    Parameter(Q, "share_id", S),
+    CanTransition(S, "revoke_share", "active", "revoked").
+
+Allow(Q) :- Request(Q, "app", "revoke_share"),
+    Parameter(Q, "share_id", S),
+    CanTransition(S, "revoke_share", "active", "revoked").
+
+Allow(Q) :- Request(Q, "share", "send_message"),
+    Parameter(Q, "recipient", R),
+    Parameter(Q, "text", _),
+    Field(S, "share_recipient", R),
+    Field(S, "share_status", "active"),
+    Field(R, "contact_trusted", "true").
+
+Allow(Q) :- Request(Q, "share", "send_message"),
+    Parameter(Q, "recipient", R),
+    Parameter(Q, "text", _),
+    Field(S, "share_recipient", R),
+    Field(S, "share_status", "active"),
+    Field(C, "contact_channel", R),
+    Field(C, "contact_trusted", "true").
+
+Allow(Q) :- Request(Q, "concierge", "concierge_reply").
+Allow(Q) :- Request(Q, "route", "route_agent_reply").
+
+Deny(Q, "p6_duration_over_240") :-
+    Request(Q, _, "create_share"),
+    Parameter(Q, "duration_min", D),
+    D > 240.
+
+Deny(Q, "p6_no_duration_or_stop") :-
+    Request(Q, _, "create_share"),
+    Parameter(Q, "duration_min", D),
+    D <= 0,
+    Parameter(Q, "stop_on_arrival", "false").
+
+Deny(Q, "p7_precise_near_sensitive") :-
+    Request(Q, "share", "create_share"),
+    Parameter(Q, "live_location", "true"),
+    Parameter(Q, "precision", P),
+    P != "neighborhood",
+    Parameter(Q, "protect_sensitive", "false"),
+    Field(_, "rider_min_sensitive_distance_m", D),
+    D <= 300.
+
+Deny(Q, "p7_precise_near_sensitive_update") :-
+    Request(Q, "share", "update_share"),
+    Parameter(Q, "share_id", S),
+    Field(S, "share_field_live_location", "true"),
+    Field(S, "share_precision", P),
+    P != "neighborhood",
+    Field(S, "share_protect_sensitive", "false"),
+    Field(_, "rider_min_sensitive_distance_m", D),
+    D <= 300.
+
+Deny(Q, "p19_contact_key") :-
+    Request(Q, _, A),
+    A != "ask_share_agent",
+    Parameter(Q, "request", Req),
+    Field(Req, "contact_name", _).
+
+Deny(Q, "p19_contact_name") :-
+    Request(Q, _, A),
+    A != "ask_share_agent",
+    Parameter(Q, "request", Req),
+    Field(C, "contact_name", Req).
+
+Deny(Q, "p19_contact_channel") :-
+    Request(Q, _, A),
+    A != "ask_share_agent",
+    Parameter(Q, "request", Req),
+    Field(C, "contact_channel", Req).
+
+Deny(Q, "p19_share_id") :-
+    Request(Q, _, A),
+    A != "ask_share_agent",
+    Parameter(Q, "request", Req),
+    Field(Req, "share_status", _).
